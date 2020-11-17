@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS0436: Le type est en conflit avec le type importé
+dotnet_diagnostic.CS0436.severity = suggestion
