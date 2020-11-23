@@ -298,7 +298,7 @@ namespace ServerVisibleManager
 
                     // Send our magnitude data off to our Spectral Flux Analyzer to be analyzed for peaks
                     PreProcessedSpectralFluxAnalyzer.analyzeSpectrum(Array.ConvertAll(scaledFFTSpectrum, x => (float)x), curSongTime);
-                    progress.Report(0.5f * i / iterations); // On met à jours la progression (valeur de 50% max ici)
+                    progress.Report(0.5f + 0.5f * i / iterations); // On met à jours la progression (valeur de 50% max ici)
                     Thread.Yield();
                 }
             });
