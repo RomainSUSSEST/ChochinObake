@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
+using System.IO;
+using ServerVisibleManager;
 
 public class Song : MonoBehaviour
 {
@@ -9,12 +11,15 @@ public class Song : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI SongTitle;
 
+    private string DirectoryPath;
+
 
     // Méthode
 
-    public void SetSongTitle(string title)
+    public void SetSongDirectory(string directory)
     {
-        SongTitle.text = title;
+        DirectoryPath = directory;
+        SongTitle.text = Path.GetFileName(directory);
     }
 
 
@@ -22,6 +27,6 @@ public class Song : MonoBehaviour
 
     public void DeleteButtonHasBeenClicked()
     {
-
+        ServerAccountManager.Instance.RemoveSongWithDirectoryPath(DirectoryPath);
     }
 }

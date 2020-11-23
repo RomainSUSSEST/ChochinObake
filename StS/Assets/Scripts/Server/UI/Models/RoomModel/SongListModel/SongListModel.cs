@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using ServerVisibleManager;
-using System.IO;
+using System.Collections.Generic;
 
 public class SongListModel : MonoBehaviour
 {
@@ -19,6 +19,9 @@ public class SongListModel : MonoBehaviour
     [Header("AddPanel")]
 
     [SerializeField] private GameObject PanelAddSong;
+
+    private List<Song> SongList;
+    private Vector3 CurrentSpawnerPosition;
 
 
     // Life Cycle
@@ -48,17 +51,49 @@ public class SongListModel : MonoBehaviour
     // Outils
 
     /// <summary>
-    /// Actualise la liste des sons enregistré sur le serveur et les affiches.
+    /// Reset puis actualise la liste des sons enregistré sur le serveur et les affiches.
     /// </summary>
     private void RefreshListSong()
     {
+        // On detruit les anciennes données.
+        DestroyListSong();
+
+        // On Initialise la position du spawner.
+        CurrentSpawnerPosition = SongInfoSpawnTransform.position;
+
+        // On Initialise la liste des sons.
+        SongList = new List<Song>();
+
+        // On récupére la liste des sons
         string[] songs = ServerAccountManager.Instance.GetSongList();
 
+        // On les affiches
         Song currentSong;
         for (int i = 0; i < songs.Length; ++i)
         {
-            currentSong = Instantiate(SongPrefab, SongInfoSpawnTransform.position, Quaternion.identity, ContentNode);
-            currentSong.SetSongTitle(Path.GetFileName(songs[i]));
+            currentSong = Instantiate(SongPrefab, CurrentSpawnerPosition, Quaternion.identity, ContentNode);
+            currentSong.SetSongDirectory(songs[i]);
+            CurrentSpawnerPosition -= new Vector3(0, currentSong.GetComponent<RectTransform>().rect.height, 0);
+
+            // On ajoute le son à la liste
+            SongList.Add(currentSong);
+        }
+    }
+
+    /// <summary>
+    /// Detruit la liste des chansons en nettoyant proprement les ressources alloué.
+    /// </summary>
+    private void DestroyListSong()
+    {
+        if (SongList == null)
+        {
+            return;
+        }
+
+        // On détruit la liste des chansons.
+        foreach (Song song in SongList)
+        {
+            Destroy(song.gameObject);
         }
     }
 }

@@ -93,9 +93,13 @@ namespace ServerVisibleManager
             ServerAccountManager_State = STATE.Nothing;
         }
 
+        /// <summary>
+        /// Delete les données de l'audio contenu dans le directory pointé par path.
+        /// </summary>
+        /// <param name="path"> Le directory contenant les données de l'audio </param>
         public void RemoveSongWithDirectoryPath(string path)
         {
-            
+            Directory.Delete(path, true);
         }
 
 
