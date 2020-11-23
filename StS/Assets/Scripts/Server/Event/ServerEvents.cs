@@ -302,10 +302,19 @@ public class SetMusicRoundEvent : SDD.Events.Event
 
 #region AccountManager Events
 	
-public class ProgressBarPrepareSongHaveChanged : SDD.Events.Event
+public class ProgressBarPrepareSongHaveChangedEvent : SDD.Events.Event
 {
 	public string State;
 	public double Value; // Compris entre 0 et 100%
+}
+
+public class ProgressBarPrepareSongErrorEvent : SDD.Events.Event
+{
+	public string msg;
+}
+
+public class PrepareSongEndEvent : SDD.Events.Event
+{
 }
 
 #endregion
