@@ -1,4 +1,4 @@
-﻿namespace ClientMaskedManager
+﻿namespace ClientManager
 {
     using System.Collections;
     using System.Collections.Generic;

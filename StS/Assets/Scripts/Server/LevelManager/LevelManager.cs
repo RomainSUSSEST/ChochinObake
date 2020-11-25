@@ -1,6 +1,6 @@
 ﻿
 
-namespace ServerMaskedManager
+namespace ServerManager
 {
     using DSPLib;
     using SDD.Events;
@@ -138,10 +138,6 @@ namespace ServerMaskedManager
         {
             base.SubscribeEvents();
 
-            // GameManager
-
-            EventManager.Instance.AddListener<GamePrepareEvent>(SetupRound);
-
             // Obstacle
 
             EventManager.Instance.AddListener<ObstacleEndMapEvent>(InstantiateObstacle);
@@ -150,10 +146,6 @@ namespace ServerMaskedManager
         public override void UnsubscribeEvents()
         {
             base.UnsubscribeEvents();
-
-            // GameManager
-
-            EventManager.Instance.RemoveListener<GamePrepareEvent>(SetupRound);
 
             // Obstacle
 
@@ -191,25 +183,6 @@ namespace ServerMaskedManager
             StartCoroutine("ProceduralGenerator");
         }
 
-        private void SetupRound(GamePrepareEvent e)
-        {
-            RealBeats = new List<SpectralFluxInfo>();
-
-            CurrentClip = e.GetMusic();
-
-            PreProcessedSpectralFluxAnalyzer = new SpectralFluxAnalyzer();
-
-            MultiChannelSamples = new float[CurrentClip.samples * CurrentClip.channels];
-            NumChannels = CurrentClip.channels;
-            NumTotalSamples = CurrentClip.samples;
-
-            // We are not evaluationg the audio as it is being played by Unity, so we need the clip's sampling rate
-            SampleRate = CurrentClip.frequency;
-
-            CurrentClip.GetData(MultiChannelSamples, 0);
-
-            StartCoroutine("AnalyzeMusic");
-        }
         #endregion
 
 
@@ -277,48 +250,6 @@ namespace ServerMaskedManager
 
 
         // Coroutine
-
-        private IEnumerator AnalyzeMusic()
-        {
-            GetFullSpectrumThreaded();
-            RealBeats = PreProcessedSpectralFluxAnalyzer.trueBeats;
-
-            // Initialisation de l'algorithme selon les beats enregistré.
-
-            MoyenneBeatsPrunedSpectralFlux = 0;
-            MaximumBeatsPrunedSpectralFlux = RealBeats[0].prunedSpectralFlux;
-
-            List<float> copyBeatsArray = new List<float>();
-            copyBeatsArray.Add(RealBeats[0].prunedSpectralFlux);
-
-            float value;
-            for (int i = 1; i < RealBeats.Count; ++i)
-            {
-                value = RealBeats[i].prunedSpectralFlux;
-
-                copyBeatsArray.Add(value);
-                MoyenneBeatsPrunedSpectralFlux += value;
-
-                if (value > MaximumBeatsPrunedSpectralFlux)
-                {
-                    MaximumBeatsPrunedSpectralFlux = value;
-                }
-            }
-            MoyenneBeatsPrunedSpectralFlux = MoyenneBeatsPrunedSpectralFlux / RealBeats.Count;
-            copyBeatsArray.Sort();
-
-            float quartil2Per5 = copyBeatsArray[2 * copyBeatsArray.Count / 5];
-
-            // On set la limite d'écoute d'obstacle
-            ThresholdOfObstacleSpawn = MoyenneBeatsPrunedSpectralFlux / MaximumBeatsPrunedSpectralFlux + quartil2Per5;
-
-            // On initialise la seed du random
-            CurRandom = new System.Random((int)MaximumBeatsPrunedSpectralFlux);
-
-            EventManager.Instance.Raise(new GameReadyEvent());
-
-            yield break;
-        }
 
         private IEnumerator ProceduralGenerator()
         {

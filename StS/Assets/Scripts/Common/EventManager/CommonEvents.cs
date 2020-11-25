@@ -120,6 +120,36 @@ public class InvalidColorEvent : NetworkedEvent
 }
 #endregion
 
+#region Music Selection
+
+public class AskForMusicListEvent : NetworkedEvent
+{
+	public AskForMusicListEvent(ulong ClientID) : base(ClientID)
+	{
+	}
+}
+
+public class AnswerForMusicListRequestEvent : NetworkedEvent
+{
+	// Attributs
+
+	public string[] MusicList;
+
+
+	// Constructeur
+
+	public AnswerForMusicListRequestEvent(ulong clientID, string[] list) : 
+		base(clientID, new Argument()
+			{
+				Arg = list,
+				Type = typeof(string[])
+			})
+	{
+		MusicList = list;
+	}
+}
+
+#endregion
 #endregion
 
 #region MobileInputs

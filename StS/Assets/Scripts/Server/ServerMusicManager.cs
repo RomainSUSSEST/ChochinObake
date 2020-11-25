@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace ServerMaskedManager
+namespace ServerManager
 {
 	/// <summary>
 	/// Music loops manager.

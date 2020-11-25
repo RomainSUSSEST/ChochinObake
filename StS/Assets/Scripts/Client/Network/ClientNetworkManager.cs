@@ -1,4 +1,4 @@
-﻿namespace ClientVisibleManager
+﻿namespace ClientManager
 {
 	using MLAPI;
 	using SDD.Events;

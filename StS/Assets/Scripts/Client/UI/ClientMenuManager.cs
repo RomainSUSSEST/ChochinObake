@@ -1,4 +1,4 @@
-﻿namespace ClientMaskedManager
+﻿namespace ClientManager
 {
     using SDD.Events;
     using System.Collections;
@@ -198,6 +198,8 @@
         protected override void MobileMusicSelection(MobileMusicSelectionEvent e)
         {
             base.MobileMusicSelection(e);
+
+            OpenPanel(m_PanelMusicSelection);
         }
 
         protected override void MobileChooseMusic(MobileChooseMusicEvent e)

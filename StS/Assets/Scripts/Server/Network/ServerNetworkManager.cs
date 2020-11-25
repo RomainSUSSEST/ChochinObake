@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 using CommonVisibleManager;
 
-namespace ServerMaskedManager
+namespace ServerManager
 {
     public class ServerNetworkManager : ServerManager<ServerNetworkManager>
     {
@@ -86,6 +86,7 @@ namespace ServerMaskedManager
         {
             base.GameMusicSelectionMenu(e);
 
+            // On averti les téléphone connecté que l'on rentre dans la zone de music selection.
             MessagingManager.Instance.RaiseNetworkedEventOnAllClient(new ServerEnterInGameMusicSelectionEvent());
         }
 

@@ -12,7 +12,7 @@ using UnityEngine.Networking;
 using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
 
-namespace ServerVisibleManager
+namespace ServerManager
 {
     /// <summary>
     /// Classe permettant de stocker les musiques, de les importer, ou de les exporter.
@@ -100,6 +100,7 @@ namespace ServerVisibleManager
         public void RemoveSongWithDirectoryPath(string path)
         {
             Directory.Delete(path, true);
+            EventManager.Instance.Raise(new DataSongDeletedEvent());
         }
 
 
@@ -254,6 +255,8 @@ namespace ServerVisibleManager
 
                 int numProcessed = 0;
                 float combinedChannelAverage = 0f;
+
+                int refresh = Math.Max(1, multiChannelsSamples.Length / 25); // On refreshera la bar de chargement 25 fois maximum, 1 fois mini.
                 for (int i = 0; i < multiChannelsSamples.Length; ++i)
                 {
                     combinedChannelAverage += multiChannelsSamples[i];
@@ -264,10 +267,14 @@ namespace ServerVisibleManager
                         preProcessedSamples[numProcessed] = combinedChannelAverage / numChannels;
                         numProcessed++;
                         combinedChannelAverage = 0f;
+
+                        Thread.Yield(); // On rend la main à d'autre Thread de temps à autre pour ne pas bloquer
                     }
 
-                    progress.Report(0.5f * i / multiChannelsSamples.Length); // On met à jours la progression (valeur de 50% max ici)
-                    Thread.Yield();
+                    if (i % refresh == 0) // On limite l'opération couteuse
+                    {
+                        progress.Report(0.5f * i / multiChannelsSamples.Length); // On met à jours la progression (valeur de 50% max ici)
+                    }
                 }
 
                 // Once we have our audio sample data prepared, we can execute an FFT to return the spectrum data over the time domain
@@ -278,6 +285,7 @@ namespace ServerVisibleManager
                 fft.Initialize((UInt32)spectrumSampleSize);
 
                 double[] sampleChunk = new double[spectrumSampleSize];
+                refresh = Math.Max(1, iterations / 25); // On refreshera la bar de chargement 25 fois maximum, 1 fois mini.
                 for (int i = 0; i < iterations; ++i)
                 {
                     // Grab the current 1024 chunk of audio sample data
@@ -298,8 +306,12 @@ namespace ServerVisibleManager
 
                     // Send our magnitude data off to our Spectral Flux Analyzer to be analyzed for peaks
                     PreProcessedSpectralFluxAnalyzer.analyzeSpectrum(Array.ConvertAll(scaledFFTSpectrum, x => (float)x), curSongTime);
-                    progress.Report(0.5f + 0.5f * i / iterations); // On met à jours la progression (valeur de 50% max ici)
-                    Thread.Yield();
+
+                    if (i % refresh == 0) // On limite l'opération couteuse
+                    {
+                        progress.Report(0.5f + 0.5f * i / iterations); // On met à jours la progression (valeur de 50% max ici)
+                        Thread.Yield(); // On rend la main à d'autres Thread
+                    }
                 }
             });
 
@@ -373,6 +385,11 @@ namespace ServerVisibleManager
                 {
                     UpdatePrepareSongState("Loading end...", 65);
                     DownloadedSongAtAudioClip = DownloadHandlerAudioClip.GetContent(www);
+
+                    if (DownloadedSongAtAudioClip == null)
+                    {
+                        throw new Exception("An error occurred");
+                    }
                 }
             }
         }

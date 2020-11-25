@@ -1,4 +1,4 @@
-﻿namespace ClientMaskedManager
+﻿namespace ClientManager
 {
     using SDD.Events;
     using System.Collections;
@@ -43,6 +43,7 @@
             // Networked Event
 
             EventManager.Instance.AddListener<ServerClosedEvent>(ServerClosed);
+            EventManager.Instance.AddListener<ServerEnterInGameMusicSelectionEvent>(ServerEnterInGameMusicSelection);
             EventManager.Instance.AddListener<GameStartedEvent>(GameStarted);
         }
 
@@ -65,6 +66,7 @@
 
             // Networked Event
             EventManager.Instance.RemoveListener<ServerClosedEvent>(ServerClosed);
+            EventManager.Instance.RemoveListener<ServerEnterInGameMusicSelectionEvent>(ServerEnterInGameMusicSelection);
             EventManager.Instance.RemoveListener<GameStartedEvent>(GameStarted);
         }
         #endregion
@@ -129,6 +131,13 @@
             EventManager.Instance.Raise(new MobileJoinRoomEvent());
         }
 
+        private void MusicSelection()
+        {
+            SetTimeScale(1);
+            m_GameState = GameState.gameMenu;
+            EventManager.Instance.Raise(new MobileMusicSelectionEvent());
+        }
+
         private void Play()
         {
             SetTimeScale(1);
@@ -151,6 +160,11 @@
         private void ServerClosed(ServerClosedEvent e)
         {
             MainMenu();
+        }
+
+        private void ServerEnterInGameMusicSelection(ServerEnterInGameMusicSelectionEvent e)
+        {
+            MusicSelection();
         }
 
         private void GameStarted(GameStartedEvent e)

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using CommonVisibleManager;
 
-public class RoomModel : ServerSimpleGameStateObserver
+public class RoomModel : MonoBehaviour
 {
     // Constante
 
@@ -37,6 +37,7 @@ public class RoomModel : ServerSimpleGameStateObserver
     {
         // Initialisation
 
+        SubscribeEvents();
         Players = new Dictionary<ulong, Player>();
         InvalidBody = new List<SlimeBody.BodyType>();
         PanelSongList.SetActive(false); // On s'assure que le panel de gestion des sons est désactivé.
@@ -44,13 +45,16 @@ public class RoomModel : ServerSimpleGameStateObserver
         ActualiseNextButton();
     }
 
+    private void OnDisable()
+    {
+        UnsubscribeEvents();
+    }
+
 
     // Event subscription
 
-    public override void SubscribeEvents()
+    public void SubscribeEvents()
     {
-        base.SubscribeEvents();
-
         // Network Server
         EventManager.Instance.AddListener<ServerConnectionSuccessEvent>(AddPlayer);
         EventManager.Instance.AddListener<ServerDisconnectionSuccessEvent>(RemovePlayer);
@@ -58,13 +62,9 @@ public class RoomModel : ServerSimpleGameStateObserver
         // Network Common Event
         EventManager.Instance.AddListener<PlayerEnterInCharacterSelectionEvent>(PlayerEnterInCharacterSelection);
         EventManager.Instance.AddListener<RequestPlayerReadyInCharacterSelectionEvent>(RequestPlayerReadyInCharacterSelection);
-
-        // GameManager
-
-        EventManager.Instance.AddListener<AskForNewGameEvent>(SendListPlayer);
     }
 
-    public override void UnsubscribeEvents()
+    public void UnsubscribeEvents()
     {
         // Network Server
         EventManager.Instance.RemoveListener<ServerConnectionSuccessEvent>(AddPlayer);
@@ -73,18 +73,21 @@ public class RoomModel : ServerSimpleGameStateObserver
         // Network Common Event
         EventManager.Instance.RemoveListener<PlayerEnterInCharacterSelectionEvent>(PlayerEnterInCharacterSelection);
         EventManager.Instance.RemoveListener<RequestPlayerReadyInCharacterSelectionEvent>(RequestPlayerReadyInCharacterSelection);
-
-        // GameManager
-
-        EventManager.Instance.RemoveListener<AskForNewGameEvent>(SendListPlayer);
     }
-
 
     // On click button function
 
     public void SongButtonHasBeenClicked()
     {
         PanelSongList.SetActive(true); // On Active le panel de gestion des sons.
+    }
+
+    public void RoomNextButtonHasBeenClicked()
+    {
+        EventManager.Instance.Raise(new RoomNextButtonClickedEvent()
+        {
+            PlayerList = Players
+        });
     }
 
 
@@ -195,14 +198,6 @@ public class RoomModel : ServerSimpleGameStateObserver
         // On indique que tout les joueurs sauf celui identifier par l'id doivent rendre la couleur bodyType indisponible/disponible selon si on met ready le joueur ou non
         MessagingManager.Instance.RaiseNetworkedEventOnAllClient(
             new InverseStateOfColorEvent(e.PlayerID.Value, e.BodyType));
-    }
-
-
-    // GameManager Event Call
-
-    private void SendListPlayer(AskForNewGameEvent e)
-    {
-        EventManager.Instance.Raise(new SetPlayerListEvent(Players));
     }
 
 

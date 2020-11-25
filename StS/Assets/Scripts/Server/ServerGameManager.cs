@@ -1,4 +1,4 @@
-﻿namespace ServerMaskedManager
+﻿namespace ServerManager
 {
 	using System.Collections;
 	using UnityEngine;
@@ -14,6 +14,15 @@
 		private Dictionary<ulong, Player> CurrentPlayers;
 		private AudioClip CurrentMusic;
 
+
+		#region Request
+
+		public IReadOnlyDictionary<ulong, Player> GetPlayers()
+		{
+			return new System.Collections.ObjectModel.ReadOnlyDictionary<ulong, Player>(CurrentPlayers);
+		}
+
+		#endregion
 
 		#region Game State
 		private GameState m_GameState;
@@ -43,18 +52,9 @@
 			EventManager.Instance.AddListener<RoomNextButtonClickedEvent>(RoomNextButtonClicked);
 
 			EventManager.Instance.AddListener<MusicSelectionLeaveButtonClickedEvent>(MusicSelectionLeaveButtonClicked);
-			EventManager.Instance.AddListener<MusicSelectionNextButtonClickedEvent>(MusicSelectionNextButtonClicked);
-
-			EventManager.Instance.AddListener<MusicResultNextButtonClickedEvent>(MusicResultNextButtonClicked);
 
 			// UI Resize
 			EventManager.Instance.AddListener<ResizeUICompleteEvent>(ResizeUIComplete);
-
-			// AskForNewGame
-			EventManager.Instance.AddListener<SetPlayerListEvent>(SetPlayerList);
-
-			// AskForNewRound
-			EventManager.Instance.AddListener<SetMusicRoundEvent>(SetMusicRound);
 
 			// Network Event
 			EventManager.Instance.AddListener<ServerDisconnectionSuccessEvent>(ClientDisconnected);
@@ -78,18 +78,9 @@
 			EventManager.Instance.RemoveListener<RoomNextButtonClickedEvent>(RoomNextButtonClicked);
 
 			EventManager.Instance.RemoveListener<MusicSelectionLeaveButtonClickedEvent>(MusicSelectionLeaveButtonClicked);
-			EventManager.Instance.RemoveListener<MusicSelectionNextButtonClickedEvent>(MusicSelectionNextButtonClicked);
-
-			EventManager.Instance.RemoveListener<MusicResultNextButtonClickedEvent>(MusicResultNextButtonClicked);
 
 			// UI Resize
 			EventManager.Instance.RemoveListener<ResizeUICompleteEvent>(ResizeUIComplete);
-
-			// AskForNewGame
-			EventManager.Instance.RemoveListener<SetPlayerListEvent>(SetPlayerList);
-
-			// AskForNewRound
-			EventManager.Instance.RemoveListener<SetMusicRoundEvent>(SetMusicRound);
 
 			// Network Event
 			EventManager.Instance.RemoveListener<ServerDisconnectionSuccessEvent>(ClientDisconnected);
@@ -136,22 +127,13 @@
 
 		private void RoomNextButtonClicked(RoomNextButtonClickedEvent e)
 		{
-			EventManager.Instance.Raise(new AskForNewGameEvent());
+			CurrentPlayers = e.PlayerList;
+			MusicSelection();
 		}
 
 		private void MusicSelectionLeaveButtonClicked(MusicSelectionLeaveButtonClickedEvent e)
 		{
 			
-		}
-
-		private void MusicSelectionNextButtonClicked(MusicSelectionNextButtonClickedEvent e)
-		{
-			MusicResult();
-		}
-
-		private void MusicResultNextButtonClicked(MusicResultNextButtonClickedEvent e)
-		{
-			EventManager.Instance.Raise(new AskForNewRoundEvent());
 		}
 
 		private void EscapeButtonClicked(EscapeButtonClickedEvent e)
@@ -165,22 +147,6 @@
 		}
         #endregion
 
-        #region Callbacks to Event issued after AskForNewGame
-		private void SetPlayerList(SetPlayerListEvent e)
-		{
-			CurrentPlayers = e.GetPlayers();
-			MusicSelection();
-		}
-        #endregion
-
-        #region Callbacks to Event issued after AskForNewRound
-		private void SetMusicRound(SetMusicRoundEvent e)
-		{
-			CurrentMusic = e.GetClip();
-			PrepareGame();
-		}
-        #endregion
-
         #region Callbacks to Event issued by LevelManager
 		private void GameReady(GameReadyEvent e)
 		{
@@ -191,6 +157,7 @@
         #region Callbacks to Network Event
         private void ClientDisconnected(ServerDisconnectionSuccessEvent e)
 		{
+			// Si nous somme en jeu et qu'un joueur se déconnecte.
 			if (GetGameState == GameState.gamePlay)
 			{
 				CurrentPlayers[e.ClientID].PlayerState = PlayerState.Disconnected;
@@ -231,7 +198,10 @@
 		{
 			SetTimeScale(1);
 			m_GameState = GameState.gamePlay;
-			EventManager.Instance.Raise(new GameMusicSelectionMenuEvent());
+			EventManager.Instance.Raise(new GameMusicSelectionMenuEvent()
+			{
+				players = GetPlayers()
+			});
 		}
 
 		private void MusicResult()
@@ -239,13 +209,6 @@
 			SetTimeScale(1);
 			m_GameState = GameState.gamePlay;
 			EventManager.Instance.Raise(new GameMusicResultMenuEvent());
-		}
-
-		private void PrepareGame()
-		{
-			SetTimeScale(1);
-			m_GameState = GameState.gamePlay;
-			EventManager.Instance.Raise(new GamePrepareEvent(CurrentPlayers, CurrentMusic));
 		}
 
 		private void Play()

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using TMPro;
-using ServerVisibleManager;
 using UnityEngine.UI;
 using SDD.Events;
+using ServerManager;
 
 public class AddSongModel : MonoBehaviour
 {
@@ -37,18 +37,15 @@ public class AddSongModel : MonoBehaviour
 
     // Life Cycle
 
-    private void Start()
-    {
-        SubscribeEvents();
-    }
-
-    private void OnDestroy()
+    private void OnDisable()
     {
         UnsubscribeEvents();
     }
 
     private void OnEnable()
     {
+        SubscribeEvents();
+
         // On initialise les éléments de la page.
 
         ProgressBar_Content.SetActive(false);

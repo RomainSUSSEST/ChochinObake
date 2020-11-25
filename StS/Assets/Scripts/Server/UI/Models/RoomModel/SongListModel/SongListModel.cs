@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
-using ServerVisibleManager;
 using System.Collections.Generic;
+using SDD.Events;
+using ServerManager;
 
 public class SongListModel : MonoBehaviour
 {
@@ -30,8 +31,14 @@ public class SongListModel : MonoBehaviour
     {
         // Initialisation
 
+        SubscribeEvents();
         PanelAddSong.SetActive(false); // On s'assure que le PanelAddSong est désactivé.
         RefreshListSong(); // On charge la liste des sons enregistré.
+    }
+
+    public void OnDisable()
+    {
+        UnsubscribeEvents();
     }
 
 
@@ -96,4 +103,35 @@ public class SongListModel : MonoBehaviour
             Destroy(song.gameObject);
         }
     }
+
+    private void SubscribeEvents()
+    {
+        // ServerAccountManager Event
+
+        EventManager.Instance.AddListener<PrepareSongEndEvent>(PrepareSongEnd);
+        EventManager.Instance.AddListener<DataSongDeletedEvent>(DataSongDeleted);
+    }
+
+    private void UnsubscribeEvents()
+    {
+        // ServerAccountManager Event
+
+        EventManager.Instance.RemoveListener<PrepareSongEndEvent>(PrepareSongEnd);
+        EventManager.Instance.RemoveListener<DataSongDeletedEvent>(DataSongDeleted);
+    }
+
+
+    #region Event Call Back
+
+    private void PrepareSongEnd(PrepareSongEndEvent e)
+    {
+        RefreshListSong();
+    }
+
+    private void DataSongDeleted(DataSongDeletedEvent e)
+    {
+        RefreshListSong();
+    }
+
+    #endregion
 }

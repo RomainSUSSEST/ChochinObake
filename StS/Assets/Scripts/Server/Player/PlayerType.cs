@@ -1,4 +1,4 @@
-﻿public enum PlayerState { Disconnected, Connection, Selection, Ready, MusicSelection, InGame }
+﻿public enum PlayerState { Disconnected, Connection, Selection, Ready, WaitingForTheVote, Voted, InGame }
 
 // Type Player
 public class Player

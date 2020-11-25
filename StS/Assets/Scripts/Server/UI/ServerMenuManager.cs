@@ -1,5 +1,5 @@
 ﻿
-namespace ServerMaskedManager
+namespace ServerManager
 {
 	using System.Collections;
 	using System.Collections.Generic;
@@ -158,19 +158,9 @@ namespace ServerMaskedManager
 			EventManager.Instance.Raise(new RoomLeaveButtonClickedEvent());
 		}
 
-		public void RoomNextButtonHasBeenClicked()
-		{
-			EventManager.Instance.Raise(new RoomNextButtonClickedEvent());
-		}
-
 		public void MusicSelectionLeaveButtonClicked()
 		{
 			EventManager.Instance.Raise(new MusicSelectionLeaveButtonClickedEvent());
-		}
-
-		public void MusicSelectionNextButtonClicked()
-		{
-			EventManager.Instance.Raise(new MusicSelectionNextButtonClickedEvent());
 		}
 
 		public void MusicResultNextButtonClicked()

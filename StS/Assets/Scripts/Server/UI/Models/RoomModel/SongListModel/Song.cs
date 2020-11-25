@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using System.IO;
-using ServerVisibleManager;
+using ServerManager;
 
 public class Song : MonoBehaviour
 {

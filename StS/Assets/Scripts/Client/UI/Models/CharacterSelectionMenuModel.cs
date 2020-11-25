@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CommonVisibleManager;
-using ClientVisibleManager;
+using ClientManager;
 
 public class CharacterSelectionMenuModel : MonoBehaviour
 {
@@ -57,16 +57,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
 
     // Life cycle
 
-    private void Awake()
-    {
-        SubscribeEvent();
-    }
-
-    private void OnDestroy()
-    {
-        UnsubscribeEvent();
-    }
-
     public void Start()
     {
         if (ListHat.Count == 0 || ListBody.Count == 0)
@@ -80,6 +70,8 @@ public class CharacterSelectionMenuModel : MonoBehaviour
 
     private void OnEnable()
     {
+        SubscribeEvent();
+
         // On averti le serveur que le joueur est entré dans la selection de personnage.
         // Si celui-ci est bien connecté à un serveur.
         if (ClientNetworkManager.Instance == null || ClientNetworkManager.Instance.GetPlayerID() == null)
@@ -88,6 +80,7 @@ public class CharacterSelectionMenuModel : MonoBehaviour
         } else
         {
             PlayerIsReady = false;
+            EnableReadyButton(); // On active le bouton pour changer d'état.
             MessagingManager.Instance.RaiseNetworkedEventOnServer(
                 new PlayerEnterInCharacterSelectionEvent(
                     ClientNetworkManager.Instance.GetPlayerID().Value));
@@ -96,6 +89,8 @@ public class CharacterSelectionMenuModel : MonoBehaviour
 
     private void OnDisable()
     {
+        UnsubscribeEvent();
+
         if (InstanceSlime != null)
             // On détruit l'instance de Slime.
             Destroy(InstanceSlime.gameObject);
@@ -122,15 +117,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
     // Méthode
 
     #region Button has been clicked
-    public void ListOnServerButtonHasBeenClicked()
-    {
-        LoadServerListMusic();
-    }
-
-    public void AddSongButtonHasBeenClicked()
-    {
-        AddSongOnServer();
-    }
 
     public void LeftHatButtonHasBeenClicked()
     {
@@ -205,18 +191,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
         SetUnreadyButtonColor();
     }
 
-    #region Gestion Music (Server List & Add)
-    private void LoadServerListMusic()
-    {
-
-    }
-
-    private void AddSongOnServer()
-    {
-
-    }
-    #endregion
-
     #region Event Call Back
     #region Network
     private void LoadLobbyInformation(LobbyInformationEvent e)
@@ -231,13 +205,13 @@ public class CharacterSelectionMenuModel : MonoBehaviour
     /// On demande à valider nos choix de customisation, si la fonction n'est pas interrompue et que le serveur renvoie
     /// une réponse positive, la demande est accepté.
     /// </summary>
-    /// <param name="e"></param>
+    /// <param name="e"> L'event </param>
     private void RequestForChangeState(ReadyCharacterSelectionEvent e)
     {
-        if (ClientNetworkManager.Instance.GetPlayerID() == null)
+        if (ClientNetworkManager.Instance.GetPlayerID() == null) // On s'assure que le client est connecté
         {
             throw new System.Exception("Client non connecté");
-        } else if (Pseudo.GetPseudo() == "")
+        } else if (Pseudo.GetPseudo() == "") // On refuse les Pseudo vide
         {
             Pseudo.StartInvalidAnimation();
             return;
@@ -246,6 +220,7 @@ public class CharacterSelectionMenuModel : MonoBehaviour
         {
             // On désactive les boutons en attendant une réponse
             ActivatePersonnalisation(false);
+            DisableReadyButton(); // On interdit le spam de demande
 
             // On previent le serveur que l'on  change d'état
             MessagingManager.Instance.RaiseNetworkedEventOnServer(
@@ -271,6 +246,9 @@ public class CharacterSelectionMenuModel : MonoBehaviour
         {
             SetUnreadyButtonColor();
         }
+
+        // On réactive le bouton pour changer d'état
+        EnableReadyButton();
     }
 
     private void InvalidPseudo(InvalidPseudoEvent e)
@@ -350,6 +328,9 @@ public class CharacterSelectionMenuModel : MonoBehaviour
         SetBody();
     }
 
+    /// <summary>
+    /// Si c'est un body valid, l'affecte et change l'état du bouton ready en conséquence.
+    /// </summary>
     private void SetBody()
     {
         // On vérifie que c'est un body valid.

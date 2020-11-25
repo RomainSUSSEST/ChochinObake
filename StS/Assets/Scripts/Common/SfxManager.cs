@@ -1,4 +1,4 @@
-namespace CommonVisibleManager
+namespace ServerManager
 {
 	using UnityEngine;
 	using System.Collections.Generic;

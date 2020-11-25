@@ -1,4 +1,4 @@
-﻿namespace ClientMaskedManager
+﻿namespace ClientManager
 {
 	using System.Collections;
 	using UnityEngine;
@@ -74,7 +74,7 @@
 
 		// Event function
 
-		#region Event Function
+		#region CallBack to GameManager Event
 
 		protected override void MobileMainMenu(MobileMainMenuEvent e)
 		{

@@ -17,64 +17,10 @@ public class GameCreditsMenuEvent : SDD.Events.Event
 }
 public class GameMusicSelectionMenuEvent : SDD.Events.Event
 {
+	public IReadOnlyDictionary<ulong, Player> players;
 }
-
 public class GameMusicResultMenuEvent : SDD.Events.Event
 {
-}
-
-public class GamePrepareEvent : SDD.Events.Event
-{
-	// Attributs
-
-	private Dictionary<ulong, Player> Players;
-	private AudioClip Clip;
-
-
-	// Constructeur
-
-	public GamePrepareEvent(Dictionary<ulong, Player> list, AudioClip clip)
-	{
-		if (list == null || clip == null)
-		{
-			throw new System.Exception();
-		}
-		else
-		{
-			Players = new Dictionary<ulong, Player>();
-
-			Dictionary<ulong, Player>.KeyCollection keys = list.Keys;
-
-			foreach (ulong id in keys)
-			{
-				Players.Add(id, list[id]);
-			}
-
-			Clip = clip;
-		}
-	}
-
-
-	// Requetes
-
-	public Dictionary<ulong, Player> GetPlayers()
-	{
-		Dictionary<ulong, Player> tampon = new Dictionary<ulong, Player>();
-
-		Dictionary<ulong, Player>.KeyCollection keys = Players.Keys;
-
-		foreach (ulong id in keys)
-		{
-			tampon.Add(id, Players[id]);
-		}
-
-		return tampon;
-	}
-
-	public AudioClip GetMusic()
-	{
-		return Clip;
-	}
 }
 public class GamePlayEvent : SDD.Events.Event
 {
@@ -135,21 +81,10 @@ public class GamePauseEvent : SDD.Events.Event
 public class GameResumeEvent : SDD.Events.Event
 {
 }
-
 public class GameEndEvent : SDD.Events.Event
 {
 }
-
 public class GameResultEvent : SDD.Events.Event
-{
-}
-
-// Other
-public class AskForNewGameEvent : SDD.Events.Event
-{
-}
-
-public class AskForNewRoundEvent : SDD.Events.Event
 {
 }
 #endregion
@@ -182,13 +117,10 @@ public class RoomLeaveButtonClickedEvent : SDD.Events.Event
 
 public class RoomNextButtonClickedEvent : SDD.Events.Event
 {
+	public Dictionary<ulong, Player> PlayerList;
 }
 
 public class MusicSelectionLeaveButtonClickedEvent : SDD.Events.Event
-{
-}
-
-public class MusicSelectionNextButtonClickedEvent : SDD.Events.Event
 {
 }
 
@@ -224,82 +156,6 @@ public class ServerDisconnectionSuccessEvent : SDD.Events.Event
 }
 #endregion
 
-#region UI Events
-
-#region RoomModel Events
-public class SetPlayerListEvent : SDD.Events.Event
-{
-	// Attributs
-
-	private Dictionary<ulong, Player> Players;
-
-
-	// Constructeur
-
-	public SetPlayerListEvent(Dictionary<ulong, Player> list)
-	{
-		if (list == null)
-		{
-			throw new System.Exception();
-		} else
-		{
-			Players = new Dictionary<ulong, Player>();
-
-			Dictionary<ulong, Player>.KeyCollection keys = list.Keys;
-
-			foreach (ulong id in keys)
-			{
-				Players.Add(id, list[id]);
-			}
-		}
-	}
-
-
-	// Requetes
-
-	public Dictionary<ulong, Player> GetPlayers()
-	{
-		Dictionary<ulong, Player> tampon = new Dictionary<ulong, Player>();
-
-		Dictionary<ulong, Player>.KeyCollection keys = Players.Keys;
-
-		foreach (ulong id in keys)
-		{
-			tampon.Add(id, Players[id]);
-		}
-
-		return tampon;
-	}
-}
-#endregion
-
-#region MusicResult Events
-public class SetMusicRoundEvent : SDD.Events.Event
-{
-	// Attributs
-
-	private AudioClip Clip;
-
-
-	// Constructeur
-
-	public SetMusicRoundEvent(AudioClip clip)
-	{
-		Clip = clip;
-	}
-
-
-	// Requete
-
-	public AudioClip GetClip()
-	{
-		return Clip;
-	}
-}
-#endregion
-
-#endregion
-
 #region AccountManager Events
 	
 public class ProgressBarPrepareSongHaveChangedEvent : SDD.Events.Event
@@ -314,6 +170,10 @@ public class ProgressBarPrepareSongErrorEvent : SDD.Events.Event
 }
 
 public class PrepareSongEndEvent : SDD.Events.Event
+{
+}
+
+public class DataSongDeletedEvent : SDD.Events.Event
 {
 }
 

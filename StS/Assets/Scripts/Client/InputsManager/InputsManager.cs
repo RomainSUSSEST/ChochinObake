@@ -1,4 +1,4 @@
-﻿namespace ClientMaskedManager
+﻿namespace ClientManager
 {
     using SDD.Events;
     using CommonVisibleManager;
@@ -86,6 +86,7 @@
 
         private void ConnectionSuccess(ServerConnectionSuccessEvent e)
         {
+            // On enregistre notre id.
             this.ClientID = e.ClientID;
         }
 
