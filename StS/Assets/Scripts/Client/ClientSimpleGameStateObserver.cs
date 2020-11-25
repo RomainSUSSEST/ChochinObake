@@ -9,7 +9,6 @@ public abstract class ClientSimpleGameStateObserver : MonoBehaviour, IEventHandl
         EventManager.Instance.AddListener<MobileJoinRoomEvent>(MobileJoinRoom);
         EventManager.Instance.AddListener<MobileCharacterSelectionEvent>(MobileCharacterSelection);
         EventManager.Instance.AddListener<MobileMusicSelectionEvent>(MobileMusicSelection);
-        EventManager.Instance.AddListener<MobileChooseMusicEvent>(MobileChooseMusic);
         EventManager.Instance.AddListener<MobileGamePlayEvent>(MobileGamePlay);
     }
 
@@ -19,7 +18,6 @@ public abstract class ClientSimpleGameStateObserver : MonoBehaviour, IEventHandl
         EventManager.Instance.RemoveListener<MobileJoinRoomEvent>(MobileJoinRoom);
         EventManager.Instance.RemoveListener<MobileCharacterSelectionEvent>(MobileCharacterSelection);
         EventManager.Instance.RemoveListener<MobileMusicSelectionEvent>(MobileMusicSelection);
-        EventManager.Instance.RemoveListener<MobileChooseMusicEvent>(MobileChooseMusic);
         EventManager.Instance.RemoveListener<MobileGamePlayEvent>(MobileGamePlay);
     }
 
@@ -52,10 +50,6 @@ public abstract class ClientSimpleGameStateObserver : MonoBehaviour, IEventHandl
     }
 
     protected virtual void MobileMusicSelection(MobileMusicSelectionEvent e)
-    {
-    }
-
-    protected virtual void MobileChooseMusic(MobileChooseMusicEvent e)
     {
     }
 

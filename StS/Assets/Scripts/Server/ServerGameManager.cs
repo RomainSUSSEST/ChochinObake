@@ -12,14 +12,24 @@
 		// Attributs
 
 		private Dictionary<ulong, Player> CurrentPlayers;
-		private AudioClip CurrentMusic;
+		private string CurrentMusicPath;
 
 
 		#region Request
 
 		public IReadOnlyDictionary<ulong, Player> GetPlayers()
 		{
+			if (CurrentPlayers == null)
+			{
+				return null;
+			}
+
 			return new System.Collections.ObjectModel.ReadOnlyDictionary<ulong, Player>(CurrentPlayers);
+		}
+
+		public string GetCurrentMusicPath()
+		{
+			return CurrentMusicPath;
 		}
 
 		#endregion
@@ -52,6 +62,7 @@
 			EventManager.Instance.AddListener<RoomNextButtonClickedEvent>(RoomNextButtonClicked);
 
 			EventManager.Instance.AddListener<MusicSelectionLeaveButtonClickedEvent>(MusicSelectionLeaveButtonClicked);
+			EventManager.Instance.AddListener<MusicSelectionTimerEndEvent>(MusicSelectionTimerEnd);
 
 			// UI Resize
 			EventManager.Instance.AddListener<ResizeUICompleteEvent>(ResizeUIComplete);
@@ -78,6 +89,7 @@
 			EventManager.Instance.RemoveListener<RoomNextButtonClickedEvent>(RoomNextButtonClicked);
 
 			EventManager.Instance.RemoveListener<MusicSelectionLeaveButtonClickedEvent>(MusicSelectionLeaveButtonClicked);
+			EventManager.Instance.RemoveListener<MusicSelectionTimerEndEvent>(MusicSelectionTimerEnd);
 
 			// UI Resize
 			EventManager.Instance.RemoveListener<ResizeUICompleteEvent>(ResizeUIComplete);
@@ -133,7 +145,12 @@
 
 		private void MusicSelectionLeaveButtonClicked(MusicSelectionLeaveButtonClickedEvent e)
 		{
-			
+			RoomMenu();
+		}
+
+		private void MusicSelectionTimerEnd(MusicSelectionTimerEndEvent e)
+		{
+			MusicResult();
 		}
 
 		private void EscapeButtonClicked(EscapeButtonClickedEvent e)
@@ -215,7 +232,7 @@
 		{
 			SetTimeScale(1);
 			m_GameState = GameState.gamePlay;
-			EventManager.Instance.Raise(new GamePlayEvent(CurrentPlayers, CurrentMusic));
+			EventManager.Instance.Raise(new GamePlayEvent(CurrentPlayers, null));
 		}
 
 		private void Pause()

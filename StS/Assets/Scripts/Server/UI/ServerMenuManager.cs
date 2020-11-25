@@ -163,11 +163,6 @@ namespace ServerManager
 			EventManager.Instance.Raise(new MusicSelectionLeaveButtonClickedEvent());
 		}
 
-		public void MusicResultNextButtonClicked()
-		{
-			EventManager.Instance.Raise(new MusicResultNextButtonClickedEvent());
-		}
-
 		#endregion
 
 		#region Callbacks to GameManager events

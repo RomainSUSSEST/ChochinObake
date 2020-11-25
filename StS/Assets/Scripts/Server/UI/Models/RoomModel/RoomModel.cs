@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using CommonVisibleManager;
+using ServerManager;
 
 public class RoomModel : MonoBehaviour
 {
@@ -241,10 +242,11 @@ public class RoomModel : MonoBehaviour
 
     /**
      * NextButton.interactable == Players.Count > 0 && foreach player, playerState == ready
+     * && Il y a au moin 1 chanson d'enregistré.
      */
     private void ActualiseNextButton()
     {
-        bool IsValid = Players != null && Players.Count > 0;
+        bool IsValid = Players != null && Players.Count > 0 && ServerAccountManager.Instance.GetSongList().Length > 0;
 
         if (!IsValid)
         {

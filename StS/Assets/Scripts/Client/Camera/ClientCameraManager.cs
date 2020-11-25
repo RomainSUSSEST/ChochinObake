@@ -96,13 +96,6 @@
             OpenCamera(m_MainCamera);
         }
 
-        protected override void MobileChooseMusic(MobileChooseMusicEvent e)
-        {
-            base.MobileChooseMusic(e);
-
-            OpenCamera(m_MainCamera);
-        }
-
         #endregion
     }
 

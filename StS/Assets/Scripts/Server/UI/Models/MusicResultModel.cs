@@ -1,30 +1,71 @@
-﻿using SDD.Events;
-using System.Collections;
-using System.Collections.Generic;
+﻿using ServerManager;
+using TMPro;
 using UnityEngine;
 
 public class MusicResultModel : MonoBehaviour
 {
     // Attributs
 
-    [Header("MusicResult")]
+    [Header("UI Elements")]
 
-    [SerializeField] private List<AudioClip> randomSong;
-    private AudioClip MusicSelected;
+    [SerializeField] private TextMeshProUGUI Timer;
+    [SerializeField] private TextMeshProUGUI SongTitle;
 
 
-    // Life Cycle
+    [Header("Panel Config")]
+
+    [SerializeField] private float TimerStartValue; // Temps initial du timer en seconde
+
+
+    private float TimerCurrentValue; // Valeur courante du timer
+
+
+    #region Life Cycle
 
     private void OnEnable()
     {
-        ChooseRandomSong();
+        if (ServerGameManager.Instance.GetCurrentMusicPath() != null)
+        {
+            // On initialise le timer
+            TimerCurrentValue = TimerStartValue;
+            SongTitle.text = ServerGameManager.Instance.GetCurrentMusicPath();
+
+            // Initialisation de la page
+
+            RefreshTimerUI(); // Affichage du timer
+        }
     }
+
+    private void Update()
+    {
+        if (TimerCurrentValue > 0)
+        {
+            TimerCurrentValue -= Time.deltaTime;
+            RefreshTimerUI();
+
+            if (TimerCurrentValue <= 0)
+            {
+                TimerEnd();
+            }
+        }
+    }
+
+    #endregion
 
 
     // Outils
 
-    private void ChooseRandomSong()
+    #region Timer
+
+    private void TimerEnd()
     {
-        MusicSelected = randomSong[Random.Range(0, randomSong.Count)];
+
     }
+
+    private void RefreshTimerUI()
+    {
+        Timer.text = Mathf.Ceil(TimerCurrentValue).ToString() + 's';
+    }
+
+    #endregion
 }

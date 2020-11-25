@@ -13,7 +13,7 @@ public class SongListModel : MonoBehaviour
 
     [Header("Song List Text Content")]
 
-    [SerializeField] private Song SongPrefab;
+    [SerializeField] private SongListModel_Song SongPrefab;
     [SerializeField] private Transform SongInfoSpawnTransform;
     [SerializeField] private Transform ContentNode;
 
@@ -21,7 +21,7 @@ public class SongListModel : MonoBehaviour
 
     [SerializeField] private GameObject PanelAddSong;
 
-    private List<Song> SongList;
+    private List<SongListModel_Song> SongList;
     private Vector3 CurrentSpawnerPosition;
 
 
@@ -62,20 +62,14 @@ public class SongListModel : MonoBehaviour
     /// </summary>
     private void RefreshListSong()
     {
-        // On detruit les anciennes données.
+        // On detruit les anciennes données et initialise la liste des sons
         DestroyListSong();
-
-        // On Initialise la position du spawner.
-        CurrentSpawnerPosition = SongInfoSpawnTransform.position;
-
-        // On Initialise la liste des sons.
-        SongList = new List<Song>();
 
         // On récupére la liste des sons
         string[] songs = ServerAccountManager.Instance.GetSongList();
 
         // On les affiches
-        Song currentSong;
+        SongListModel_Song currentSong;
         for (int i = 0; i < songs.Length; ++i)
         {
             currentSong = Instantiate(SongPrefab, CurrentSpawnerPosition, Quaternion.identity, ContentNode);
@@ -89,19 +83,25 @@ public class SongListModel : MonoBehaviour
 
     /// <summary>
     /// Detruit la liste des chansons en nettoyant proprement les ressources alloué.
+    /// Puis recréer une liste empty
+    /// Reinitialise la position du spawner
     /// </summary>
     private void DestroyListSong()
     {
-        if (SongList == null)
+        if (SongList != null)
         {
-            return;
+            // On détruit la liste des chansons.
+            foreach (SongListModel_Song song in SongList)
+            {
+                Destroy(song.gameObject);
+            }
         }
 
-        // On détruit la liste des chansons.
-        foreach (Song song in SongList)
-        {
-            Destroy(song.gameObject);
-        }
+        // On Initialise la liste des sons.
+        SongList = new List<SongListModel_Song>();
+
+        // On Initialise la position du spawner.
+        CurrentSpawnerPosition = SongInfoSpawnTransform.position;
     }
 
     private void SubscribeEvents()

@@ -104,13 +104,6 @@
 			PlayMusic(MenuMusic);
 		}
 
-		protected override void MobileChooseMusic(MobileChooseMusicEvent e)
-		{
-			base.MobileChooseMusic(e);
-
-			PlayMusic(MenuMusic);
-		}
-
 		#endregion
 	}
 

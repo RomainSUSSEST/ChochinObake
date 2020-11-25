@@ -122,12 +122,38 @@ public class InvalidColorEvent : NetworkedEvent
 
 #region Music Selection
 
+#region ModelMusicSelectionClient
+
 public class AskForMusicListEvent : NetworkedEvent
 {
 	public AskForMusicListEvent(ulong ClientID) : base(ClientID)
 	{
 	}
 }
+
+public class VoteButtonHasBeenClickedEvent : NetworkedEvent
+{
+	// Attributs
+
+	public string AudioTitle;
+
+
+	// Constructeur
+
+	public VoteButtonHasBeenClickedEvent(ulong ClientID, string audioTitle) :
+		base(ClientID, new Argument()
+		{
+			Arg = audioTitle,
+			Type = typeof(string)
+		})
+	{
+		this.AudioTitle = audioTitle;
+	}
+}
+
+#endregion
+
+#region ModelMusicSelectionServer
 
 public class AnswerForMusicListRequestEvent : NetworkedEvent
 {
@@ -138,18 +164,30 @@ public class AnswerForMusicListRequestEvent : NetworkedEvent
 
 	// Constructeur
 
-	public AnswerForMusicListRequestEvent(ulong clientID, string[] list) : 
+	public AnswerForMusicListRequestEvent(ulong clientID, string[] list) :
 		base(clientID, new Argument()
-			{
-				Arg = list,
-				Type = typeof(string[])
-			})
+		{
+			Arg = list,
+			Type = typeof(string[])
+		})
 	{
 		MusicList = list;
 	}
 }
 
+public class MusicVoteAcceptedEvent : NetworkedEvent
+{
+	// Constructeur
+
+	public MusicVoteAcceptedEvent(ulong PlayerID) : base(PlayerID)
+	{
+	}
+}
+
 #endregion
+
+#endregion
+
 #endregion
 
 #region MobileInputs

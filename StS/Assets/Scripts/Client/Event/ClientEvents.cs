@@ -23,15 +23,12 @@ public class MobileMusicSelectionEvent : Event
 {
 }
 
-public class MobileChooseMusicEvent : Event
-{
-}
-
 public class MobileGamePlayEvent : Event
 {
 }
 #endregion
 
+#region UI
 #region MenuManagerEvents
 // Client
 public class JoinButtonClickedEvent : Event
@@ -57,6 +54,7 @@ public class PreviousMusicSelectionButtonClickedEvent : Event
 public class RespawnButtonClickedEvent : Event
 {
 }
+#endregion
 #endregion
 
 #region Network Client

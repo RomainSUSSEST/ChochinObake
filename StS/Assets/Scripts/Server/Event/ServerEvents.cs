@@ -124,8 +124,9 @@ public class MusicSelectionLeaveButtonClickedEvent : SDD.Events.Event
 {
 }
 
-public class MusicResultNextButtonClickedEvent : SDD.Events.Event
+public class MusicSelectionTimerEndEvent : SDD.Events.Event
 {
+	public string PathDirectoryMusicSelected;
 }
 #endregion
 

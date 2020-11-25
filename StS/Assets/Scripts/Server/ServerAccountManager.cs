@@ -19,10 +19,6 @@ namespace ServerManager
     /// </summary>
     public class ServerAccountManager : ServerManager<ServerAccountManager>
     {
-        // State
-
-        private enum STATE { Nothing, AddingSong, LoadingSong }
-
         // Constante
 
         private static readonly string WEBM_EXTENSION = ".webm";
@@ -34,14 +30,12 @@ namespace ServerManager
 
         // Attributs
 
-        private STATE ServerAccountManager_State;
         private AudioClip DownloadedSongAtAudioClip;
 
 
         #region Manager implementation
         protected override IEnumerator InitCoroutine()
         {
-            ServerAccountManager_State = STATE.Nothing;
             yield break;
         }
         #endregion
@@ -50,7 +44,7 @@ namespace ServerManager
         // Requetes
 
         /// <summary>
-        /// Renvoi la liste des chansons actuellement enregistré.
+        /// Renvoi le path de la liste des chansons actuellement enregistré.
         /// </summary>
         /// <returns> Renvoi la liste des chansons actuellement enregistré dans "Application.persistentDataPath" </returns>
         public string[] GetSongList()
@@ -70,8 +64,6 @@ namespace ServerManager
         /// <param name="Url"> L'Url du lien youtube à ajouter </param>
         public async void AddYoutubeSongAsync(string Url)
         {
-            ServerAccountManager_State = STATE.AddingSong;
-
             try
             {
                 string WebmSongPath = await ExtractYoutubeAudioWebmAsync(Url); // On récupére l'audio de Youtube au format .Webm
@@ -89,8 +81,6 @@ namespace ServerManager
 
             // On averti que l'opération est terminé
             EventManager.Instance.Raise(new PrepareSongEndEvent());
-            // On change l'état du manager en conséquence.
-            ServerAccountManager_State = STATE.Nothing;
         }
 
         /// <summary>
@@ -134,7 +124,7 @@ namespace ServerManager
 
             UpdatePrepareSongState("Search for the best quality", 4);
             StreamManifest streamManifest = await youtube.Videos.Streams.GetManifestAsync(Url);
-          
+
             // On sélectionne la plus haute qualité audio
             IStreamInfo streamInfo = streamManifest.GetAudioOnly().WithHighestBitrate();
 
@@ -418,7 +408,6 @@ namespace ServerManager
                 msg = msg
             });
             EventManager.Instance.Raise(new PrepareSongEndEvent());
-            ServerAccountManager_State = STATE.Nothing;
         }
 
         #endregion
