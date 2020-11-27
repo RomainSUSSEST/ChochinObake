@@ -158,7 +158,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1176411222472982, guid: 2d4cc07e22d85374b8d15cd15f4e18e1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1322255614258102, guid: 2d4cc07e22d85374b8d15cd15f4e18e1, type: 3}
       propertyPath: m_IsActive
@@ -455,7 +455,7 @@ PrefabInstance:
     - target: {fileID: 2216146498385321127, guid: 2d4cc07e22d85374b8d15cd15f4e18e1,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2561663787512832413, guid: 2d4cc07e22d85374b8d15cd15f4e18e1,
         type: 3}
@@ -706,6 +706,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4817549018445314619, guid: 2d4cc07e22d85374b8d15cd15f4e18e1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5572488179480834655, guid: 2d4cc07e22d85374b8d15cd15f4e18e1,
         type: 3}
