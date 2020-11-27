@@ -32,7 +32,6 @@
             EventManager.Instance.AddListener<LeaveButtonClickedEvent>(LeaveButtonClicked);
             EventManager.Instance.AddListener<PreviousCharacterSelectionButtonClickedEvent>(PreviousCharacterSelectionButtonClicked);
             EventManager.Instance.AddListener<ReadyCharacterSelectionButtonClickedEvent>(ReadyCharacterSelectionButtonClicked);
-            EventManager.Instance.AddListener<RespawnButtonClickedEvent>(Respawn);
 
             // UI Resize
             EventManager.Instance.AddListener<ResizeUICompleteEvent>(ResizeUIComplete);
@@ -56,7 +55,6 @@
             EventManager.Instance.RemoveListener<LeaveButtonClickedEvent>(LeaveButtonClicked);
             EventManager.Instance.RemoveListener<PreviousCharacterSelectionButtonClickedEvent>(PreviousCharacterSelectionButtonClicked);
             EventManager.Instance.RemoveListener<ReadyCharacterSelectionButtonClickedEvent>(ReadyCharacterSelectionButtonClicked);
-            EventManager.Instance.RemoveListener<RespawnButtonClickedEvent>(Respawn);
 
             // UI Resize
             EventManager.Instance.RemoveListener<ResizeUICompleteEvent>(ResizeUIComplete);
@@ -106,11 +104,6 @@
         private void ReadyCharacterSelectionButtonClicked(ReadyCharacterSelectionButtonClickedEvent e)
         {
             EventManager.Instance.Raise(new ReadyCharacterSelectionEvent());
-        }
-
-        private void Respawn(RespawnButtonClickedEvent e)
-        {
-            MessagingManager.Instance.RaiseNetworkedEventOnServer(new RespawnEvent());
         }
 
         #endregion

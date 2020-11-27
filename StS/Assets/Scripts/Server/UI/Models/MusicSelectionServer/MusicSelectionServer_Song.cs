@@ -11,7 +11,6 @@ public class MusicSelectionServer_Song : MonoBehaviour
 
     private int NbrVote;
     private string Title;
-    private string DirectoryPath;
 
 
     // Requete
@@ -24,11 +23,6 @@ public class MusicSelectionServer_Song : MonoBehaviour
     public int getNbrVote()
     {
         return NbrVote;
-    }
-
-    public string GetDirectoryPath()
-    {
-        return DirectoryPath;
     }
 
 
@@ -50,11 +44,6 @@ public class MusicSelectionServer_Song : MonoBehaviour
     {
         Title = title;
         RefreshInfo();
-    }
-
-    public void SetDirectoryPath(string path)
-    {
-        DirectoryPath = path;
     }
 
 

@@ -275,10 +275,5 @@ public class GameStartedEvent : NetworkedEvent
 public class ServerEnterInGameMusicSelectionEvent : NetworkedEvent
 {
 }
-
-public class RespawnEvent : NetworkedEvent
-{
-	public ulong PlayerID;
-}
 #endregion
 #endregion

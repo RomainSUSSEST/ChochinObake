@@ -47,7 +47,7 @@ public class MusicSelectionClientModel : MonoBehaviour
 
     private void MusicVoteAccepted(MusicVoteAcceptedEvent e)
     {
-
+        // To DO, désactiver boutons d'envoie.
     }
 
     #endregion

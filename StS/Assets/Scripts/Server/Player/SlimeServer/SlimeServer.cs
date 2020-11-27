@@ -64,10 +64,6 @@ public class SlimeServer : Slime
         EventManager.Instance.AddListener<TiltTopBottomEvent>(TiltTopBottom);
 
         EventManager.Instance.AddListener<ServerDisconnectionSuccessEvent>(OnClientDisconnected);
-
-        // A suppr
-
-        EventManager.Instance.AddListener<RespawnEvent>(Reset);
     }
 
     private void UnsubscribeEvent()
@@ -84,10 +80,6 @@ public class SlimeServer : Slime
         EventManager.Instance.RemoveListener<TiltTopBottomEvent>(TiltTopBottom);
 
         EventManager.Instance.RemoveListener<ServerDisconnectionSuccessEvent>(OnClientDisconnected);
-
-        // A Suppr
-
-        EventManager.Instance.RemoveListener<RespawnEvent>(Reset);
     }
     #endregion
 
@@ -155,12 +147,5 @@ public class SlimeServer : Slime
         }
     }
 
-    private void Reset(RespawnEvent e)
-    {
-        if (e.DoesThisConcernMe(AssociedClientID))
-        {
-            transform.position = Respawn;
-        }
-    }
     #endregion
 }

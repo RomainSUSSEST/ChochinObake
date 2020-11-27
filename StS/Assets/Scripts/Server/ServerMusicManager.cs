@@ -131,7 +131,7 @@ namespace ServerManager
 		{
 			base.GamePlay(e);
 
-			PlayMusic(e.GetMusic());
+
 		}
 
 		protected override void GamePause(GamePauseEvent e)
