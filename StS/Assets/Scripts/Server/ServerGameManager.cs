@@ -6,7 +6,7 @@
     using System.Collections.Generic;
 
     public enum GameState { gameMenu, gamePlay, gameLobby, gamePause }
-
+	
 	public class ServerGameManager : ServerManager<ServerGameManager>
 	{
 		// Attributs
@@ -64,6 +64,8 @@
 			EventManager.Instance.AddListener<MusicSelectionLeaveButtonClickedEvent>(MusicSelectionLeaveButtonClicked);
 			EventManager.Instance.AddListener<MusicSelectionTimerEndEvent>(MusicSelectionTimerEnd);
 
+			EventManager.Instance.AddListener<MusicResultTimerEndEvent>(MusicResultTimerEnd);
+
 			// UI Resize
 			EventManager.Instance.AddListener<ResizeUICompleteEvent>(ResizeUIComplete);
 
@@ -90,6 +92,8 @@
 
 			EventManager.Instance.RemoveListener<MusicSelectionLeaveButtonClickedEvent>(MusicSelectionLeaveButtonClicked);
 			EventManager.Instance.RemoveListener<MusicSelectionTimerEndEvent>(MusicSelectionTimerEnd);
+
+			EventManager.Instance.RemoveListener<MusicResultTimerEndEvent>(MusicResultTimerEnd);
 
 			// UI Resize
 			EventManager.Instance.RemoveListener<ResizeUICompleteEvent>(ResizeUIComplete);
@@ -150,7 +154,14 @@
 
 		private void MusicSelectionTimerEnd(MusicSelectionTimerEndEvent e)
 		{
+			// On set la musique choisi
+			CurrentMusicPath = e.PathDirectoryMusicSelected;
 			MusicResult();
+		}
+
+		private void MusicResultTimerEnd(MusicResultTimerEndEvent e)
+		{
+
 		}
 
 		private void EscapeButtonClicked(EscapeButtonClickedEvent e)

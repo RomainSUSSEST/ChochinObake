@@ -1,11 +1,12 @@
-﻿using ServerManager;
+﻿using SDD.Events;
+using ServerManager;
 using TMPro;
 using UnityEngine;
 
 public class MusicResultModel : MonoBehaviour
 {
     // Attributs
-
+ 
     [Header("UI Elements")]
 
     [SerializeField] private TextMeshProUGUI Timer;
@@ -21,7 +22,7 @@ public class MusicResultModel : MonoBehaviour
 
 
     #region Life Cycle
-
+    
     private void OnEnable()
     {
         if (ServerGameManager.Instance.GetCurrentMusicPath() != null)
@@ -59,7 +60,7 @@ public class MusicResultModel : MonoBehaviour
 
     private void TimerEnd()
     {
-
+        EventManager.Instance.Raise(new MusicResultTimerEndEvent());
     }
 
     private void RefreshTimerUI()
