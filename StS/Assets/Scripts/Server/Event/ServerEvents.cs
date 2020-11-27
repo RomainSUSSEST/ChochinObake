@@ -128,6 +128,10 @@ public class MusicSelectionTimerEndEvent : SDD.Events.Event
 {
 	public string PathDirectoryMusicSelected;
 }
+
+public class MusicResultTimerEndEvent : SDD.Events.Event
+{
+}
 #endregion
 
 #region Level Manager
