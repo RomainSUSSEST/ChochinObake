@@ -24,56 +24,6 @@ public class GameMusicResultMenuEvent : SDD.Events.Event
 }
 public class GamePlayEvent : SDD.Events.Event
 {
-	// Attributs
-
-	private Dictionary<ulong, Player> Players;
-	private AudioClip Clip;
-
-
-	// Constructeur
-
-	public GamePlayEvent(Dictionary<ulong, Player> list, AudioClip clip)
-	{
-		if (list == null || clip == null)
-		{
-			throw new System.Exception();
-		}
-		else
-		{
-			Players = new Dictionary<ulong, Player>();
-
-			Dictionary<ulong, Player>.KeyCollection keys = list.Keys;
-
-			foreach (ulong id in keys)
-			{
-				Players.Add(id, list[id]);
-			}
-
-			Clip = clip;
-		}
-	}
-
-
-	// Requetes
-
-	public Dictionary<ulong, Player> GetPlayers()
-	{
-		Dictionary<ulong, Player> tampon = new Dictionary<ulong, Player>();
-
-		Dictionary<ulong, Player>.KeyCollection keys = Players.Keys;
-
-		foreach (ulong id in keys)
-		{
-			tampon.Add(id, Players[id]);
-		}
-
-		return tampon;
-	}
-
-	public AudioClip GetMusic()
-	{
-		return Clip;
-	}
 }
 public class GamePauseEvent : SDD.Events.Event
 {
@@ -136,9 +86,6 @@ public class MusicResultTimerEndEvent : SDD.Events.Event
 
 #region Level Manager
 
-public class GameReadyEvent : SDD.Events.Event
-{
-}
 #region AlgoProcedural Events
 public class NextWaveEvent : SDD.Events.Event
 {
@@ -152,6 +99,7 @@ public class ObstacleEndMapEvent : SDD.Events.Event
 {
 }
 #endregion
+
 #endregion
 
 #region Network Server

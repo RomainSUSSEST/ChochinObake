@@ -178,7 +178,7 @@ namespace ServerManager
                 totalSize += LastObstacle.GetComponent<BoxCollider>().bounds.size.z; ;
             }
 
-            InstantiatePlayers(e.GetPlayers());
+            //InstantiatePlayers(e.GetPlayers());
 
             StartCoroutine("ProceduralGenerator");
         }

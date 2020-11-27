@@ -170,7 +170,6 @@ public class MusicSelectionServerModel : MonoBehaviour
         tampon.SetTitle(title); // On set son titre
         tampon.IncreaseNumberVote(); // on set son nombre de vote
 
-
         SongListGameObject.Add(tampon); // On l'ajoute à la liste
     }
 
@@ -192,7 +191,7 @@ public class MusicSelectionServerModel : MonoBehaviour
                 // On récupére le path de la chanson
                 foreach (string s in SongListPath)
                 {
-                    if (Path.GetDirectoryName(s).Equals(song.GetTitle()))
+                    if (Path.GetFileName(s).Equals(song.GetTitle()))
                     { // C'est une gagnante, on l'ajoute
                         PathMusicGagnante.Add(s);
                         break;

@@ -71,9 +71,6 @@
 
 			// Network Event
 			EventManager.Instance.AddListener<ServerDisconnectionSuccessEvent>(ClientDisconnected);
-
-			// Level Manager
-			EventManager.Instance.AddListener<GameReadyEvent>(GameReady);
 		}
 
 		public override void UnsubscribeEvents()
@@ -100,9 +97,6 @@
 
 			// Network Event
 			EventManager.Instance.RemoveListener<ServerDisconnectionSuccessEvent>(ClientDisconnected);
-
-			// Level Manager
-			EventManager.Instance.RemoveListener<GameReadyEvent>(GameReady);
 		}
 		#endregion
 
@@ -161,7 +155,7 @@
 
 		private void MusicResultTimerEnd(MusicResultTimerEndEvent e)
 		{
-
+			Play();
 		}
 
 		private void EscapeButtonClicked(EscapeButtonClickedEvent e)
@@ -172,13 +166,6 @@
 		private void QuitButtonClicked(QuitButtonClickedEvent e)
 		{
 			Application.Quit();
-		}
-        #endregion
-
-        #region Callbacks to Event issued by LevelManager
-		private void GameReady(GameReadyEvent e)
-		{
-			Play();
 		}
         #endregion
 
@@ -243,7 +230,7 @@
 		{
 			SetTimeScale(1);
 			m_GameState = GameState.gamePlay;
-			EventManager.Instance.Raise(new GamePlayEvent(CurrentPlayers, null));
+			EventManager.Instance.Raise(new GamePlayEvent());
 		}
 
 		private void Pause()

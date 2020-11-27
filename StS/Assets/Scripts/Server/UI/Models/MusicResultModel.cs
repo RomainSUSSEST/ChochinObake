@@ -1,5 +1,6 @@
 ﻿using SDD.Events;
 using ServerManager;
+using System.IO;
 using TMPro;
 using UnityEngine;
 
@@ -29,7 +30,7 @@ public class MusicResultModel : MonoBehaviour
         {
             // On initialise le timer
             TimerCurrentValue = TimerStartValue;
-            SongTitle.text = ServerGameManager.Instance.GetCurrentMusicPath();
+            SongTitle.text = Path.GetFileName(ServerGameManager.Instance.GetCurrentMusicPath());
 
             // Initialisation de la page
 
