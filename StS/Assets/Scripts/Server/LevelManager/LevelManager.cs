@@ -161,6 +161,9 @@ namespace ServerManager
         {
             base.GamePlay(e);
 
+            // On charge la carte
+
+
             // Initialisation des obstacles
             Obstacle.SetCurrentMoveSpeed(RealBeats.Count / CurrentClip.length * Obstacle.DEFAULT_SPEED);
             Obstacle.SetMapStart(SpawnerMap.transform);

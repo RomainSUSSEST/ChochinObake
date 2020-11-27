@@ -19,6 +19,9 @@ namespace ServerManager
     /// </summary>
     public class ServerAccountManager : ServerManager<ServerAccountManager>
     {
+        private enum STATE { ADDING, LOADING, NOTHING }
+
+
         // Constante
 
         private static readonly string WEBM_EXTENSION = ".webm";
@@ -30,12 +33,16 @@ namespace ServerManager
 
         // Attributs
 
+        private STATE CurrentState { get; set; }
         private AudioClip DownloadedSongAtAudioClip;
 
 
         #region Manager implementation
         protected override IEnumerator InitCoroutine()
         {
+            // Initialisation de l'état de base
+            CurrentState = STATE.NOTHING;
+
             yield break;
         }
         #endregion
@@ -64,6 +71,9 @@ namespace ServerManager
         /// <param name="Url"> L'Url du lien youtube à ajouter </param>
         public async void AddYoutubeSongAsync(string Url)
         {
+            await WaitToManagerReady();
+            CurrentState = STATE.ADDING; // On dit que le manager add une chanson
+
             try
             {
                 string WebmSongPath = await ExtractYoutubeAudioWebmAsync(Url); // On récupére l'audio de Youtube au format .Webm
@@ -75,9 +85,11 @@ namespace ServerManager
                 DeleteTemporaryFile(Directory);
             } catch (Exception e)
             {
-                AnErrorOccurred(e.Message);
+                UpdatePrepareSongAnErrorOccurred(e.Message);
                 return;
             }
+
+            ManagerIsReady(); // On libére le manager
 
             // On averti que l'opération est terminé
             EventManager.Instance.Raise(new PrepareSongEndEvent());
@@ -93,8 +105,144 @@ namespace ServerManager
             EventManager.Instance.Raise(new DataSongDeletedEvent());
         }
 
+        /// <summary>
+        /// Renvoie l'audio clip associé au répertoire correspondant à la musique souhaité. (Asynchrone)
+        /// Pour suivre la progression, s'abonner à "UpdateLoadingAudioClipFromSong" de type SDD.Events.Event
+        /// </summary>
+        /// <param name="directory"> Le répertoire contenant les informations de la musique </param>
+        /// <returns> L'audio clip associé </returns>
+        public async Task<AudioClip> GetAudioClipOfSongAsync(string directory)
+        {
+            await WaitToManagerReady();
+            CurrentState = STATE.LOADING; // On dit que le manager load une chanson
+
+            AudioClip clip = await GetAudioClipOfWavSongAsync(directory + DEFAULT_NAME + WAV_EXTENSION);
+
+            ManagerIsReady();
+            return clip;
+        }
+
+        /// <summary>
+        /// Renvoie les données de la carte stocké dans le repertoire 'directory' (Asynchrone)
+        /// Pour suivre la progression, s'abonner à "UpdateLoadingMapDataEvent"
+        /// </summary>
+        /// <param name="directory"> Le répertoire contenant les données de la chansons </param>
+        /// <returns></returns>
+        public async Task<List<SpectralFluxInfo>> GetMapDataAsync(string directory)
+        {
+            IProgress<double> progress = new Progress<double>(percent => UpdateLoadingMapData(percent));
+            string file = directory + '/' + DATA_FILE;
+
+            if (!File.Exists(file))
+            {
+                throw new Exception("Fichier manquant");
+            }
+
+            List<SpectralFluxInfo> result = await Task.Run(() =>
+            {
+                long fileLength = new FileInfo(file).Length;
+                byte[] binaryInfo = new byte[fileLength];
+                using (BinaryReader reader = new BinaryReader(File.Open(file, FileMode.Open)))
+                {
+                    int count = 1024;
+                    int index;
+
+                    for (index = 0; index < binaryInfo.Length; index += count)
+                    {
+                        progress.Report((double)index / binaryInfo.Length);
+                        reader.Read(binaryInfo, index, Math.Min(count, binaryInfo.Length - (index + 1)));
+                        Thread.Yield();
+                    }
+
+                    reader.Close();
+                }
+
+                return (List<SpectralFluxInfo>) ByteArrayToObject(binaryInfo);
+            });
+
+            UpdateLoadingMapData(1);
+
+            return result;
+        }
+
 
         // Outils
+
+        #region GetAudioClipOfSongAsync
+
+        /// <summary>
+        /// Charge le fichier audio .Wav indiquer par path et renvoie un AudioClip associé.
+        /// Pour suivre la progression, s'abonner à "UpdateLoadingAudioClipFromSong" de type SDD.Events.Event
+        /// </summary>
+        /// <param name="path"> Le chemin du fichier audio au format .Wav </param>
+        /// <returns> L'audioClip associé au .Wav pointé par Path. </returns>
+        private async Task<AudioClip> GetAudioClipOfWavSongAsync(string path)
+        {
+            StartCoroutine("_GetAudioClipOfWavSongAsync", path);
+            await Task.Run(() =>
+            {
+                while (DownloadedSongAtAudioClip == null)
+                {
+                    Thread.Sleep(100);
+                }
+            });
+
+            return DownloadedSongAtAudioClip;
+        }
+
+        private IEnumerator _GetAudioClipOfWavSongAsync(string path)
+        {
+            using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip("file://" + path, AudioType.WAV))
+            {
+                www.SendWebRequest();
+
+                while (!www.isDone)
+                {
+                    UpdateLoadingAudioClipFromSong(www.downloadProgress);
+                    yield return new WaitForSeconds(0.2f); ;
+                }
+
+                if (www.isNetworkError || www.isHttpError)
+                {
+                    throw new Exception("Error when loading audio");
+                }
+                else
+                {
+                    DownloadedSongAtAudioClip = DownloadHandlerAudioClip.GetContent(www);
+
+                    if (DownloadedSongAtAudioClip == null)
+                    {
+                        throw new Exception("An error occurred");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Permet de suivre la progression du chargement
+        /// </summary>
+        /// <param name="value"> Valeur [0f, 1f]</param>
+        private void UpdateLoadingAudioClipFromSong(float value)
+        {
+            EventManager.Instance.Raise(new UpdateLoadingProgressionAudioClipEvent()
+            {
+                progression = value
+            });
+        }
+
+        #endregion
+
+        #region GetMapDataAsync
+
+        private void UpdateLoadingMapData(double value)
+        {
+            EventManager.Instance.Raise(new UpdateLoadingMapDataEvent()
+            {
+                progression = value
+            });
+        }
+
+        #endregion
 
         #region AddingSong
 
@@ -401,7 +549,7 @@ namespace ServerManager
         /// - Change l'état du manager à STATE.Nothing
         /// </summary>
         /// <param name="msg"></param>
-        private void AnErrorOccurred(string msg)
+        private void UpdatePrepareSongAnErrorOccurred(string msg)
         {
             EventManager.Instance.Raise(new ProgressBarPrepareSongErrorEvent()
             {
@@ -438,5 +586,33 @@ namespace ServerManager
         }
 
         #endregion
+
+        /// <summary>
+        /// Permet d'attendre jusqu'à ce que le manager soit pret.
+        /// </summary>
+        /// <returns></returns>
+        private async Task WaitToManagerReady()
+        {
+            // Si une opération est déjà en cours, on attend.
+            if (CurrentState != STATE.NOTHING)
+            {
+                await Task.Run(() =>
+                {
+                    while (CurrentState != STATE.NOTHING)
+                    {
+                        Thread.Sleep(200);
+                    }
+                });
+            }
+        }
+
+        /// <summary>
+        /// Indique que le manager est pret
+        /// </summary>
+        private void ManagerIsReady()
+        {
+            // On indique que l'opération est terminé.
+            CurrentState = STATE.NOTHING;
+        }
     }
 }

@@ -110,7 +110,8 @@ public class ServerDisconnectionSuccessEvent : SDD.Events.Event
 #endregion
 
 #region AccountManager Events
-	
+
+// Add	
 public class ProgressBarPrepareSongHaveChangedEvent : SDD.Events.Event
 {
 	public string State;
@@ -126,8 +127,20 @@ public class PrepareSongEndEvent : SDD.Events.Event
 {
 }
 
+// Delete
 public class DataSongDeletedEvent : SDD.Events.Event
 {
+}
+
+// Loading
+public class UpdateLoadingProgressionAudioClipEvent : SDD.Events.Event
+{
+	public float progression; // 0f - 1f
+}
+
+public class UpdateLoadingMapDataEvent : SDD.Events.Event
+{
+	public double progression; // 0f- 1f
 }
 
 #endregion
