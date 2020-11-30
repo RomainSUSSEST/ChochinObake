@@ -17,7 +17,6 @@ public class GameCreditsMenuEvent : SDD.Events.Event
 }
 public class GameMusicSelectionMenuEvent : SDD.Events.Event
 {
-	public IReadOnlyDictionary<ulong, Player> players;
 }
 public class GameMusicResultMenuEvent : SDD.Events.Event
 {
@@ -79,8 +78,10 @@ public class MusicSelectionTimerEndEvent : SDD.Events.Event
 	public string PathDirectoryMusicSelected;
 }
 
-public class MusicResultTimerEndEvent : SDD.Events.Event
+public class MusicResultGameReadyEvent : SDD.Events.Event
 {
+	public AudioClip audio;
+	public List<SpectralFluxInfo> map;
 }
 #endregion
 

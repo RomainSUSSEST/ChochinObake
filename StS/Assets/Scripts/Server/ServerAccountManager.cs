@@ -27,7 +27,7 @@ namespace ServerManager
         private static readonly string WEBM_EXTENSION = ".webm";
         private static readonly string WAV_EXTENSION = ".wav";
 
-        private static readonly string DEFAULT_NAME = "Audio";
+        private static readonly string AUDIO_FILE = "Audio";
         private static readonly string DATA_FILE = "Data";
 
 
@@ -71,7 +71,7 @@ namespace ServerManager
         /// <param name="Url"> L'Url du lien youtube à ajouter </param>
         public async void AddYoutubeSongAsync(string Url)
         {
-            await WaitToManagerReady();
+            await WaitToManagerReadyAsync();
             CurrentState = STATE.ADDING; // On dit que le manager add une chanson
 
             try
@@ -80,7 +80,7 @@ namespace ServerManager
                 string Directory = Path.GetDirectoryName(WebmSongPath);
                 string WavPath = await ConvertWebmToWavAsync(WebmSongPath, Directory); // On converti le fichier .Webm double en .Wav
                 AudioClip clip = await LoadWavAudioFromAsync(WavPath);
-                List<SpectralFluxInfo> realBeats = await AnalyzeAudio(clip);
+                List<SpectralFluxInfo> realBeats = await AnalyzeAudioAsync(clip);
                 await SaveMapAsync(realBeats, Directory);
                 DeleteTemporaryFile(Directory);
             } catch (Exception e)
@@ -97,6 +97,7 @@ namespace ServerManager
 
         /// <summary>
         /// Delete les données de l'audio contenu dans le directory pointé par path.
+        /// Envoie un DataSongDeletedEvent une fois fini.
         /// </summary>
         /// <param name="path"> Le directory contenant les données de l'audio </param>
         public void RemoveSongWithDirectoryPath(string path)
@@ -113,10 +114,10 @@ namespace ServerManager
         /// <returns> L'audio clip associé </returns>
         public async Task<AudioClip> GetAudioClipOfSongAsync(string directory)
         {
-            await WaitToManagerReady();
+            await WaitToManagerReadyAsync();
             CurrentState = STATE.LOADING; // On dit que le manager load une chanson
 
-            AudioClip clip = await GetAudioClipOfWavSongAsync(directory + DEFAULT_NAME + WAV_EXTENSION);
+            AudioClip clip = await GetAudioClipOfWavSongAsync(directory + '/' + AUDIO_FILE + WAV_EXTENSION);
 
             ManagerIsReady();
             return clip;
@@ -127,7 +128,7 @@ namespace ServerManager
         /// Pour suivre la progression, s'abonner à "UpdateLoadingMapDataEvent"
         /// </summary>
         /// <param name="directory"> Le répertoire contenant les données de la chansons </param>
-        /// <returns></returns>
+        /// <returns> Une List<SpectralFluxInfo> correspondant au donnée de la carte. /returns>
         public async Task<List<SpectralFluxInfo>> GetMapDataAsync(string directory)
         {
             IProgress<double> progress = new Progress<double>(percent => UpdateLoadingMapData(percent));
@@ -140,21 +141,21 @@ namespace ServerManager
 
             List<SpectralFluxInfo> result = await Task.Run(() =>
             {
-                long fileLength = new FileInfo(file).Length;
-                byte[] binaryInfo = new byte[fileLength];
-                using (BinaryReader reader = new BinaryReader(File.Open(file, FileMode.Open)))
+                byte[] binaryInfo;
+                using (FileStream reader = new FileStream(file, FileMode.Open, FileAccess.Read))
                 {
+                    long fileLength = reader.Length;
+                    binaryInfo = new byte[fileLength];
+
                     int count = 1024;
                     int index;
 
                     for (index = 0; index < binaryInfo.Length; index += count)
                     {
                         progress.Report((double)index / binaryInfo.Length);
-                        reader.Read(binaryInfo, index, Math.Min(count, binaryInfo.Length - (index + 1)));
+                        reader.Read(binaryInfo, index, Math.Min(count, binaryInfo.Length - index));
                         Thread.Yield();
                     }
-
-                    reader.Close();
                 }
 
                 return (List<SpectralFluxInfo>) ByteArrayToObject(binaryInfo);
@@ -294,7 +295,7 @@ namespace ServerManager
 
             Directory.CreateDirectory(directory); // Création du répertoire
 
-            string resultPath = directory + "/" + DEFAULT_NAME + WEBM_EXTENSION;
+            string resultPath = directory + "/" + AUDIO_FILE + WEBM_EXTENSION;
 
             // Lancement du téléchargement
 
@@ -354,7 +355,7 @@ namespace ServerManager
         /// </summary>
         /// <param name="audio"> L'audioClip à analyser </param>
         /// <returns> La liste des moments fort au format List<SpectralFluxInfo> </returns>
-        private async Task<List<SpectralFluxInfo>> AnalyzeAudio(AudioClip audio)
+        private async Task<List<SpectralFluxInfo>> AnalyzeAudioAsync(AudioClip audio)
         {
             UpdatePrepareSongState("Begin map generation...", 66);
             // On récupére les infos sur la musique
@@ -368,7 +369,7 @@ namespace ServerManager
             audio.GetData(MultiChannelsSamples, 0);
 
             UpdatePrepareSongState("Analyze audio for generation...", 68);
-            SpectralFluxAnalyzer spectralFluxAnalyzer = await GetFullSpectrumThreaded(NumTotalSamples, MultiChannelsSamples, NumChannels, SampleRate);
+            SpectralFluxAnalyzer spectralFluxAnalyzer = await GetFullSpectrumThreadedAsync(NumTotalSamples, MultiChannelsSamples, NumChannels, SampleRate);
             return spectralFluxAnalyzer.trueBeats;
         }
 
@@ -380,7 +381,7 @@ namespace ServerManager
         /// <param name="numChannels"></param>
         /// <param name="sampleRate"></param>
         /// <returns></returns>
-        private async Task<SpectralFluxAnalyzer> GetFullSpectrumThreaded(int numTotalSamples, float[] multiChannelsSamples, int numChannels, int sampleRate)
+        private async Task<SpectralFluxAnalyzer> GetFullSpectrumThreadedAsync(int numTotalSamples, float[] multiChannelsSamples, int numChannels, int sampleRate)
         {
             SpectralFluxAnalyzer PreProcessedSpectralFluxAnalyzer = new SpectralFluxAnalyzer();
             IProgress<double> progress = new Progress<double>(percent => UpdatePrepareSongState("Analyze Audio...", 68f + percent * 27f));
@@ -478,7 +479,7 @@ namespace ServerManager
                     for (index = 0; index < binaryInfo.Length; index += count)
                     {
                         progress.Report((double)index / binaryInfo.Length);
-                        writer.Write(binaryInfo, index, Math.Min(count, binaryInfo.Length - (index + 1)));
+                        writer.Write(binaryInfo, index, Math.Min(count, binaryInfo.Length - index));
                         Thread.Yield();
                     }
 
@@ -496,7 +497,7 @@ namespace ServerManager
         /// <returns></returns>
         private void DeleteTemporaryFile(string Directory)
         {
-            File.Delete(Directory + '/' + DEFAULT_NAME + WEBM_EXTENSION);
+            File.Delete(Directory + '/' + AUDIO_FILE + WEBM_EXTENSION);
             UpdatePrepareSongState("Map saved !", 100);
         }
         #endregion
@@ -591,7 +592,7 @@ namespace ServerManager
         /// Permet d'attendre jusqu'à ce que le manager soit pret.
         /// </summary>
         /// <returns></returns>
-        private async Task WaitToManagerReady()
+        private async Task WaitToManagerReadyAsync()
         {
             // Si une opération est déjà en cours, on attend.
             if (CurrentState != STATE.NOTHING)

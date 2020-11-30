@@ -131,7 +131,16 @@ namespace ServerManager
 		{
 			base.GamePlay(e);
 
+			AudioClip clip = ServerGameManager.Instance.GetCurrentAudioClip();
 
+			if (clip == null)
+			{
+				throw new System.Exception("La map n'est pas correctement chargé");
+			}
+			else
+			{
+				PlayMusic(ServerGameManager.Instance.GetCurrentAudioClip());
+			}
 		}
 
 		protected override void GamePause(GamePauseEvent e)

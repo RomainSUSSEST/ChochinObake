@@ -11,8 +11,10 @@
 	{
 		// Attributs
 
-		private Dictionary<ulong, Player> CurrentPlayers;
-		private string CurrentMusicPath;
+		private Dictionary<ulong, Player> CurrentPlayers; // Les joueurs
+		private string CurrentMusicPath; // Le path de la musique
+		private AudioClip CurrentAudio; // La musique courante
+		private List<SpectralFluxInfo> CurrentMapData; // Les données de carte
 
 
 		#region Request
@@ -27,9 +29,32 @@
 			return new System.Collections.ObjectModel.ReadOnlyDictionary<ulong, Player>(CurrentPlayers);
 		}
 
+		/// <summary>
+		/// Renvoie le chemin de la musique courante
+		/// </summary>
+		/// <returns> Le path </returns>
 		public string GetCurrentMusicPath()
 		{
 			return CurrentMusicPath;
+		}
+
+		/// <summary>
+		/// Renvoie l'AudioClip courant
+		/// </summary>
+		/// <returns> L'AudioClip </returns>
+		public AudioClip GetCurrentAudioClip()
+		{
+			return CurrentAudio;
+		}
+
+		public System.Collections.ObjectModel.ReadOnlyCollection<SpectralFluxInfo> GetCurrentMapData()
+		{
+			if (CurrentMapData == null)
+			{
+				return null;
+			}
+
+			return CurrentMapData.AsReadOnly();
 		}
 
 		#endregion
@@ -64,7 +89,7 @@
 			EventManager.Instance.AddListener<MusicSelectionLeaveButtonClickedEvent>(MusicSelectionLeaveButtonClicked);
 			EventManager.Instance.AddListener<MusicSelectionTimerEndEvent>(MusicSelectionTimerEnd);
 
-			EventManager.Instance.AddListener<MusicResultTimerEndEvent>(MusicResultTimerEnd);
+			EventManager.Instance.AddListener<MusicResultGameReadyEvent>(MusicResultGameReady);
 
 			// UI Resize
 			EventManager.Instance.AddListener<ResizeUICompleteEvent>(ResizeUIComplete);
@@ -90,7 +115,7 @@
 			EventManager.Instance.RemoveListener<MusicSelectionLeaveButtonClickedEvent>(MusicSelectionLeaveButtonClicked);
 			EventManager.Instance.RemoveListener<MusicSelectionTimerEndEvent>(MusicSelectionTimerEnd);
 
-			EventManager.Instance.RemoveListener<MusicResultTimerEndEvent>(MusicResultTimerEnd);
+			EventManager.Instance.RemoveListener<MusicResultGameReadyEvent>(MusicResultGameReady);
 
 			// UI Resize
 			EventManager.Instance.RemoveListener<ResizeUICompleteEvent>(ResizeUIComplete);
@@ -153,8 +178,12 @@
 			MusicResult();
 		}
 
-		private void MusicResultTimerEnd(MusicResultTimerEndEvent e)
+		private void MusicResultGameReady(MusicResultGameReadyEvent e)
 		{
+			// On enregistre les données de carte
+			CurrentAudio = e.audio;
+			CurrentMapData = e.map;
+
 			Play();
 		}
 
@@ -213,10 +242,7 @@
 		{
 			SetTimeScale(1);
 			m_GameState = GameState.gamePlay;
-			EventManager.Instance.Raise(new GameMusicSelectionMenuEvent()
-			{
-				players = GetPlayers()
-			});
+			EventManager.Instance.Raise(new GameMusicSelectionMenuEvent());
 		}
 
 		private void MusicResult()

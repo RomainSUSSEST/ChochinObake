@@ -43,11 +43,11 @@ public class MusicSelectionServerModel : MonoBehaviour
     {
         SubscribeEvents();
 
-        if (ServerGameManager.Instance.GetPlayers() != null)
-        {
-            // On récupéré la liste des joueurs
-            Players = ServerGameManager.Instance.GetPlayers();
+        // On récupéré la liste des joueurs
+        Players = ServerGameManager.Instance.GetPlayers();
 
+        if (Players != null)
+        {
             // On intialise l'état des joueurs
             InitializePlayerDefaultState();
 
@@ -117,6 +117,12 @@ public class MusicSelectionServerModel : MonoBehaviour
         Players[e.PlayerID.Value].PlayerState = PlayerState.Voted; // On change le state du joueur
         RefreshPlayerListState(); // On refresh les états
 
+        // On regarde si tout les joueurs on voté
+        if (AllPlayersVoted())
+        {
+            ChooseAndSendWinnerSong();
+        }
+
         // On indique au joueur que sont vote à bien été recu
         MessagingManager.Instance.RaiseNetworkedEventOnClient(new MusicVoteAcceptedEvent(e.PlayerID.Value));
     }
@@ -127,6 +133,68 @@ public class MusicSelectionServerModel : MonoBehaviour
 
 
     // Outils
+
+    #region ChooseAndSendWinnerSong
+
+    private void ChooseAndSendWinnerSong()
+    {
+        int cmptVote = GetMaxVote();
+        List<string> PathMusicGagnante = new List<string>();
+
+        // On récupére les musiques gagnante
+        foreach (MusicSelectionServer_Song song in SongListGameObject)
+        {
+            if (song.getNbrVote() == cmptVote) // Si c'est une musique gagnante
+            {
+                // On récupére le path de la chanson
+                foreach (string s in SongListPath)
+                {
+                    if (Path.GetFileName(s).Equals(song.GetTitle()))
+                    { // C'est une gagnante, on l'ajoute
+                        PathMusicGagnante.Add(s);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Si des personnes on voté
+        if (PathMusicGagnante.Count > 0)
+        {
+            // On choisi une chanson parmi les gagnantes et on envoie son path du directory
+            EventManager.Instance.Raise(new MusicSelectionTimerEndEvent()
+            {
+                PathDirectoryMusicSelected = PathMusicGagnante[Random.Range(0, PathMusicGagnante.Count)]
+            });
+        }
+        else // Si personne n'a voté on prend une chanson aléatoire
+        {
+            EventManager.Instance.Raise(new MusicSelectionTimerEndEvent()
+            {
+                PathDirectoryMusicSelected = SongListPath[Random.Range(0, SongListPath.Length)]
+            });
+        }
+    }
+
+    /// <summary>
+    /// Renvoie le nombre de vote le plus élevé parmi les chansons
+    /// </summary>
+    /// <returns> Renvoie le nombre de vote le plus élevé parmi les chansons </returns>
+    private int GetMaxVote()
+    {
+        int vote = 0;
+        foreach (MusicSelectionServer_Song song in SongListGameObject)
+        {
+            if (song.getNbrVote() > vote)
+            {
+                vote = song.getNbrVote();
+            }
+        }
+
+        return vote;
+    }
+
+    #endregion
 
     #region Panel Music
 
@@ -179,60 +247,7 @@ public class MusicSelectionServerModel : MonoBehaviour
 
     private void TimerEnd()
     {
-        int cmptVote = GetMaxVote();
-
-        List<string> PathMusicGagnante = new List<string>();
-        
-        // On récupére les musiques gagnante
-        foreach (MusicSelectionServer_Song song in SongListGameObject)
-        {
-            if (song.getNbrVote() == cmptVote) // Si c'est une musique gagnante
-            {
-                // On récupére le path de la chanson
-                foreach (string s in SongListPath)
-                {
-                    if (Path.GetFileName(s).Equals(song.GetTitle()))
-                    { // C'est une gagnante, on l'ajoute
-                        PathMusicGagnante.Add(s);
-                        break;
-                    }
-                }
-            }
-        }
-
-        // Si des personnes on voté
-        if (PathMusicGagnante.Count > 0)
-        {
-            // On choisi une chanson parmi les gagnantes et on envoie son path du directory
-            EventManager.Instance.Raise(new MusicSelectionTimerEndEvent()
-            {
-                PathDirectoryMusicSelected = PathMusicGagnante[Random.Range(0, PathMusicGagnante.Count)]
-            });
-        } else // Si personne n'a voté on prend une chanson aléatoire
-        {
-            EventManager.Instance.Raise(new MusicSelectionTimerEndEvent()
-            {
-                PathDirectoryMusicSelected = SongListPath[Random.Range(0, SongListPath.Length)]
-            });
-        }
-    }
-
-    /// <summary>
-    /// Renvoie le nombre de vote le plus élevé parmi les chansons
-    /// </summary>
-    /// <returns> Renvoie le nombre de vote le plus élevé parmi les chansons </returns>
-    private int GetMaxVote()
-    {
-        int vote = 0;
-        foreach (MusicSelectionServer_Song song in SongListGameObject)
-        {
-            if (song.getNbrVote() > vote)
-            {
-                vote = song.getNbrVote();
-            }
-        }
-
-        return vote;
+        ChooseAndSendWinnerSong();
     }
 
     private void RefreshTimerUI()
@@ -242,7 +257,7 @@ public class MusicSelectionServerModel : MonoBehaviour
 
     #endregion
 
-    #region Player Panel
+    #region Player
 
     private void InitializePlayerDefaultState()
     {
@@ -282,6 +297,20 @@ public class MusicSelectionServerModel : MonoBehaviour
             default:
                 throw new System.Exception();
         }
+    }
+
+    private bool AllPlayersVoted()
+    {
+        IEnumerable<Player> value = Players.Values;
+        foreach (Player p in value)
+        {
+            if (p.PlayerState != PlayerState.Voted)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     #endregion

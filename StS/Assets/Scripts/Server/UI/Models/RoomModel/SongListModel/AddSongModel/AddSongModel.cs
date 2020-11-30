@@ -8,8 +8,8 @@ public class AddSongModel : MonoBehaviour
 {
     // Constante
 
-    private static readonly Color DEFAULT_COLOR = Color.white;
-    private static readonly Color ERROR_COLOR = Color.red;
+    [SerializeField] private Color PROGRESS_BAR_DEFAULT_COLOR = Color.white;
+    [SerializeField] private Color PROGRESS_BAR_ERROR_COLOR = Color.red;
 
 
     // Attributs
@@ -113,7 +113,7 @@ public class AddSongModel : MonoBehaviour
     private void InitializeProgressBar()
     {
         ProgressBar_Content.SetActive(true); // On active le panel de progressBar
-        ProgressBar_State.color = DEFAULT_COLOR; // On set la color à DEFAULT_COLOR
+        ProgressBar_State.color = PROGRESS_BAR_DEFAULT_COLOR; // On set la color à DEFAULT_COLOR
         ProgressBar_CloseButton.gameObject.SetActive(false); // On masque le boutton pour fermer la progressBar.
     }
 
@@ -129,7 +129,7 @@ public class AddSongModel : MonoBehaviour
     private void UpdateProgressBarPrepareSongError(ProgressBarPrepareSongErrorEvent e)
     {
         ProgressBar_State.text = e.msg; // On affiche le message d'erreur
-        ProgressBar_State.color = ERROR_COLOR; // On Change la couleur en ERROR_COLOR
+        ProgressBar_State.color = PROGRESS_BAR_ERROR_COLOR; // On Change la couleur en ERROR_COLOR
     }
 
     /// <summary>
