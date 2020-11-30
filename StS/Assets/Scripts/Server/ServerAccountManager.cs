@@ -35,6 +35,7 @@ namespace ServerManager
 
         private STATE CurrentState { get; set; }
         private AudioClip DownloadedSongAtAudioClip;
+        private bool IsCancelled; // TODO
 
 
         #region Manager implementation
@@ -279,7 +280,18 @@ namespace ServerManager
 
             // On crée le répertoire stockant les données
 
-            string newFolder = video.Title.Replace(Path.GetInvalidPathChars().ToString(), ""); // Nouveau dossier à créer
+                // On récupére les charactères interdit
+            char[] tampon = Path.GetInvalidPathChars();
+            char[] invalidChar = new char[tampon.Length + 1];
+            int i;
+            for (i = 0; i < tampon.Length; ++i)
+            {
+                invalidChar[i] = tampon[i];
+            }
+            invalidChar[i] = '/'; // On rajoute un charactère à la liste.
+
+
+            string newFolder = Replace(video.Title, invalidChar, ""); // Nouveau dossier à créer
             if (newFolder == "") // Si le nom ne contient que des characteres non lisible
             {
                 throw new Exception("The video's name is unreadable");
@@ -518,7 +530,7 @@ namespace ServerManager
 
                 if (www.isNetworkError || www.isHttpError)
                 {
-                    throw new Exception("Error when loading audio");
+                    UpdatePrepareSongAnErrorOccurred("Error when loading audio");
                 }
                 else
                 {
@@ -527,7 +539,7 @@ namespace ServerManager
 
                     if (DownloadedSongAtAudioClip == null)
                     {
-                        throw new Exception("An error occurred");
+                        UpdatePrepareSongAnErrorOccurred("An error occurred");
                     }
                 }
             }
@@ -614,6 +626,14 @@ namespace ServerManager
         {
             // On indique que l'opération est terminé.
             CurrentState = STATE.NOTHING;
+        }
+
+        private string Replace(string s, char[] separators, string newVal)
+        {
+            string[] temp;
+
+            temp = s.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            return String.Join(newVal, temp);
         }
     }
 }
