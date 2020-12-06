@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MAT_ForestSky_P1
+  m_Name: MAT_ForestSky
   m_Shader: {fileID: -6465566751694194690, guid: 4e968c8cb5173e1469c9fb2d966b9e7a,
     type: 3}
   m_ShaderKeywords: 
@@ -21,17 +21,21 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Texture2D_A0B8DAC1:
-        m_Texture: {fileID: 2800000, guid: d52c41a52bf613a49bda1aee38febd36, type: 3}
+        m_Texture: {fileID: 2800000, guid: 38c120d5dd7aff64bb8854386c78f340, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_CE80AEEA:
-        m_Texture: {fileID: 2800000, guid: 81a916cbf3c2ce942b9527f1e3b8c56e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9d4fdd48038b37c4e98b90e87477d3c0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_6A84C4CD_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 38c120d5dd7aff64bb8854386c78f340, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_57CDE102: 2
-    - Vector1_79CA6B67: -0.1
+    - Vector1_79CA6B67: -0.5
     m_Colors:
-    - Color_344CC5CA: {r: 0.6462264, g: 0.81297326, b: 1, a: 0}
-    - Color_44F2D3C4: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 0}
-    - Color_E7A09089: {r: 0.85882354, g: 0.85882354, b: 0.85882354, a: 0}
+    - Color_344CC5CA: {r: 0.2051887, g: 0.4932647, b: 0.8207547, a: 0}
+    - Color_44F2D3C4: {r: 1.490566, g: 0, b: 0.9252269, a: 0}
+    - Color_E7A09089: {r: 1.498039, g: 0, b: 0, a: 0}
