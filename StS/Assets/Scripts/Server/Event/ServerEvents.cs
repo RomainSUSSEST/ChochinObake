@@ -88,15 +88,7 @@ public class MusicResultGameReadyEvent : SDD.Events.Event
 #region Level Manager
 
 #region AlgoProcedural Events
-public class NextWaveEvent : SDD.Events.Event
-{
-}
-
-public class CanNotAddObstacle : SDD.Events.Event
-{
-}
-
-public class ObstacleEndMapEvent : SDD.Events.Event
+public class GroundEndMapEvent : SDD.Events.Event
 {
 }
 #endregion

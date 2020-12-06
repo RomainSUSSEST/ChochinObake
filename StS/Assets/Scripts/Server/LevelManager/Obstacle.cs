@@ -59,7 +59,7 @@ public class Obstacle : MonoBehaviour
     {
         if (transform.position.z <= EndPosition)
         {
-            EventManager.Instance.Raise(new ObstacleEndMapEvent());
+
             Destroy(this.gameObject);
         }
 

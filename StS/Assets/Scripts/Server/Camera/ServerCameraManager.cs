@@ -18,7 +18,6 @@
         #region Camera
         [Header("Camera")]
 
-        [SerializeField] private GameObject m_InGameCamera;
         [SerializeField] private GameObject m_MenuCamera;
 
         private List<GameObject> m_AllCamera;
@@ -64,7 +63,6 @@
         {
             m_AllCamera = new List<GameObject>();
 
-            m_AllCamera.Add(m_InGameCamera);
             m_AllCamera.Add(m_MenuCamera);
         }
 
@@ -133,7 +131,7 @@
         {
             base.GamePlay(e);
 
-            OpenCamera(m_InGameCamera);
+            OpenCamera(null);
         }
         #endregion
     }
