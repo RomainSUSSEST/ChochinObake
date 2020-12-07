@@ -8,28 +8,40 @@ public class WorldForest : MonoBehaviour
     // Constante
 
     public static readonly float DEFAULT_SPEED = 2.5f;
+    private static readonly float DESTROY_MARGIN = 2;
 
 
     // Attributs
 
     [Header("Map Elements")]
-    [SerializeField] private Ground DefaultGround;
     [SerializeField] private List<Obstacle> ListObstacle;
+    [SerializeField] private List<Ground> ListGroundColor;
+    [SerializeField] private Ground UnusedGround;
 
     [Header("Map Config")]
     [SerializeField] private float DistanceBetweenGround;
 
-    [Header("Camera")]
-    [SerializeField] private Camera Camera;
+    [Header("SlimeServer")]
+    [SerializeField] private SlimeServer SlimeServerPrefab;
 
+    // Information sur la carte
     private System.Collections.ObjectModel.ReadOnlyCollection<SpectralFluxInfo> CurrentMap;
     private IReadOnlyDictionary<ulong, Player> Players;
 
-    private Ground LastGround;
-    private Vector3 GroundSize;
-    private int NbrWaves;
+    #region Gestion des grounds
+    private Ground LastGround; // Dernier ground spawné
+    private Vector3 GroundSize; // Taille des grounds
+    private int NbrWaves; // Nombre de waves
 
-    private int CmptWavesHasBeenDestroyed;
+    private float StartWavesSpawnPosition_X; // Position d'apparition des waves
+
+    private int CmptWavesHasBeenDestroyed; // Nombre de wave détruite depuis le dernier spawn
+    #endregion
+
+    #region Wave Array
+    private SlimeServer[] SlimesArray; // SlimesArray[i] contient le SlimeServer à la wave i ou null.
+    private Ground[] GroundArray; // Contient la prefab à instancier à la wave i.
+    #endregion
 
 
     #region Life Cycle
@@ -46,6 +58,7 @@ public class WorldForest : MonoBehaviour
 
     private void Start()
     {
+        #region MapInfo
         // On récupére les informations de la carte.
         CurrentMap = ServerGameManager.Instance.GetCurrentMapData();
         AudioClip clip = ServerGameManager.Instance.GetCurrentAudioClip();
@@ -58,29 +71,86 @@ public class WorldForest : MonoBehaviour
         {
             throw new System.Exception("Donnée de carte invalide");
         }
+        #endregion
 
-        // On récupére la tailles des grounds
-        GroundSize = DefaultGround.GetComponent<Renderer>().bounds.size;
+        #region Variable
+
+        GroundSize = UnusedGround.GetComponent<Renderer>().bounds.size; // On récupére la taille d'un des grounds
+        NbrWaves = Mathf.Max(ServerLevelManager.MIN_NUMBER_WAVES, Players.Count); // Il y a un nombre de wave minimum
+        StartWavesSpawnPosition_X = transform.position.x - (((GroundSize.x + DistanceBetweenGround) * NbrWaves) - DistanceBetweenGround) / 2;
+        
+        SlimesArray = new SlimeServer[NbrWaves];
+        GroundArray = new Ground[NbrWaves];
+
+        #endregion
+
+        #region Array Player & Ground
+
+        // On initialise les Array (player & ground)
+        int nextValue = 0;
+
+        float slimeSpawn_X = StartWavesSpawnPosition_X + GroundSize.x / 2;
+        float slimeSpawn_Y = transform.position.y + GroundSize.y;
+
+        IEnumerator<ulong> enumPlayer = Players.Keys.GetEnumerator(); // Enum sur les joueurs
+        for (int i = (int) Mathf.Floor(NbrWaves / 2f); 0 <= i && i < NbrWaves; i += nextValue)
+        {
+            if (enumPlayer.MoveNext())
+            {
+                // Slime Array
+                SlimesArray[i] = Instantiate(SlimeServerPrefab,
+                    new Vector3(
+                        slimeSpawn_X + (GroundSize.x + DistanceBetweenGround) * i,
+                        slimeSpawn_Y,
+                        transform.position.z), Quaternion.identity, transform); // On créer le slime
+
+                SlimesArray[i].AssociedClientID = (ulong)enumPlayer.Current; // On récupére l'ulong du playerCourant
+
+                // On récupére le Player associé
+                Player p = Players[SlimesArray[i].AssociedClientID];
+
+                // On set le hat et le body
+                SlimesArray[i].SetHat(p.Hat);
+                SlimesArray[i].SetBody(p.Body);
+
+                // Ground Array
+
+                // On cherche le ground qui correspond au slime body courant.
+                foreach (Ground g in ListGroundColor)
+                {
+                    if (g.GetAssociatedSlimeBody() == p.Body)
+                    {
+                        GroundArray[i] = g;
+                        break;
+                    }
+                }
+            } else
+            {
+                SlimesArray[i] = null;
+                GroundArray[i] = UnusedGround;
+            }
+
+            if (nextValue <= 0)
+            {
+                nextValue = (nextValue - 1) * -1;
+            } else
+            {
+                nextValue = (nextValue + 1) * -1;
+            }
+        }
+
+        #endregion
 
         // Initialisation des élements
         Ground.MOVE_SPEED = ((CurrentMap.Count / clip.length) * DEFAULT_SPEED);
-        Ground.DESTROY_Z_POSITION = transform.position.z - GroundSize.z;
-
+        Ground.DESTROY_Z_POSITION = transform.position.z - GroundSize.z - DESTROY_MARGIN;
 
         // On initialise la carte
-
-        NbrWaves = Mathf.Max(ServerLevelManager.MIN_NUMBER_WAVES, Players.Count); // Il y a un nombre de wave minimum
-        InstantiateNewGroundsAt(transform.position);
+        InstantiateNewGroundsAt(new Vector3(StartWavesSpawnPosition_X, transform.position.y, transform.position.z));
         InstantiateNewGroundsAt(new Vector3(
-             LastGround.transform.position.x,
+             StartWavesSpawnPosition_X,
              LastGround.transform.position.y,
              LastGround.transform.position.z + GroundSize.z));
-
-        // On intialise la position de la camera au milieu des waves
-        Camera.transform.position = new Vector3(
-            (transform.position.x + LastGround.transform.position.x) / 2,
-            Camera.transform.position.y,
-            Camera.transform.position.z);
     }
 
     #endregion
@@ -107,7 +177,7 @@ public class WorldForest : MonoBehaviour
         if (++CmptWavesHasBeenDestroyed >= NbrWaves)
         {
             InstantiateNewGroundsAt(new Vector3(
-                LastGround.transform.position.x,
+                StartWavesSpawnPosition_X,
                 LastGround.transform.position.y,
                 LastGround.transform.position.z + GroundSize.z));
 
@@ -120,6 +190,7 @@ public class WorldForest : MonoBehaviour
     #region Tools
 
     /// <summary>
+    /// Instantie une rangée de wave à la position StartPosition
     /// Effet de bord : Update LastGround
     /// </summary>
     /// <param name="StartPosition"></param>
@@ -127,7 +198,7 @@ public class WorldForest : MonoBehaviour
     {
         for (int i = 0; i < NbrWaves; ++i)
         {
-            LastGround = Instantiate(DefaultGround, new Vector3(
+            LastGround = Instantiate(GroundArray[i], new Vector3(
                 StartPosition.x + (GroundSize.x + DistanceBetweenGround) * i,
                 StartPosition.y,
                 StartPosition.z),

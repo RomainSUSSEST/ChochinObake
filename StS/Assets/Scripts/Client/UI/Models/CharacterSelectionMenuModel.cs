@@ -20,10 +20,7 @@ public class CharacterSelectionMenuModel : MonoBehaviour
     [SerializeField] private List<SlimeBody> ListBody;
 
     [SerializeField] private SlimeClient PrefabSlimeClient;
-    [SerializeField] private Camera PrefabCameraView;
-
     [SerializeField] private Transform SlimeSpawn;
-    [SerializeField] private Transform CameraSpawn;
 
     [SerializeField] private float RotationSpeed;
 
@@ -174,8 +171,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
     {
         // On crée un objet SlimeClient sur spawn point et on le rend enfant de spawn point
         InstanceSlime = Instantiate(PrefabSlimeClient, SlimeSpawn.position, SlimeSpawn.rotation, SlimeSpawn);
-        // On crée la camera permettant de visualiser le slime.
-        InstanceCamera = Instantiate(PrefabCameraView, CameraSpawn.position, CameraSpawn.rotation, CameraSpawn);
 
         SetHat();
         SetBody();

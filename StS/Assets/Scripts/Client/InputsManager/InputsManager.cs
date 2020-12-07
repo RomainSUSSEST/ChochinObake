@@ -149,7 +149,6 @@
                 {
                     OnTiltTopBottom(0);
                 }
-                Debug.Log("coucou");
                 yield return new WaitForSeconds(REFRESH_TILT_DELAY);
             }
 
