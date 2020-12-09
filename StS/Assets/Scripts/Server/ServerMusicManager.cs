@@ -25,19 +25,48 @@ namespace ServerManager
 		private AudioSource AudioSource;
 
 
-		// Life cycle
+        #region Request
 
-		protected override void Awake()
+        public float GetCurrentMusicTime()
+		{
+			return AudioSource.time;
+		}
+
+        #endregion
+
+        #region Life Cycle
+
+        protected override void Awake()
 		{
 			base.Awake();
 
 			AudioSource = GetComponent<AudioSource>();
 		}
 
+        #endregion
 
-		// Outils
+        #region Methods
 
-		private void PlayMusic(AudioClip clip)
+		/// <summary>
+		/// Permet de lancer la musique du round courant.
+		/// </summary>
+		public void StartRoundMusic()
+		{
+			AudioClip clip = ServerGameManager.Instance.GetCurrentAudioClip();
+
+			if (clip == null)
+			{
+				return;
+			}
+
+			PlayMusic(clip);
+		}
+
+        #endregion
+
+        #region Tools
+
+        private void PlayMusic(AudioClip clip)
 		{
 			// Si la musique demandé est déjà lancé, ne fait rien. Ou si le clip demandé vaut null
 			if (AudioSource.clip == clip || clip == null)
@@ -86,20 +115,23 @@ namespace ServerManager
 			}
 		}
 
+        #endregion
 
-		// InitCoroutine
+        #region Manager Implementation
 
-		protected override IEnumerator InitCoroutine()
+        protected override IEnumerator InitCoroutine()
 		{
 			yield break;
 		}
 
+        #endregion
 
-		// Event GameState function
 
-		#region Event Function
+        // Event GameState function
 
-		protected override void GameMainMenu(GameMainMenuEvent e)
+        #region Event Function
+
+        protected override void GameMainMenu(GameMainMenuEvent e)
 		{
 			base.GameMainMenu(e);
 
@@ -125,22 +157,6 @@ namespace ServerManager
 			base.GameCreditsMenu(e);
 
 			PlayMusic(MenuMusic);
-		}
-
-		protected override void GamePlay(GamePlayEvent e)
-		{
-			base.GamePlay(e);
-
-			AudioClip clip = ServerGameManager.Instance.GetCurrentAudioClip();
-
-			if (clip == null)
-			{
-				throw new System.Exception("La map n'est pas correctement chargé");
-			}
-			else
-			{
-				PlayMusic(ServerGameManager.Instance.GetCurrentAudioClip());
-			}
 		}
 
 		protected override void GamePause(GamePauseEvent e)

@@ -1,74 +1,23 @@
-﻿using SDD.Events;
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
-    // Constante
+    #region Life Cycle
 
-    public static readonly string TAG = "Obstacle";
-
-    public static readonly float DEFAULT_SPEED = 2.5f;
-
-    private static float MoveSpeed; // Units/Seconde
-    private static Transform MapStart;
-
-
-    // Attributs
-
-    private float EndPosition;
-
-
-    // Static ---
-
-
-    // Requete
-
-    public static float GetCurrentMoveSpeed()
+    private void Update()
     {
-        return MoveSpeed;
-    }
-
-
-    // Méthode
-
-    /**
-     * @pre v > 0
-     * @post GetCurrentMoveSpeed() == v
-     */
-    public static void SetCurrentMoveSpeed(float v)
-    {
-        if (v <= 0)
+        if (transform.position.z <= Ground.DESTROY_Z_POSITION)
         {
-            throw new Exception("Vitesse refusé " + v);
-        }
-
-        MoveSpeed = v;
-    }
-
-    public static void SetMapStart(Transform start)
-    {
-        MapStart = start;
-    }
-    // ---
-
-
-    // Life Cycle
-
-    void Update()
-    {
-        if (transform.position.z <= EndPosition)
-        {
-
             Destroy(this.gameObject);
         }
 
-        transform.Translate(new Vector3(0, 0, -MoveSpeed * Time.deltaTime));
+        transform.Translate(new Vector3(0, 0, -Ground.MOVE_SPEED * Time.deltaTime));
     }
 
     private void Start()
     {
-        transform.Translate(new Vector3(0, 0, -MoveSpeed * Time.deltaTime)); // Initialisation
-        EndPosition = MapStart.position.z - GetComponent<BoxCollider>().bounds.size.z;
+        transform.Translate(new Vector3(0, 0, -Ground.MOVE_SPEED * Time.deltaTime)); // Initialisation
     }
+
+    #endregion
 }

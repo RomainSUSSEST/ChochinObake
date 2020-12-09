@@ -1,5 +1,6 @@
 ﻿using SDD.Events;
 using ServerManager;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,8 +8,10 @@ public class WorldForest : MonoBehaviour
 {
     // Constante
 
-    public static readonly float DEFAULT_SPEED = 2.5f;
-    private static readonly float DESTROY_MARGIN = 2;
+    public static readonly float DEFAULT_SPEED = 5f;
+    private static readonly float DESTROY_MARGIN = 8;
+
+    private static readonly float AlgoSensitivity = 0.2f; // en %
 
 
     // Attributs
@@ -20,6 +23,7 @@ public class WorldForest : MonoBehaviour
 
     [Header("Map Config")]
     [SerializeField] private float DistanceBetweenGround;
+    [SerializeField] private float ObstacleDistanceToSlimeSpawn;
 
     [Header("SlimeServer")]
     [SerializeField] private SlimeServer SlimeServerPrefab;
@@ -43,6 +47,13 @@ public class WorldForest : MonoBehaviour
     private Ground[] GroundArray; // Contient la prefab à instancier à la wave i.
     #endregion
 
+    #region Obstacle
+
+    private float CurrentMaxPrunedSpectralFlux;
+    private float CurrentThresholdSensititvity;
+    private float AheadTimeToSpawn;
+
+    #endregion
 
     #region Life Cycle
 
@@ -73,6 +84,7 @@ public class WorldForest : MonoBehaviour
         }
         #endregion
 
+        #region Ground & Player
         #region Variable
 
         GroundSize = UnusedGround.GetComponent<Renderer>().bounds.size; // On récupére la taille d'un des grounds
@@ -145,16 +157,80 @@ public class WorldForest : MonoBehaviour
         Ground.MOVE_SPEED = ((CurrentMap.Count / clip.length) * DEFAULT_SPEED);
         Ground.DESTROY_Z_POSITION = transform.position.z - GroundSize.z - DESTROY_MARGIN;
 
-        // On initialise la carte
+        #region On Initialise la carte
         InstantiateNewGroundsAt(new Vector3(StartWavesSpawnPosition_X, transform.position.y, transform.position.z));
         InstantiateNewGroundsAt(new Vector3(
              StartWavesSpawnPosition_X,
              LastGround.transform.position.y,
              LastGround.transform.position.z + GroundSize.z));
+        #endregion
+        #endregion
+
+        #region Obstacle
+        #region Variable
+        // On récupére le MaxPrunedSpectralFlux
+        CurrentMaxPrunedSpectralFlux = 0;
+        foreach (SpectralFluxInfo sf in CurrentMap)
+        {
+            if (sf.prunedSpectralFlux > CurrentMaxPrunedSpectralFlux)
+            {
+                CurrentMaxPrunedSpectralFlux = sf.prunedSpectralFlux;
+            }
+        }
+
+        CurrentThresholdSensititvity = CurrentMaxPrunedSpectralFlux * AlgoSensitivity; // On calcul la sensitivité de l'algo
+
+        // On calcul le temps d'avance que doivent prendre les obstacles pour apparaitre à ObstacleDistanceToSpawn
+        // du spawn des slimes et tj arriver au moment du beats.
+        AheadTimeToSpawn = ObstacleDistanceToSlimeSpawn / Ground.MOVE_SPEED;
+
+        #endregion
+
+        // On lance la musique après aHeadTimeToSpawn
+        StartCoroutine("StartMusic");
+        // On lance l'algo procédural des obstacles
+        StartCoroutine("ProceduralGenerator");
+        #endregion
     }
 
     #endregion
 
+    #region Coroutine
+
+    /// <summary>
+    /// Lance la musique du round après AheadTimeToSpawn
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator StartMusic()
+    {
+        yield return new WaitForSeconds(AheadTimeToSpawn);
+
+        ServerMusicManager.Instance.StartRoundMusic();
+    }
+
+    /// <summary>
+    /// Parcourt les beats de la musique pour générer les obstacles
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator ProceduralGenerator()
+    {
+        int cpt = 0;
+        while (cpt < CurrentMap.Count)
+        {
+
+            while (cpt < CurrentMap.Count &&
+                CurrentMap[cpt].time - AheadTimeToSpawn <= ServerMusicManager.Instance.GetCurrentMusicTime())
+            {
+                AddObstacle(CurrentMap[cpt]);
+
+                ++cpt;
+            }
+
+            yield return new CoroutineTools.WaitForFrames(1);
+        }
+    }
+
+    #endregion
 
     #region Subscribe Event
 
@@ -203,6 +279,31 @@ public class WorldForest : MonoBehaviour
                 StartPosition.y,
                 StartPosition.z),
                 Quaternion.identity, transform);
+        }
+    }
+
+    private void AddObstacle(SpectralFluxInfo flux)
+    {
+        // Si le beats n'est pas ignoré
+        if (flux.prunedSpectralFlux > CurrentThresholdSensititvity)
+        {
+            // On cherche à combien de pourcentage du maximum correspond le beats.
+            float curPercentOfMax = flux.prunedSpectralFlux / CurrentMaxPrunedSpectralFlux;
+
+            // On obtient une valeur entre 0 et 1 que l'on multiplie au nombre d'obstacle - 1
+            int index = (int) curPercentOfMax * (ListObstacle.Count - 1);
+
+           // Pour chaque slime, on invoque l'obstacle
+           foreach (SlimeServer ss in SlimesArray)
+            {
+                if (ss != null)
+                    Instantiate(ListObstacle[index], new Vector3(
+                        ss.transform.position.x,
+                        ss.transform.position.y,
+                        ss.transform.position.z + ObstacleDistanceToSlimeSpawn),
+                        Quaternion.identity,
+                        transform);
+            }
         }
     }
 

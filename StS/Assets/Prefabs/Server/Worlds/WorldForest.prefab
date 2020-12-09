@@ -47,7 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a52083366b3f448a36d5c264afe247, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ListObstacle: []
+  ListObstacle:
+  - {fileID: -8067204575181223413, guid: 5c5eeffc08a7e7843b3dd17bae5b05db, type: 3}
   ListGroundColor:
   - {fileID: 1590013743200785398, guid: b00ff9a79f73a5f4bb3ddbda23e722c8, type: 3}
   - {fileID: 8508324969120931777, guid: 0f1185c91eb700e4093d301b6ea617b6, type: 3}
@@ -64,6 +65,7 @@ MonoBehaviour:
   UnusedGround: {fileID: 1416582747068832026, guid: 3f2470c37335cdd42904d2eacd641ad3,
     type: 3}
   DistanceBetweenGround: 0
+  ObstacleDistanceToSlimeSpawn: 100
   SlimeServerPrefab: {fileID: -3312898644491709661, guid: 6047c66e9e3fafe4e88df5fa1f3aaae1,
     type: 3}
 --- !u!1 &7537251287893370950
