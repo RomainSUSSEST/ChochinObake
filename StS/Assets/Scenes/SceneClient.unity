@@ -500,6 +500,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2508553946413392068, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
+        type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2805779090470864952, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
         type: 3}
       propertyPath: m_textInfo.characterCount
