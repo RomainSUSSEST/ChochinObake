@@ -215,18 +215,21 @@ public class WorldForest : MonoBehaviour
     private IEnumerator ProceduralGenerator()
     {
         int cpt = 0;
+        bool isFirstObstacle = true; // Permet d'empecher la superposition d'obstacle.
         while (cpt < CurrentMap.Count)
         {
-
             while (cpt < CurrentMap.Count &&
                 CurrentMap[cpt].time - AheadTimeToSpawn <= ServerMusicManager.Instance.GetCurrentMusicTime())
             {
-                AddObstacle(CurrentMap[cpt]);
+                if (isFirstObstacle)
+                    AddObstacle(CurrentMap[cpt]);
 
+                isFirstObstacle = false;
                 ++cpt;
             }
 
             yield return new CoroutineTools.WaitForFrames(1);
+            isFirstObstacle = true;
         }
     }
 
@@ -293,16 +296,20 @@ public class WorldForest : MonoBehaviour
             // On obtient une valeur entre 0 et 1 que l'on multiplie au nombre d'obstacle - 1
             int index = (int) curPercentOfMax * (ListObstacle.Count - 1);
 
+            Obstacle curObstacle;
            // Pour chaque slime, on invoque l'obstacle
            foreach (SlimeServer ss in SlimesArray)
             {
-                if (ss != null)
-                    Instantiate(ListObstacle[index], new Vector3(
+                if (ss != null) {
+                    curObstacle = Instantiate(ListObstacle[index], new Vector3(
                         ss.transform.position.x,
                         ss.transform.position.y,
                         ss.transform.position.z + ObstacleDistanceToSlimeSpawn),
                         Quaternion.identity,
                         transform);
+
+                    curObstacle.SetAssociatedSlime(ss);
+                }
             }
         }
     }

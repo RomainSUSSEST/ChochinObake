@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6213697185113620512}
   - component: {fileID: 7031428804346498949}
   - component: {fileID: 5075645255174667087}
-  - component: {fileID: -8067204575181223413}
+  - component: {fileID: 1986038957172646057}
   m_Layer: 0
   m_Name: FBX_ForestPlantTwo
   m_TagString: Untagged
@@ -80,7 +80,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &-8067204575181223413
+--- !u!114 &1986038957172646057
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,6 +89,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6733070591369845402}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b346666d9e2ad4fad8132434fd50e4cf, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b20cba49f4f0a14da9f3f9912b0684e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InputActionToDodge: 0
