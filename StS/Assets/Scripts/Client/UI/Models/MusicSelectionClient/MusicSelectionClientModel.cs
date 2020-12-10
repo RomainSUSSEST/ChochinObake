@@ -87,8 +87,9 @@ public class MusicSelectionClientModel : MonoBehaviour
             currentSong = Instantiate(SongPrefab, CurrentSpawnerPosition, Quaternion.identity, ContentNode);
             currentSong.SetTitle(MusicList[i]);
 
+            Debug.Log(CurrentSpawnerPosition.y);
             CurrentSpawnerPosition = new Vector3(CurrentSpawnerPosition.x,
-                CurrentSpawnerPosition.y - currentSong.GetComponent<RectTransform>().rect.height,
+                CurrentSpawnerPosition.y - currentSong.GetComponent<RectTransform>().rect.height / 2,
                 CurrentSpawnerPosition.z);
 
             // On ajoute le son à la liste.
