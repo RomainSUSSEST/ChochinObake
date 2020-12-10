@@ -43,6 +43,7 @@
 
             EventManager.Instance.AddListener<ServerClosedEvent>(ServerClosed);
             EventManager.Instance.AddListener<ServerEnterInGameMusicSelectionEvent>(ServerEnterInGameMusicSelection);
+            //EventManager.Instance.AddListener<ServerEnterInGame>
             EventManager.Instance.AddListener<GameStartedEvent>(GameStarted);
         }
 
