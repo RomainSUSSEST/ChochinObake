@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 using ZXing;
 using ZXing.QrCode;
@@ -8,15 +9,20 @@ public class QRCodeProducer : MonoBehaviour
     // Attributs
 
     private RawImage rawImage;
+    [SerializeField] private TextMeshProUGUI ip_Address;
 
 
     // Life cyles
 
     private void Start()
     {
+        string tempIPAddress = IPManager.GetIP(ADDRESSFAM.IPv4);
+
         rawImage = GetComponent<RawImage>();
 
-        rawImage.texture = GenerateQRCode(IPManager.GetIP(ADDRESSFAM.IPv4));
+        rawImage.texture = GenerateQRCode(tempIPAddress);
+
+        ip_Address.text = tempIPAddress;
     }
 
 

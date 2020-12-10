@@ -1502,8 +1502,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9454e10251c07414c98104bae9b7d24a, type: 2}
-  m_sharedMaterial: {fileID: -3102197507449942003, guid: 9454e10251c07414c98104bae9b7d24a,
+  m_fontAsset: {fileID: 11400000, guid: aea66cc7ed0654d458438912526c0ff2, type: 2}
+  m_sharedMaterial: {fileID: 3054126994307732238, guid: aea66cc7ed0654d458438912526c0ff2,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1582,7 +1582,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_subTextObjects:
   - {fileID: 0}
   - {fileID: 0}
@@ -1761,7 +1761,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7602646691265738071
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2294,7 +2294,7 @@ MonoBehaviour:
   m_CaretWidth: 1
   m_ReadOnly: 0
   m_RichText: 1
-  m_GlobalFontAsset: {fileID: 11400000, guid: 9454e10251c07414c98104bae9b7d24a, type: 2}
+  m_GlobalFontAsset: {fileID: 0}
   m_OnFocusSelectAll: 1
   m_ResetOnDeActivation: 1
   m_RestoreOriginalTextOnEscape: 1
@@ -4087,8 +4087,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: ENTER IP
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9454e10251c07414c98104bae9b7d24a, type: 2}
-  m_sharedMaterial: {fileID: -3102197507449942003, guid: 9454e10251c07414c98104bae9b7d24a,
+  m_fontAsset: {fileID: 11400000, guid: aea66cc7ed0654d458438912526c0ff2, type: 2}
+  m_sharedMaterial: {fileID: 3054126994307732238, guid: aea66cc7ed0654d458438912526c0ff2,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -4391,8 +4391,8 @@ MonoBehaviour:
   Pseudo: {fileID: 6902458644460196754}
   ButtonReady: {fileID: 9085858094050832986}
   ButtonReadyImage: {fileID: 7320827743071124695}
-  ReadyButtonColor: {r: 0.1720757, g: 0.3207547, b: 0.17096831, a: 1}
-  UnreadyButtonColor: {r: 0.3380849, g: 0.9811321, b: 0.14346743, a: 1}
+  ReadyButtonColor: {r: 0, g: 0, b: 0, a: 0.78431374}
+  UnreadyButtonColor: {r: 1, g: 1, b: 1, a: 0.78431374}
   InvalidBodyImage: {fileID: 9127197179201614474}
 --- !u!1 &6866789322460564241
 GameObject:
@@ -4411,7 +4411,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6479004801949431841
 RectTransform:
   m_ObjectHideFlags: 0

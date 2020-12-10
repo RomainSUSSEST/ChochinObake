@@ -66,6 +66,63 @@ public abstract class IPManager
 
         return splitValues.All(r => byte.TryParse(r, out tempForParsing));
     }
+
+    public static string EncryptIPtoHexa(string ipAddress)
+    {
+        string dotsPosition = "";
+        string encryptedIP = "";
+
+        char[] arr;
+        arr = ipAddress.ToCharArray();
+        
+        for (int i = 0; i < arr.Count(); i++)
+        {
+            if (arr[i] == Convert.ToChar("."))
+            {
+                dotsPosition += i;
+            } else
+            {
+                encryptedIP += arr[i];
+            }
+        }
+
+        encryptedIP = dotsPosition + encryptedIP;
+
+        // TO DO
+
+        return encryptedIP;
+    }
+
+    public static string ConvertToBase36(ulong value)
+    {
+        string result = "";
+        ulong Base = 36;
+        string Chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        while (value > 0)
+        {
+            int index = Convert.ToInt32(value % Base);
+            result = Chars[index] + result; // use StringBuilder for better performance
+            value /= Base;
+        }
+
+        return result;
+    }
+
+    public static string ConvertToBase10(int value)
+    {
+        string result = "";
+        int Base = 10;
+        string Chars = "0123456789";
+
+        while (value > 0)
+        {
+            result = Chars[value % Base] + result; // use StringBuilder for better performance
+            value /= Base;
+        }
+
+        return result;
+    }
 }
 
 public enum ADDRESSFAM
