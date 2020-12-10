@@ -13,6 +13,7 @@ public class SlimeServer : Slime
     public ulong AssociedClientID { get; set; }
 
     private InputActionValidArea CurrentInputActionValidArea;
+    private Animator InputActionValidArea_Animator;
 
 
     // Life cycle
@@ -36,6 +37,8 @@ public class SlimeServer : Slime
                 CurrentInputActionValidArea = Instantiate(input,
                     Spawn_InputActionValidArea.transform);
 
+                InputActionValidArea_Animator = CurrentInputActionValidArea.GetComponent<Animator>();
+
                 break;
             }
         }
@@ -56,15 +59,12 @@ public class SlimeServer : Slime
     private void SubscribeEvent()
     {
         // ClientInputsManager
-        //EventManager.Instance.AddListener<SwipeUpEvent>(SwipeUp);
-        //EventManager.Instance.AddListener<SwipeLeftEvent>(SwipeLeft);
-        //EventManager.Instance.AddListener<SwipeRightEvent>(SwipeRight);
-        //EventManager.Instance.AddListener<SwipeDownEvent>(SwipeDown);
+        EventManager.Instance.AddListener<SwipeUpEvent>(SwipeUp);
+        EventManager.Instance.AddListener<SwipeLeftEvent>(SwipeLeft);
+        EventManager.Instance.AddListener<SwipeRightEvent>(SwipeRight);
+        EventManager.Instance.AddListener<SwipeDownEvent>(SwipeDown);
 
-        //EventManager.Instance.AddListener<DoublePressEvent>(DoublePress);
-
-        //EventManager.Instance.AddListener<TiltLeftRightEvent>(TiltLeftRight);
-        //EventManager.Instance.AddListener<TiltTopBottomEvent>(TiltTopBottom);
+        EventManager.Instance.AddListener<DoublePressEvent>(DoublePress);
 
         EventManager.Instance.AddListener<ServerDisconnectionSuccessEvent>(OnClientDisconnected);
     }
@@ -72,15 +72,12 @@ public class SlimeServer : Slime
     private void UnsubscribeEvent()
     {
         // ClientInputsManager
-        //EventManager.Instance.RemoveListener<SwipeUpEvent>(SwipeUp);
-        //EventManager.Instance.RemoveListener<SwipeLeftEvent>(SwipeLeft);
-        //EventManager.Instance.RemoveListener<SwipeRightEvent>(SwipeRight);
-        //EventManager.Instance.RemoveListener<SwipeDownEvent>(SwipeDown);
+        EventManager.Instance.RemoveListener<SwipeUpEvent>(SwipeUp);
+        EventManager.Instance.RemoveListener<SwipeLeftEvent>(SwipeLeft);
+        EventManager.Instance.RemoveListener<SwipeRightEvent>(SwipeRight);
+        EventManager.Instance.RemoveListener<SwipeDownEvent>(SwipeDown);
 
-        //EventManager.Instance.RemoveListener<DoublePressEvent>(DoublePress);
-
-        //EventManager.Instance.RemoveListener<TiltLeftRightEvent>(TiltLeftRight);
-        //EventManager.Instance.RemoveListener<TiltTopBottomEvent>(TiltTopBottom);
+        EventManager.Instance.RemoveListener<DoublePressEvent>(DoublePress);
 
         EventManager.Instance.RemoveListener<ServerDisconnectionSuccessEvent>(OnClientDisconnected);
     }
@@ -98,57 +95,44 @@ public class SlimeServer : Slime
         }
     }
 
-    //private void SwipeUp(SwipeUpEvent e)
-    //{
-    //    if (e.DoesThisConcernMe(AssociedClientID))
-    //    {
-    //        Jump();
-    //    }
-    //}
+    private void SwipeUp(SwipeUpEvent e)
+    {
+        if (e.DoesThisConcernMe(AssociedClientID))
+        {
+            InputActionValidArea_Animator.SetTrigger("InputTriggered");
+        }
+    }
 
-    //private void SwipeRight(SwipeRightEvent e)
-    //{
-    //    if (e.DoesThisConcernMe(AssociedClientID))
-    //    {
-    //        AttackRight();
-    //    }
-    //}
+    private void SwipeRight(SwipeRightEvent e)
+    {
+        if (e.DoesThisConcernMe(AssociedClientID))
+        {
+            InputActionValidArea_Animator.SetTrigger("InputTriggered");
+        }
+    }
 
-    //private void SwipeLeft(SwipeLeftEvent e)
-    //{
-    //    if (e.DoesThisConcernMe(AssociedClientID))
-    //    {
-    //        AttackLeft();
-    //    }
-    //}
+    private void SwipeLeft(SwipeLeftEvent e)
+    {
+        if (e.DoesThisConcernMe(AssociedClientID))
+        {
+            InputActionValidArea_Animator.SetTrigger("InputTriggered");
+        }
+    }
 
-    //private void SwipeDown(SwipeDownEvent e)
-    //{
-    //    if (e.DoesThisConcernMe(AssociedClientID))
-    //    {
-    //        DownAction();
-    //    }
-    //}
+    private void SwipeDown(SwipeDownEvent e)
+    {
+        if (e.DoesThisConcernMe(AssociedClientID))
+        {
+            InputActionValidArea_Animator.SetTrigger("InputTriggered");
+        }
+    }
 
-    //private void DoublePress(DoublePressEvent e)
-    //{
-    //}
-
-    //private void TiltLeftRight(TiltLeftRightEvent e)
-    //{
-    //    if (e.DoesThisConcernMe(AssociedClientID))
-    //    {
-    //        MovementIntensityX = e.intensity * Speed;
-    //    }
-    //}
-
-    //private void TiltTopBottom(TiltTopBottomEvent e)
-    //{
-    //    if (e.DoesThisConcernMe(AssociedClientID))
-    //    {
-    //        MovementIntensityZ = e.intensity * Speed;
-    //    }
-    //}
-
+    private void DoublePress(DoublePressEvent e)
+    {
+        if (e.DoesThisConcernMe(AssociedClientID))
+        {
+            InputActionValidArea_Animator.SetTrigger("InputTriggered");
+        }
+    }
     #endregion
 }
