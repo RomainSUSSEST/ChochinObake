@@ -3,7 +3,17 @@ guid: fef9886fd07a909469bc26417b1bc556
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MAT_ScaryTree3
+    second: {fileID: 2100000, guid: eb1415132b7eb0d4bb8cd28f7fa86747, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mushroom4
+    second: {fileID: 2100000, guid: f673f1b3f50b47c46817747309a85cc6, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

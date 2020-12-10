@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Mat_TreeSHAD
+  m_Shader: {fileID: -6465566751694194690, guid: 6f7187012e3d2ad42a7eb0d9d86e0d65,
+    type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_AB6779A8:
+        m_Texture: {fileID: 2800000, guid: 463bfdbb55b3a764094157c8cbe591e3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_C30707FE:
+        m_Texture: {fileID: 2800000, guid: aab9dcecda3b7854190a603fe4947583, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BendingAmount: 0
+    m_Colors:
+    - Color_96C9505D: {r: 1, g: 1, b: 1, a: 0}
+    - Color_D4D972EB: {r: 1, g: 0.52179044, b: 0, a: 0}

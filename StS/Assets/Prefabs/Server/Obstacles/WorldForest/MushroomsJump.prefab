@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3405583724819157365}
   - component: {fileID: 623721143288882623}
   m_Layer: 0
-  m_Name: FBX_MushroomsJump
+  m_Name: MushroomsJump
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -523738367024946496, guid: d390f772851ea1742b5530f5469e2907, type: 3}
+  - {fileID: 2100000, guid: eafe1195f68178843a2e90326d2a9ad0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
