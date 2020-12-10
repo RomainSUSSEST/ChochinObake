@@ -1,11 +1,18 @@
 ﻿using SDD.Events;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SlimeServer : Slime
 {
     // Attributs
 
+    [Header("InputActionValidArea")]
+    [SerializeField] private List<InputActionValidArea> ListInputActionValidArea;
+    [SerializeField] private GameObject Spawn_InputActionValidArea;
+
     public ulong AssociedClientID { get; set; }
+
+    private InputActionValidArea CurrentInputActionValidArea;
 
 
     // Life cycle
@@ -18,6 +25,28 @@ public class SlimeServer : Slime
     private void OnDestroy()
     {
         UnsubscribeEvent();
+    }
+
+    private void Start()
+    {
+        foreach (InputActionValidArea input in ListInputActionValidArea)
+        {
+            if (input.GetAssociatedBody() == GetSlimeBody().GetBodyType())
+            {
+                CurrentInputActionValidArea = Instantiate(input,
+                    Spawn_InputActionValidArea.transform);
+
+                break;
+            }
+        }
+    }
+
+
+    // Requete
+
+    public Vector3 GetInputActionValidAreaPosition()
+    {
+        return Spawn_InputActionValidArea.transform.position;
     }
 
 

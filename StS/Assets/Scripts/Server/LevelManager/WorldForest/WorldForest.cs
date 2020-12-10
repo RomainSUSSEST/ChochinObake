@@ -130,7 +130,7 @@ public class WorldForest : MonoBehaviour
                 // On cherche le ground qui correspond au slime body courant.
                 foreach (Ground g in ListGroundColor)
                 {
-                    if (g.GetAssociatedSlimeBody() == p.Body)
+                    if (g.GetAssociatedSlimeBody() == p.Body.GetBodyType())
                     {
                         GroundArray[i] = g;
                         break;
@@ -301,10 +301,12 @@ public class WorldForest : MonoBehaviour
            foreach (SlimeServer ss in SlimesArray)
             {
                 if (ss != null) {
+                    Vector3 pos = ss.GetInputActionValidAreaPosition();
+
                     curObstacle = Instantiate(ListObstacle[index], new Vector3(
-                        ss.transform.position.x,
-                        ss.transform.position.y,
-                        ss.transform.position.z + ObstacleDistanceToSlimeSpawn),
+                        pos.x,
+                        pos.y,
+                        pos.z + ObstacleDistanceToSlimeSpawn),
                         Quaternion.identity,
                         transform);
 

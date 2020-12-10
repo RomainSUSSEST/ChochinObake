@@ -92,5 +92,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 116e3605137e3dd4487b2ecc8a1e9ee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AssociatedSlimeBody: {fileID: -6089092216667704421, guid: 80173aded9de1434bb9b16a7e726668d,
-    type: 3}
+  AssociatedSlimeBody: 11

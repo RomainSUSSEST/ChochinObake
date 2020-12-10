@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8770195880764924824
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6341449740250650730}
+  m_Layer: 0
+  m_Name: Spawn_InputActionValidArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6341449740250650730
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8770195880764924824}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 612680899142966293}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8953726460553250359
 GameObject:
   m_ObjectHideFlags: 0
@@ -10,7 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 612680899142966293}
   - component: {fileID: -3312898644491709661}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: SlimeServer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +57,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 6341449740250650730}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
@@ -43,5 +74,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3c39436b34090846a835bf0fdb29c8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  JumpForce: 40
-  Speed: 20
+  ListInputActionValidArea:
+  - {fileID: -2534543633040217611, guid: 10758917d590ed84c95a8b3aefbd0722, type: 3}
+  - {fileID: 1921933847122057427, guid: 08a4c9c6626c9c247a13914a7a142b25, type: 3}
+  - {fileID: 1046429908156118968, guid: 0e91b4631b352644ab0cf9cab25e3f6f, type: 3}
+  - {fileID: 5137126239946022201, guid: 491ad6666af4dd046886d6e717421f8a, type: 3}
+  - {fileID: -7154274233293944919, guid: 1070355d84955a0499a688ca52e70356, type: 3}
+  - {fileID: -1643397098322139931, guid: 5c7d1541a375e6743aec5a7c77f4e813, type: 3}
+  - {fileID: 7478542825353901106, guid: 9407425098342fc47806e2e881b82ad8, type: 3}
+  - {fileID: -391742407993207935, guid: 14c51b098223b7e46aa34cd88b95481d, type: 3}
+  - {fileID: -6025474649190709199, guid: 23e86608bf451854d99feee7b90513b9, type: 3}
+  - {fileID: -6758382734431140403, guid: 6e6d3723da91b7948ac6b6b0ba9ef94c, type: 3}
+  - {fileID: 6886261881537962951, guid: fa8c9eefe9fb16c4a85edb951d09e6dd, type: 3}
+  - {fileID: 9087223816343954746, guid: 0055125b5d85cde4499a84c8c67ba9a5, type: 3}
+  Spawn_InputActionValidArea: {fileID: 8770195880764924824}

@@ -5,7 +5,7 @@ public class Ground : MonoBehaviour
 {
     // Attributs
 
-    [SerializeField] private SlimeBody AssociatedSlimeBody;
+    [SerializeField] private SlimeBody.BodyType AssociatedSlimeBody;
     
     public static float MOVE_SPEED { get; set; }
     public static float DESTROY_Z_POSITION { get; set; }
@@ -33,7 +33,7 @@ public class Ground : MonoBehaviour
 
     #region Request
 
-    public SlimeBody GetAssociatedSlimeBody()
+    public SlimeBody.BodyType GetAssociatedSlimeBody()
     {
         return AssociatedSlimeBody;
     }
