@@ -8,6 +8,9 @@ public class MusicSelectionClientModel : MonoBehaviour
 {
     // Attributs
 
+    [Header("SongListPanel")]
+    [SerializeField] private GameObject PanelMusicList;
+
     [Header("Song List Text Content")]
 
     [SerializeField] private MusicSelectionClient_Song SongPrefab; // La prefab de l'objet son à spawn
@@ -24,6 +27,9 @@ public class MusicSelectionClientModel : MonoBehaviour
     private void OnEnable()
     {
         SubscribeEvents(); // On s'abonne au différent event
+
+        // On active le panel de musique
+        PanelMusicList.SetActive(true);
 
         // On réinitialise le panel de musique
         DestroyListSong();
@@ -47,7 +53,8 @@ public class MusicSelectionClientModel : MonoBehaviour
 
     private void MusicVoteAccepted(MusicVoteAcceptedEvent e)
     {
-        // To DO, désactiver boutons d'envoie.
+        // On désactive le PanelMusicList
+        PanelMusicList.SetActive(false);
     }
 
     #endregion
@@ -79,7 +86,10 @@ public class MusicSelectionClientModel : MonoBehaviour
         {
             currentSong = Instantiate(SongPrefab, CurrentSpawnerPosition, Quaternion.identity, ContentNode);
             currentSong.SetTitle(MusicList[i]);
-            CurrentSpawnerPosition -= new Vector3(0, currentSong.GetComponent<RectTransform>().rect.height, 0);
+
+            CurrentSpawnerPosition = new Vector3(CurrentSpawnerPosition.x,
+                CurrentSpawnerPosition.y - currentSong.GetComponent<RectTransform>().rect.height,
+                CurrentSpawnerPosition.z);
 
             // On ajoute le son à la liste.
             SongList.Add(currentSong);

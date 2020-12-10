@@ -3,7 +3,6 @@
     using SDD.Events;
     using System.Collections;
     using UnityEngine;
-    using CommonVisibleManager;
 
     public enum GameState { gameMenu, gamePlay, gamePause }
 
@@ -43,7 +42,7 @@
 
             EventManager.Instance.AddListener<ServerClosedEvent>(ServerClosed);
             EventManager.Instance.AddListener<ServerEnterInGameMusicSelectionEvent>(ServerEnterInGameMusicSelection);
-            //EventManager.Instance.AddListener<ServerEnterInGame>
+            EventManager.Instance.AddListener<ServerEnterInGameMusicResultEvent>(ServerEnterInGameMusicResult);
             EventManager.Instance.AddListener<GameStartedEvent>(GameStarted);
         }
 
@@ -66,6 +65,7 @@
             // Networked Event
             EventManager.Instance.RemoveListener<ServerClosedEvent>(ServerClosed);
             EventManager.Instance.RemoveListener<ServerEnterInGameMusicSelectionEvent>(ServerEnterInGameMusicSelection);
+            EventManager.Instance.RemoveListener<ServerEnterInGameMusicResultEvent>(ServerEnterInGameMusicResult);
             EventManager.Instance.RemoveListener<GameStartedEvent>(GameStarted);
         }
         #endregion
@@ -159,6 +159,11 @@
         private void ServerEnterInGameMusicSelection(ServerEnterInGameMusicSelectionEvent e)
         {
             MusicSelection();
+        }
+
+        private void ServerEnterInGameMusicResult(ServerEnterInGameMusicResultEvent e)
+        {
+            //MusicResult();
         }
 
         private void GameStarted(GameStartedEvent e)

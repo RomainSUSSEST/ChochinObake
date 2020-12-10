@@ -5268,6 +5268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ba57eb77757c894ab5dced956d967b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PanelMusicList: {fileID: 5450974405654147427}
   SongPrefab: {fileID: 5628401043329235247, guid: 27f4e5d99c34db6498829e95a43defa3,
     type: 3}
   SongSpawnTransform: {fileID: 2726534284996258966}

@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Mat_TreeSHAD
+  m_Name: MAT_TreeSHAD
   m_Shader: {fileID: -6465566751694194690, guid: 6f7187012e3d2ad42a7eb0d9d86e0d65,
     type: 3}
   m_ShaderKeywords: 
