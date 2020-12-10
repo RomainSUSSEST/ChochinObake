@@ -47,7 +47,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ListObstacle:
-  - {fileID: 1986038957172646057, guid: 5c5eeffc08a7e7843b3dd17bae5b05db, type: 3}
+  - {fileID: -1900442564431706469, guid: 37dc0b37e17be744f8c6559e9f588e66, type: 3}
+  - {fileID: -3068269530866845941, guid: d0ef5eb4f2f8635408f238ef2c55837a, type: 3}
+  - {fileID: -3068269530866845941, guid: d0ef5eb4f2f8635408f238ef2c55837a, type: 3}
+  - {fileID: -1900442564431706469, guid: 37dc0b37e17be744f8c6559e9f588e66, type: 3}
+  - {fileID: -1900442564431706469, guid: 37dc0b37e17be744f8c6559e9f588e66, type: 3}
+  - {fileID: -1900442564431706469, guid: 37dc0b37e17be744f8c6559e9f588e66, type: 3}
   ListGroundColor:
   - {fileID: 1590013743200785398, guid: b00ff9a79f73a5f4bb3ddbda23e722c8, type: 3}
   - {fileID: 8508324969120931777, guid: 0f1185c91eb700e4093d301b6ea617b6, type: 3}

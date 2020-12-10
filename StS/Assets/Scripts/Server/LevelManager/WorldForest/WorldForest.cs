@@ -294,7 +294,7 @@ public class WorldForest : MonoBehaviour
             float curPercentOfMax = flux.prunedSpectralFlux / CurrentMaxPrunedSpectralFlux;
 
             // On obtient une valeur entre 0 et 1 que l'on multiplie au nombre d'obstacle - 1
-            int index = (int) curPercentOfMax * (ListObstacle.Count - 1);
+            int index = (int) Mathf.Round(curPercentOfMax * (ListObstacle.Count - 1));
 
             Obstacle curObstacle;
            // Pour chaque slime, on invoque l'obstacle
