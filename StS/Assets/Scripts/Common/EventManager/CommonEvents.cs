@@ -275,9 +275,5 @@ public class GameStartedEvent : NetworkedEvent
 public class ServerEnterInGameMusicSelectionEvent : NetworkedEvent
 {
 }
-
-public class ServerEnterInGameMusicResultEvent : NetworkedEvent
-{
-}
 #endregion
 #endregion

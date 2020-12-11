@@ -1,6 +1,5 @@
 ﻿namespace ClientManager
 {
-    using SDD.Events;
     using CommonVisibleManager;
     using System.Collections;
     using System.Collections.Generic;
@@ -14,9 +13,9 @@
         [SerializeField] private float SWIPE_THRESHOLD = 20f;
 
         // L'inclinaison
-        [SerializeField] private float TILT_THRESHOLD = 0.05f;
-        [SerializeField] private float REFRESH_TILT_DELAY = 0.75f;
-        [SerializeField] private float DEFAULT_INCLINAISON = 0.3f;
+        //[SerializeField] private float TILT_THRESHOLD = 0.05f;
+        //[SerializeField] private float REFRESH_TILT_DELAY = 0.75f;
+        //[SerializeField] private float DEFAULT_INCLINAISON = 0.3f;
 
         // Les appuies sur écran
         [SerializeField] private float MAX_DELAI_2PRESS = 1;
@@ -35,8 +34,6 @@
 
         private ulong ClientID;
 
-        private bool IsPlaying;
-
 
         // Méthodes
 
@@ -45,8 +42,6 @@
             DisableSwipeTouchId = new List<int>();
             NbrPress = 0;
 
-            IsPlaying = false; // TODO : Intégré correctement InputsManager dans l'architecture
-
             yield break;
         }
 
@@ -54,19 +49,11 @@
         public override void SubscribeEvents()
         {
             base.SubscribeEvents();
-
-            // Network Event
-
-            EventManager.Instance.AddListener<ServerConnectionSuccessEvent>(ConnectionSuccess);
         }
 
         public override void UnsubscribeEvents()
         {
             base.UnsubscribeEvents();
-
-            // Network Event
-
-            EventManager.Instance.RemoveListener<ServerConnectionSuccessEvent>(ConnectionSuccess);
         }
         #endregion
 
@@ -75,27 +62,20 @@
         {
             base.MobileGamePlay(e);
 
-            IsPlaying = true;
+            // On récupére l'id du joueur
+            ClientID = ClientNetworkManager.Instance.GetPlayerID().Value;
+
             StartCoroutine("ListenInputs");
-            StartCoroutine("CheckTilt");
+            //StartCoroutine("CheckTilt");
         }
         #endregion
-
-
-        // Event call back
-
-        private void ConnectionSuccess(ServerConnectionSuccessEvent e)
-        {
-            // On enregistre notre id.
-            this.ClientID = e.ClientID;
-        }
 
 
         // Coroutine
 
         private IEnumerator ListenInputs()
         {
-            while (IsPlaying)
+            while (ClientGameManager.Instance.GetGameState == GameState.gamePlay)
             {
                 foreach (Touch touch in Input.touches)
                 {
@@ -122,37 +102,38 @@
                         DisableSwipeTouchId.Remove(touch.fingerId);
                     }
                 }
+
                 yield return new CoroutineTools.WaitForFrames(1);
             }
         }
 
-        private IEnumerator CheckTilt()
-        {
+        //private IEnumerator CheckTilt()
+        //{
 
-            while (IsPlaying)
-            {
-                if (Mathf.Abs(Input.acceleration.x) > TILT_THRESHOLD)
-                {
-                    OnTiltLeftRight(Input.acceleration.x);
-                }
-                else
-                {
-                    OnTiltLeftRight(0);
-                }
+        //    while (IsPlaying)
+        //    {
+        //        if (Mathf.Abs(Input.acceleration.x) > TILT_THRESHOLD)
+        //        {
+        //            OnTiltLeftRight(Input.acceleration.x);
+        //        }
+        //        else
+        //        {
+        //            OnTiltLeftRight(0);
+        //        }
 
-                float z = Input.acceleration.z + DEFAULT_INCLINAISON;
-                if (Mathf.Abs(z) > TILT_THRESHOLD)
-                {
-                    OnTiltTopBottom(z); // Permet de tenir le telephone légerement incliné de base
-                }
-                else
-                {
-                    OnTiltTopBottom(0);
-                }
-                yield return new WaitForSeconds(REFRESH_TILT_DELAY);
-            }
+        //        float z = Input.acceleration.z + DEFAULT_INCLINAISON;
+        //        if (Mathf.Abs(z) > TILT_THRESHOLD)
+        //        {
+        //            OnTiltTopBottom(z); // Permet de tenir le telephone légerement incliné de base
+        //        }
+        //        else
+        //        {
+        //            OnTiltTopBottom(0);
+        //        }
+        //        yield return new WaitForSeconds(REFRESH_TILT_DELAY);
+        //    }
 
-        }
+        //}
 
 
         // Outils
@@ -251,7 +232,7 @@
             return Mathf.Abs(t1 - t2);
         }
 
-        //////////////////////////////////CALLBACK FUNCTIONS/////////////////////////////
+        #region CALLBACK FUNCTIONS
         private void OnSwipeUp()
         {
             MessagingManager.Instance.RaiseNetworkedEventOnServer(new SwipeUpEvent(ClientID));
@@ -277,16 +258,17 @@
             MessagingManager.Instance.RaiseNetworkedEventOnServer(new DoublePressEvent(ClientID));
         }
 
-        private void OnTiltLeftRight(float intensity)
-        {
+        //private void OnTiltLeftRight(float intensity)
+        //{
 
-            MessagingManager.Instance.RaiseNetworkedEventOnServer(new TiltLeftRightEvent(ClientID, intensity));
-        }
+        //    MessagingManager.Instance.RaiseNetworkedEventOnServer(new TiltLeftRightEvent(ClientID, intensity));
+        //}
 
-        private void OnTiltTopBottom(float intensity)
-        {
-            MessagingManager.Instance.RaiseNetworkedEventOnServer(new TiltTopBottomEvent(ClientID, intensity));
+        //private void OnTiltTopBottom(float intensity)
+        //{
+        //    MessagingManager.Instance.RaiseNetworkedEventOnServer(new TiltTopBottomEvent(ClientID, intensity));
 
-        }
+        //}
+        #endregion
     }
 }

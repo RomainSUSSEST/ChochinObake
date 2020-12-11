@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using ZXing;
 using SDD.Events;
 using System.Collections;
+using UnityEngine.Android;
+using ClientManager;
 
 public class QrCodeIPReader : MonoBehaviour
 {
@@ -12,30 +14,54 @@ public class QrCodeIPReader : MonoBehaviour
 
     [SerializeField] private Text errorMessage;
 
-    private bool camAvailable;
     private RawImage display;
     private WebCamTexture camTexture;
-    private volatile bool stoped;
 
-    
-    // Life cycle
-    void Start()
+
+    #region Life Cycle
+
+    private void Awake()
     {
         // On récupére les components
         display = GetComponent<RawImage>();
+    }
 
-        // On identifie les caméras.
+    private void Start()
+    {
+        // On demande les autorisation de la caméra
+        if (Application.platform == RuntimePlatform.Android
+            && !Permission.HasUserAuthorizedPermission(Permission.Camera)) // Si on est sur android et que l'on a pas les autorisations
+        {
+            Permission.RequestUserPermission(Permission.Camera); // On les demande
+        }
+    }
+
+    private void OnEnable()
+    {
+        // Si on est pas en focus sur ce panel
+        if (ClientGameManager.Instance.GetGameState != GameState.gameJoin)
+            return;
+
+        // Si on n'a pas les autorisations
+        if (Application.platform == RuntimePlatform.Android
+            && !Permission.HasUserAuthorizedPermission(Permission.Camera))
+        {
+            return;
+        }
+
+        #region On identifie les caméras.
 
         WebCamDevice[] devices = WebCamTexture.devices;
 
         if (devices.Length == 0)
         {
             Debug.LogError("No camera detected");
-            camAvailable = false;
             return;
         }
 
-        // On initialise les components pour s'adapter à la platforme.
+        #endregion
+
+        #region On initialise les components pour s'adapter à la platforme.
         if (SystemInfo.deviceType == DeviceType.Desktop)
         {
             display.transform.localScale = new Vector3(-1 * display.transform.localScale.x, display.transform.localScale.y, display.transform.localScale.z);
@@ -50,8 +76,9 @@ public class QrCodeIPReader : MonoBehaviour
                     break;
                 }
             }
-        } else 
-        if (Application.platform == RuntimePlatform.Android)
+        }
+        else
+            if (Application.platform == RuntimePlatform.Android)
         {
             display.transform.localScale = new Vector3(-1 * display.transform.localScale.x, -1 * display.transform.localScale.y, display.transform.localScale.z);
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -67,76 +94,80 @@ public class QrCodeIPReader : MonoBehaviour
                 }
             }
         }
+        #endregion
 
-        // Si aucune caméra n'est trouvé
+        #region Si aucune caméra n'est trouvé
         if (camTexture == null)
         {
             Debug.LogError("No back camera");
-            camAvailable = false;
             return;
-        } else
-        {
-            camAvailable = true;
         }
-    }
+        #endregion
 
-    private void OnEnable()
-    {
-        stoped = false;
+        #region On lance la lecture
+
         StartCoroutine("SearchQRCode");
+
+        #endregion
     }
 
     private void OnDisable()
     {
-        stoped = true;
+        // On s'assure que la caméra est éteinte
+        if (camTexture != null)
+        {
+            camTexture.Stop();
+        }
+        // Et que la coroutine est fini
+        StopCoroutine("SearchQRCode");
     }
 
+    #endregion
 
-    // Outils Coroutine
+    #region Coroutine
 
     private IEnumerator SearchQRCode()
     {
-        // Si nous n'avons aucune caméra...
-        if (!camAvailable) // Attention de vérifié que ce n'est pas un enable de resize dimension !
+        #region Initialisation des composants & lancement de la caméra
+        errorMessage.text = ""; // initialisation du message d'erreur.
+        display.texture = camTexture;
+        camTexture.Play();
+
+        Result result = null;
+        IBarcodeReader barcodeReader = new BarcodeReader();
+        #endregion
+
+        while (result == null)
         {
-            // TO DO
+            // Decode the current frame
+            Texture2D texture = TextureToTexture2D(display.texture); // On récupére la texture
+            result = barcodeReader.Decode(texture.GetPixels32(),
+                texture.width, texture.height); // On écode l'image
+
+            #region Invalid IP
+            if (result != null && !IPManager.ValidateIPv4(result.Text))
+            {
+                errorMessage.text = "Invalid IP : " + result.Text;
+                result = null;
+            }
+            #endregion
+
+            yield return new WaitForSeconds(1);
         }
-        else
-        {
-            errorMessage.text = ""; // initialisation du message d'erreur.
-            display.texture = camTexture;
-            camTexture.Play();
 
-            Result result = null;
-            IBarcodeReader barcodeReader = new BarcodeReader();
-            while (result == null && !stoped)
-            {
-                // Decode the current frame
-                Texture2D texture = TextureToTexture2D(display.texture);
-                result = barcodeReader.Decode(texture.GetPixels32(),
-                    texture.width, texture.height);
-
-                if (result != null && !IPManager.ValidateIPv4(result.Text))
-                {
-                    errorMessage.text = "Invalid IP : " + result.Text;
-                    result = null;
-                }
-
-                yield return new WaitForSeconds(1);
-            }
-
-            camTexture.Stop();
+        camTexture.Stop(); // On stop la caméra
             
-            // Renvoie du résultat.
-            if (result != null)
+        // Renvoie du résultat.
+        if (result != null)
+        {
+            EventManager.Instance.Raise(new ServerConnectionEvent()
             {
-                EventManager.Instance.Raise(new ServerConnectionEvent()
-                {
-                    Adress = result.Text
-                });
-            }
+                Adress = result.Text
+            });
         }
     }
+
+    #endregion
 
 
     // Outils
