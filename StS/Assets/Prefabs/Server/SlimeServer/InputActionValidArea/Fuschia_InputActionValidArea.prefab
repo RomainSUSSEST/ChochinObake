@@ -94,6 +94,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AssociatedBody: 2
+  Top: {fileID: -8801408555092567480, guid: 8f511fd50756f704c9ed260f9f98e757, type: 3}
+  Bottom: {fileID: -72976673302315851, guid: 7cfeeadd1b1cae5478cfec81c73f62cb, type: 3}
+  Right: {fileID: 6190730493794174344, guid: 6b53aaf4a15166f49ac015420cce808d, type: 3}
+  Left: {fileID: 4455441203669364487, guid: 3b5db85567e3ef24b982cc195192ac80, type: 3}
+  DoublePress: {fileID: -7113523749508634083, guid: 2d21f95523549504a96ed25a47dcb9a2,
+    type: 3}
 --- !u!95 &60364913966112662
 Animator:
   serializedVersion: 3

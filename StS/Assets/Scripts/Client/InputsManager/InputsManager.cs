@@ -39,9 +39,6 @@
 
         protected override IEnumerator InitCoroutine()
         {
-            DisableSwipeTouchId = new List<int>();
-            NbrPress = 0;
-
             yield break;
         }
 
@@ -75,6 +72,9 @@
 
         private IEnumerator ListenInputs()
         {
+            DisableSwipeTouchId = new List<int>();
+            NbrPress = 0;
+
             while (ClientGameManager.Instance.GetGameState == GameState.gamePlay)
             {
                 foreach (Touch touch in Input.touches)

@@ -30,7 +30,7 @@ public class SlimeServer : Slime
 
     private void Start()
     {
-        foreach (InputActionValidArea input in ListInputActionValidArea)
+        foreach (InputActionValidArea input in ListInputActionValidArea) // On récupére la validArea associé.
         {
             if (input.GetAssociatedBody() == GetSlimeBody().GetBodyType())
             {
@@ -49,7 +49,12 @@ public class SlimeServer : Slime
 
     public Vector3 GetInputActionValidAreaPosition()
     {
-        return Spawn_InputActionValidArea.transform.position;
+        return CurrentInputActionValidArea.transform.position;
+    }
+
+    public InputAction_Obstacle GetInputAction(InputActionValidArea.InputAction type)
+    {
+        return CurrentInputActionValidArea.GetInputAction(type);
     }
 
 
