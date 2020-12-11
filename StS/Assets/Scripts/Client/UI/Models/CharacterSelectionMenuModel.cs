@@ -237,9 +237,11 @@ public class CharacterSelectionMenuModel : MonoBehaviour
         if (PlayerIsReady)
         {
             SetReadyButtonColor();
+            EventManager.Instance.Raise(new RefreshSlimeInformationEvent() { body = GetCurrentBody(), hat = GetCurrentHats() });
         } else
         {
             SetUnreadyButtonColor();
+            EventManager.Instance.Raise(new RefreshSlimeInformationEvent() { body = null, hat = null });
         }
 
         // On réactive le bouton pour changer d'état

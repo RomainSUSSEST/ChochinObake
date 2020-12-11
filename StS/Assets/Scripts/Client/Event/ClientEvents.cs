@@ -55,6 +55,15 @@ public class RespawnButtonClickedEvent : Event
 {
 }
 #endregion
+
+#region Character Selection Menu
+public class RefreshSlimeInformationEvent : Event
+{
+	public SlimeBody body;
+	public SlimeHats hat;
+}
+
+#endregion
 #endregion
 
 #region Network Client

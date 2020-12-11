@@ -8,6 +8,11 @@
 
     public class ClientGameManager : ClientManager<ClientGameManager>
     {
+        #region Attributs
+        private SlimeBody currentBody;
+        private SlimeHats currentHat;
+        #endregion
+        
         #region Game State
         private GameState m_GameState;
 
@@ -21,6 +26,19 @@
         }
         #endregion
 
+        #region Requests
+
+        public SlimeBody GetCurrentBody()
+        {
+            return currentBody;
+        }
+
+        public SlimeHats GetCurrentHat()
+        {
+            return currentHat;
+        }
+        #endregion
+
         #region Events subscription
         public override void SubscribeEvents()
         {
@@ -31,6 +49,7 @@
             EventManager.Instance.AddListener<LeaveButtonClickedEvent>(LeaveButtonClicked);
             EventManager.Instance.AddListener<PreviousCharacterSelectionButtonClickedEvent>(PreviousCharacterSelectionButtonClicked);
             EventManager.Instance.AddListener<ReadyCharacterSelectionButtonClickedEvent>(ReadyCharacterSelectionButtonClicked);
+            EventManager.Instance.AddListener<RefreshSlimeInformationEvent>(RefreshSlimeInformation);
 
             // UI Resize
             EventManager.Instance.AddListener<ResizeUICompleteEvent>(ResizeUIComplete);
@@ -54,6 +73,7 @@
             EventManager.Instance.RemoveListener<LeaveButtonClickedEvent>(LeaveButtonClicked);
             EventManager.Instance.RemoveListener<PreviousCharacterSelectionButtonClickedEvent>(PreviousCharacterSelectionButtonClicked);
             EventManager.Instance.RemoveListener<ReadyCharacterSelectionButtonClickedEvent>(ReadyCharacterSelectionButtonClicked);
+            EventManager.Instance.RemoveListener<RefreshSlimeInformationEvent>(RefreshSlimeInformation);
 
             // UI Resize
             EventManager.Instance.RemoveListener<ResizeUICompleteEvent>(ResizeUIComplete);
@@ -104,7 +124,6 @@
         {
             EventManager.Instance.Raise(new ReadyCharacterSelectionEvent());
         }
-
         #endregion
 
         #region GameState Methods
@@ -162,6 +181,14 @@
         private void GameStarted(GameStartedEvent e)
         {
             Play();
+        }
+        #endregion
+
+        #region EventCallbackCharacterSelectionMenu
+        private void RefreshSlimeInformation(RefreshSlimeInformationEvent e)
+        {
+            currentBody = e.body;
+            currentHat = e.hat;
         }
         #endregion
     }
