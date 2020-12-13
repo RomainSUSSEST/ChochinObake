@@ -8,6 +8,7 @@ public class MusicSelectionServer_Song : MonoBehaviour
     [Header("Song info")]
 
     [SerializeField] private TextMeshProUGUI SongInfo;
+    [SerializeField] private TextMeshProUGUI VoteInfo;
 
     private int NbrVote;
     private string Title;
@@ -51,6 +52,8 @@ public class MusicSelectionServer_Song : MonoBehaviour
 
     private void RefreshInfo()
     {
-        SongInfo.text = Title + " |Vote : " + NbrVote;
+        Debug.Log(Title);
+        SongInfo.text = Title;
+        VoteInfo.text =  NbrVote.ToString();
     }
 }
