@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5634417097895534046}
   - component: {fileID: -1643397098322139931}
   - component: {fileID: -417642842867402652}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Orange_InputActionValidArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}

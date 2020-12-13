@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5634417097895534046}
   - component: {fileID: 1921933847122057427}
   - component: {fileID: -8176856622708726159}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: DarkBlue_InputActionValidArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}

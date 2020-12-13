@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5634417097895534046}
   - component: {fileID: 6886261881537962951}
   - component: {fileID: -5339239254139989744}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: White_InputActionValidArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}

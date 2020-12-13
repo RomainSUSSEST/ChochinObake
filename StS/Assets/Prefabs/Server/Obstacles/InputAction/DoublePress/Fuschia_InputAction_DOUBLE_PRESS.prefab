@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5084922359305350737}
   - component: {fileID: 5634417097895534046}
   - component: {fileID: -7113523749508634083}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Fuschia_InputAction_DOUBLE_PRESS
   m_TagString: Untagged
   m_Icon: {fileID: 0}

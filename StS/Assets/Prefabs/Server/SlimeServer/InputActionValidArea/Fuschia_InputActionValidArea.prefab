@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5634417097895534046}
   - component: {fileID: 1046429908156118968}
   - component: {fileID: 60364913966112662}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Fuschia_InputActionValidArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}

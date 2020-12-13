@@ -30,6 +30,10 @@ namespace ServerManager
         private static readonly string AUDIO_FILE = "Audio";
         private static readonly string DATA_FILE = "Data";
 
+        // Song map data
+        private static readonly float MIN_THRESHOLD_INTENSITY = 0.1f;
+        private static readonly float MIN_TIME_BETWEEN_BEATS = 0.25f; // En seconde
+
 
         // Attributs
 
@@ -364,6 +368,7 @@ namespace ServerManager
 
         /// <summary>
         /// Analyze l'audio et renvoie la liste des moments forts associé.
+        /// Clean l'audio en fonction des constante MIN_THRESHOLD_INTENSITY & MIN_TIME_BETWEEN_BEATS
         /// </summary>
         /// <param name="audio"> L'audioClip à analyser </param>
         /// <returns> La liste des moments fort au format List<SpectralFluxInfo> </returns>
@@ -382,7 +387,29 @@ namespace ServerManager
 
             UpdatePrepareSongState("Analyze audio for generation...", 68);
             SpectralFluxAnalyzer spectralFluxAnalyzer = await GetFullSpectrumThreadedAsync(NumTotalSamples, MultiChannelsSamples, NumChannels, SampleRate);
-            return spectralFluxAnalyzer.trueBeats;
+
+            // Clean Up Data
+            UpdatePrepareSongState("Clean up data...", 91);
+
+            List<SpectralFluxInfo> result = new List<SpectralFluxInfo>(); // On initialise la liste 'résultat'
+            float LastBeatTime = -MIN_TIME_BETWEEN_BEATS; // On initialise au plus bas le lastBeatTime
+
+            foreach (SpectralFluxInfo sfi in spectralFluxAnalyzer.trueBeats)
+            {
+                // On regarde si la valeur eest écoutable
+                if (sfi.prunedSpectralFlux >= MIN_THRESHOLD_INTENSITY)
+                {
+                    // On regarde si le delai entre le current et le précédent est au dessus du seuil minimum
+                    if (sfi.time - LastBeatTime >= MIN_TIME_BETWEEN_BEATS)
+                    {
+                        result.Add(sfi);
+                        LastBeatTime = sfi.time;
+                    }
+                }
+            }
+
+            UpdatePrepareSongState("Clean up end", 95);
+            return result;
         }
 
         /// <summary>
@@ -396,7 +423,7 @@ namespace ServerManager
         private async Task<SpectralFluxAnalyzer> GetFullSpectrumThreadedAsync(int numTotalSamples, float[] multiChannelsSamples, int numChannels, int sampleRate)
         {
             SpectralFluxAnalyzer PreProcessedSpectralFluxAnalyzer = new SpectralFluxAnalyzer();
-            IProgress<double> progress = new Progress<double>(percent => UpdatePrepareSongState("Analyze Audio...", 68f + percent * 27f));
+            IProgress<double> progress = new Progress<double>(percent => UpdatePrepareSongState("Analyze Audio...", 68f + percent * 22f));
 
             // Lancement de la tache lourde sur un autre thread avec suivi de progression
             await Task.Run(() =>
@@ -466,7 +493,7 @@ namespace ServerManager
                 }
             });
 
-            UpdatePrepareSongState("Analyze audio end", 95);
+            UpdatePrepareSongState("Analyze audio end", 90);
             return PreProcessedSpectralFluxAnalyzer;
         }
 

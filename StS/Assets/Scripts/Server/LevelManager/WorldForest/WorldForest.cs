@@ -8,8 +8,8 @@ public class WorldForest : MonoBehaviour
 {
     // Constante
 
-    public static readonly float DEFAULT_SPEED = 5f;
-    private static readonly float DESTROY_MARGIN = 8;
+    public static readonly float DEFAULT_SPEED = 15f; // Vitesse par défaut
+    private static readonly float DESTROY_MARGIN = 8; // Distance à rajouté pour supprimer l'obstacle hors champ
 
     private static readonly float AlgoSensitivity = 0.2f; // en %
 
@@ -190,6 +190,8 @@ public class WorldForest : MonoBehaviour
         StartCoroutine("StartMusic");
         // On lance l'algo procédural des obstacles
         StartCoroutine("ProceduralGenerator");
+
+        StartCoroutine("ASuppr");
         #endregion
     }
 
@@ -215,21 +217,40 @@ public class WorldForest : MonoBehaviour
     private IEnumerator ProceduralGenerator()
     {
         int cpt = 0;
-        bool isFirstObstacle = true; // Permet d'empecher la superposition d'obstacle.
+        float time = 0; // Compteur de temps
         while (cpt < CurrentMap.Count)
         {
             while (cpt < CurrentMap.Count &&
-                CurrentMap[cpt].time - AheadTimeToSpawn <= ServerMusicManager.Instance.GetCurrentMusicTime())
+                CurrentMap[cpt].time <= time)
             {
-                if (isFirstObstacle)
-                    AddObstacle(CurrentMap[cpt]);
-
-                isFirstObstacle = false;
+                AddObstacle(CurrentMap[cpt]);
                 ++cpt;
             }
 
             yield return new CoroutineTools.WaitForFrames(1);
-            isFirstObstacle = true;
+            time += Time.deltaTime; // On ajoute le temps passé
+        }
+    }
+
+    private IEnumerator ASuppr()
+    {
+        int cpt = 0;
+        float time = -AheadTimeToSpawn; // Compteur de temps
+        while (cpt < CurrentMap.Count)
+        {
+            while (cpt < CurrentMap.Count &&
+                CurrentMap[cpt].time <= time)
+            {
+                if (CurrentMap[cpt].prunedSpectralFlux > CurrentThresholdSensititvity)
+                {
+                    SfxManager.Instance.PlaySfx2D("Balloon");
+                }
+                    
+                ++cpt;
+            }
+
+            yield return new CoroutineTools.WaitForFrames(1);
+            time += Time.deltaTime; // On ajoute le temps passé
         }
     }
 
@@ -285,7 +306,12 @@ public class WorldForest : MonoBehaviour
         }
     }
 
-    private void AddObstacle(SpectralFluxInfo flux)
+    /// <summary>
+    /// Renvoie true si un obstacle est ajouté, false sinon
+    /// </summary>
+    /// <param name="flux"></param>
+    /// <returns></returns>
+    private bool AddObstacle(SpectralFluxInfo flux)
     {
         // Si le beats n'est pas ignoré
         if (flux.prunedSpectralFlux > CurrentThresholdSensititvity)
@@ -303,6 +329,7 @@ public class WorldForest : MonoBehaviour
                 if (ss != null) {
                     Vector3 pos = ss.GetInputActionValidAreaPosition();
 
+                    // On instantie l'obstacle à ObstacleDistanceToSlimeSpawn de InputActionValidAreaPosition
                     curObstacle = Instantiate(ListObstacle[index], new Vector3(
                         pos.x,
                         pos.y,
@@ -313,7 +340,9 @@ public class WorldForest : MonoBehaviour
                     curObstacle.SetAssociatedSlime(ss);
                 }
             }
+            return true;
         }
+        return false;
     }
 
     #endregion

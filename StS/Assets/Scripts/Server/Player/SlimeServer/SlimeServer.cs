@@ -49,7 +49,7 @@ public class SlimeServer : Slime
 
     public Vector3 GetInputActionValidAreaPosition()
     {
-        return CurrentInputActionValidArea.transform.position;
+        return Spawn_InputActionValidArea.transform.position;
     }
 
     public InputAction_Obstacle GetInputAction(InputActionValidArea.InputAction type)

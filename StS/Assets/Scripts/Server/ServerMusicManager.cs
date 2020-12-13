@@ -24,16 +24,6 @@ namespace ServerManager
 
 		private AudioSource AudioSource;
 
-
-        #region Request
-
-        public float GetCurrentMusicTime()
-		{
-			return AudioSource.time;
-		}
-
-        #endregion
-
         #region Life Cycle
 
         protected override void Awake()

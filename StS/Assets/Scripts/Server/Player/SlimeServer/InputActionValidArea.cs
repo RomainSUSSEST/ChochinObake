@@ -9,7 +9,7 @@ public class InputActionValidArea : MonoBehaviour
 
     #region Attributs
 
-    [Header("Slimbe Body")]
+    [Header("Slime Body")]
     [SerializeField] private SlimeBody.BodyType AssociatedBody;
 
     [Header("Associated InputAction_Obstacle")]
@@ -27,7 +27,7 @@ public class InputActionValidArea : MonoBehaviour
 
     #region Life Cycle
 
-    private void Start()
+    private void Awake()
     {
         // On initialise le tableau des inputs actions
         InputActions = new InputAction_Obstacle[InputActionCount];
