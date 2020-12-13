@@ -47,12 +47,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ListObstacle:
-  - {fileID: -1900442564431706469, guid: 37dc0b37e17be744f8c6559e9f588e66, type: 3}
-  - {fileID: -3068269530866845941, guid: d0ef5eb4f2f8635408f238ef2c55837a, type: 3}
-  - {fileID: -3068269530866845941, guid: d0ef5eb4f2f8635408f238ef2c55837a, type: 3}
-  - {fileID: -1900442564431706469, guid: 37dc0b37e17be744f8c6559e9f588e66, type: 3}
-  - {fileID: -1900442564431706469, guid: 37dc0b37e17be744f8c6559e9f588e66, type: 3}
-  - {fileID: -1900442564431706469, guid: 37dc0b37e17be744f8c6559e9f588e66, type: 3}
+  - {fileID: 5495056432260345588, guid: 69292888326e1654c90ca33bfd380d44, type: 3}
+  - {fileID: 4589993125203342544, guid: 05c173a278c196b41bbcd60d08ac66e7, type: 3}
+  - {fileID: 8164220759310899648, guid: 923a5abf63178b34db338cb67a920a6d, type: 3}
+  - {fileID: 5748256611552682758, guid: d680394bf71abc24bb7e55d4d9d42c43, type: 3}
+  - {fileID: 3738221276283132138, guid: 8a1b7c282c71ccd48ad92fb2a0864f2b, type: 3}
+  - {fileID: -2026969081864587213, guid: 9677f5377c02aa14985c6cf0444be01c, type: 3}
+  - {fileID: -6562537612954387148, guid: b94fafb995ac6bd48aaf78b6cd6c6599, type: 3}
+  - {fileID: 7284895084587832073, guid: 95a6a385f92e5cd479072c904526b4d9, type: 3}
+  - {fileID: -488685304998103357, guid: 873dd6a68d8dafe40b9d326bfd4e04e9, type: 3}
   ListGroundColor:
   - {fileID: 1590013743200785398, guid: b00ff9a79f73a5f4bb3ddbda23e722c8, type: 3}
   - {fileID: 8508324969120931777, guid: 0f1185c91eb700e4093d301b6ea617b6, type: 3}
