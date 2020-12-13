@@ -157,14 +157,6 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: b169bdeaf8c55f94b8e8d779268d229d, type: 2}
---- !u!81 &2135729987296494617
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8115639691159958508}
-  m_Enabled: 1
 --- !u!1001 &1129690223846107052
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -297,6 +289,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8913440568752298949}
     m_Modifications:
+    - target: {fileID: 227606640508621401, guid: 8a05a2b27e7e6804ba76cf688f03667a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1113042031696648487, guid: 8a05a2b27e7e6804ba76cf688f03667a,
+        type: 3}
+      propertyPath: m_Cameras.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3023173489329855002, guid: 8a05a2b27e7e6804ba76cf688f03667a,
         type: 3}
       propertyPath: m_RootOrder
@@ -327,15 +329,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3023173489329855007, guid: 8a05a2b27e7e6804ba76cf688f03667a, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a05a2b27e7e6804ba76cf688f03667a, type: 3}
---- !u!1 &8115639691159958508 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3023173489329855006, guid: 8a05a2b27e7e6804ba76cf688f03667a,
-    type: 3}
-  m_PrefabInstance: {fileID: 6437036989836700146}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8115639691159958504 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3023173489329855002, guid: 8a05a2b27e7e6804ba76cf688f03667a,
