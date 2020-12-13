@@ -7,8 +7,8 @@ public class Ground : MonoBehaviour
 
     [SerializeField] private SlimeBody.BodyType AssociatedSlimeBody;
     
-    public static float MOVE_SPEED { get; set; }
-    public static float DESTROY_Z_POSITION { get; set; }
+    public static float MOVE_SPEED { get; set; } // Vitesse unit/s
+    public static float DESTROY_Z_POSITION { get; set; } // Position de destruction
 
 
     #region Life Cycle
@@ -22,11 +22,6 @@ public class Ground : MonoBehaviour
         }
 
         transform.Translate(new Vector3(0, 0, -MOVE_SPEED * Time.deltaTime));
-    }
-
-    private void Start()
-    {
-        transform.Translate(new Vector3(0, 0, -MOVE_SPEED * Time.deltaTime)); // Initialisation
     }
 
     #endregion

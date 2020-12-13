@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5084922359305350737}
   - component: {fileID: 5634417097895534046}
   - component: {fileID: 8523959946795848539}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: DarkBlue_InputAction_RIGHT
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -715,7 +715,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_DoNotDestroyGameObjectOnLoad: 0
   enablePlanet: 0
-  BendingAmount: 0.005
+  BendingAmount: 0.004
 --- !u!1001 &4468114901962073907
 PrefabInstance:
   m_ObjectHideFlags: 0

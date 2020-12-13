@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5084922359305350737}
   - component: {fileID: 5634417097895534046}
   - component: {fileID: -4568241902392440970}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Red_InputAction_TOP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
