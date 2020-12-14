@@ -76,6 +76,8 @@ namespace ServerManager
 			m_AudioSources.Add(m_AudioSourceModel.GetComponent<AudioSource>());
 			for (int i = 0; i < m_NAudioSources - 1; i++)
 				AddAudioSource();
+
+			source.clip = Balloon;
 		}
 
 		public void PlaySfx3D(string sfxName, Vector3 pos)
@@ -107,7 +109,9 @@ namespace ServerManager
 			//	audioSource.PlayOneShot(audioClip.clip, audioClip.volume);
 			//}
 
-			source.PlayOneShot(Balloon);
+
+			source.Stop();
+			source.Play();
 		}
 
 		void OnGUI()
