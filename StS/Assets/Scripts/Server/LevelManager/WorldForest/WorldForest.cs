@@ -105,7 +105,10 @@ public class WorldForest : MonoBehaviour
         float slimeSpawn_Y = transform.position.y + GroundSize.y;
 
         IEnumerator<ulong> enumPlayer = Players.Keys.GetEnumerator(); // Enum sur les joueurs
-        for (int i = (int) Mathf.Floor(NbrWaves / 2f); 0 <= i && i < NbrWaves; i += nextValue)
+
+        int index = NbrWaves % 2 == 0 ? (NbrWaves / 2)-1 : (int)Mathf.Floor(NbrWaves / 2f);
+
+        for (int i = index; 0 <= i && i < NbrWaves; i += nextValue)
         {
             if (enumPlayer.MoveNext())
             {
@@ -135,7 +138,9 @@ public class WorldForest : MonoBehaviour
                         GroundArray[i] = g;
                         break;
                     }
+                    
                 }
+                Debug.Log(GroundArray[i] + " " + p.Body.GetBodyType().ToString()+ " i =" + i);
             } else
             {
                 SlimesArray[i] = null;

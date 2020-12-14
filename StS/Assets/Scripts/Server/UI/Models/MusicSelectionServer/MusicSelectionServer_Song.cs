@@ -52,7 +52,6 @@ public class MusicSelectionServer_Song : MonoBehaviour
 
     private void RefreshInfo()
     {
-        Debug.Log(Title);
         SongInfo.text = Title;
         VoteInfo.text =  NbrVote.ToString();
     }
