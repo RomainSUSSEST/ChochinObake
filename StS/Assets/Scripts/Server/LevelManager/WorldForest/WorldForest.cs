@@ -322,7 +322,7 @@ public class WorldForest : MonoBehaviour
         if (flux.prunedSpectralFlux > CurrentThresholdSensititvity)
         {
             // On cherche à combien de pourcentage du maximum correspond le beats.
-            float curPercentOfMax = flux.prunedSpectralFlux / CurrentMaxPrunedSpectralFlux;
+            float curPercentOfMax = flux.prunedSpectralFlux / CurrentMaxPrunedSpectralFlux; // Max : 1
 
             // On obtient une valeur entre 0 et 1 que l'on multiplie au nombre d'obstacle - 1
             int index = (int) Mathf.Round(curPercentOfMax * (ListObstacle.Count - 1));
@@ -342,7 +342,7 @@ public class WorldForest : MonoBehaviour
                         Quaternion.identity,
                         transform);
 
-                    curObstacle.SetAssociatedSlime(ss);
+                    curObstacle.SetAssociatedSlime(ss); // On associe le slime à l'obstacle
                 }
             }
             return true;

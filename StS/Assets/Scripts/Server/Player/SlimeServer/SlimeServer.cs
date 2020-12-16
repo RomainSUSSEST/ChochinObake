@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class SlimeServer : Slime
 {
+    // Constante
+
+    private static readonly float MARGIN_ERROR_S = 0.05f; // en % 0-1
+    private static readonly float MARGIN_ERROR_A = 0.20f; // en % 0-1
+    private static readonly float MARGIN_ERROR_B = 0.50f; // en % 0-1
+
+    private enum Grade { S, A, B, C, NONE }
+
+
     // Attributs
 
     [Header("InputActionValidArea")]
@@ -14,6 +23,10 @@ public class SlimeServer : Slime
 
     private InputActionValidArea CurrentInputActionValidArea;
     private Animator InputActionValidArea_Animator;
+
+    private Queue<Obstacle> QueueObstacle; // Queue des obstacles suivant associé à ce slime
+
+    private float InputActionSize_Z_Per2; // La taille d'un input action sur l'axe Z divisé par 2
 
 
     // Life cycle
@@ -41,6 +54,24 @@ public class SlimeServer : Slime
 
                 break;
             }
+        }
+
+        // On initialise la Queue des obstacles associé
+        QueueObstacle = new Queue<Obstacle>();
+
+        // On récupére la taille sur Z d'un input action divisé par 2
+        InputActionSize_Z_Per2 = CurrentInputActionValidArea.GetComponent<Renderer>().bounds.size.z / 2;
+    }
+
+    private void Update()
+    {
+        // Les obstacles ne doivent pas valoir null, puisqu'il se détruise loin derriere les slimes !
+        // Si un obstacle enregistré à dépassé la position limite (sur Z), il est considéré comme raté.
+        if (QueueObstacle.Count > 0 
+            && QueueObstacle.Peek().transform.position.z < CurrentInputActionValidArea.transform.position.z - InputActionSize_Z_Per2)
+        {
+            DeregisterObstacle(); // On désenregistre l'obstacle.
+            Debug.Log("Raté !");
         }
     }
 
@@ -88,6 +119,15 @@ public class SlimeServer : Slime
     }
     #endregion
 
+    /// <summary>
+    /// Permet d'enregistrer un obstacle aupres du slime
+    /// </summary>
+    /// <param name="obs"></param>
+    public void RegisterObstacle(Obstacle obs)
+    {
+        QueueObstacle.Enqueue(obs);
+    }
+
 
     // Outils
 
@@ -104,7 +144,7 @@ public class SlimeServer : Slime
     {
         if (e.DoesThisConcernMe(AssociedClientID))
         {
-            InputActionValidArea_Animator.SetTrigger("InputTriggered");
+            InputPressed(InputActionValidArea.InputAction.SWIPE_TOP);
         }
     }
 
@@ -112,7 +152,7 @@ public class SlimeServer : Slime
     {
         if (e.DoesThisConcernMe(AssociedClientID))
         {
-            InputActionValidArea_Animator.SetTrigger("InputTriggered");
+            InputPressed(InputActionValidArea.InputAction.SWIPE_RIGHT);
         }
     }
 
@@ -120,7 +160,7 @@ public class SlimeServer : Slime
     {
         if (e.DoesThisConcernMe(AssociedClientID))
         {
-            InputActionValidArea_Animator.SetTrigger("InputTriggered");
+            InputPressed(InputActionValidArea.InputAction.SWIPE_LEFT);
         }
     }
 
@@ -128,7 +168,7 @@ public class SlimeServer : Slime
     {
         if (e.DoesThisConcernMe(AssociedClientID))
         {
-            InputActionValidArea_Animator.SetTrigger("InputTriggered");
+            InputPressed(InputActionValidArea.InputAction.SWIPE_BOTTOM);
         }
     }
 
@@ -136,8 +176,101 @@ public class SlimeServer : Slime
     {
         if (e.DoesThisConcernMe(AssociedClientID))
         {
-            InputActionValidArea_Animator.SetTrigger("InputTriggered");
+            InputPressed(InputActionValidArea.InputAction.DOUBLE_PRESS);
         }
     }
     #endregion
+
+    /// <summary>
+    /// Renvoie Grade 'NONE' -> Aucune collision avec l'obstacle
+    /// Renvoie Grade 'S', 'A', 'B', 'C' -> Selon les seuil défini en constante pour noter la qualité
+    /// du timing de l'input effectué
+    /// </summary>
+    /// <param name="obs"></param>
+    /// <returns></returns>
+    private Grade GetGrade(Obstacle obs)
+    {
+        float PosObs_Z = obs.transform.position.z; // Position de l'obstacle sur Z
+        float PosInputValidArea_Z = CurrentInputActionValidArea.transform.position.z; // Position du référentiel sur Z
+
+        // On test si il y a une collision
+        float marg = InputActionSize_Z_Per2;
+        if (PosInputValidArea_Z - marg <= PosObs_Z
+            && PosObs_Z <= PosInputValidArea_Z + marg)
+        {
+            // On test si c'est un B
+            marg = InputActionSize_Z_Per2 * MARGIN_ERROR_B;
+            if (PosInputValidArea_Z - marg <= PosObs_Z 
+                && PosObs_Z <= PosInputValidArea_Z + marg)
+            {
+                // On test si c'est un A
+                marg = InputActionSize_Z_Per2 * MARGIN_ERROR_A;
+                if (PosInputValidArea_Z - marg <= PosObs_Z
+                    && PosObs_Z <= PosInputValidArea_Z + marg)
+                {
+                    // On test si c'est un S
+                    marg = InputActionSize_Z_Per2 * MARGIN_ERROR_S;
+                    if (PosInputValidArea_Z - marg <= PosObs_Z
+                        && PosObs_Z <= PosInputValidArea_Z + marg)
+                    {
+                        return Grade.S;
+                    } else
+                    {
+                        return Grade.A;
+                    }
+                } else
+                {
+                    return Grade.B;
+                }
+            } else
+            {
+                return Grade.C; // Note C
+            }
+        } else
+        {
+            return Grade.NONE; // Pas de collision
+        }        
+    }
+
+    /// <summary>
+    /// Gére le comportement du slime en cas d'input pressé par le joueur.
+    /// </summary>
+    /// <param name="action"> L'action effectué par le joueur </param>
+    private void InputPressed(InputActionValidArea.InputAction action)
+    {
+        // On lance l'animation d'un input effectué
+        InputActionValidArea_Animator.SetTrigger("InputTriggered");
+
+        // S'il n'y a pas d'obstacle suivant
+        if (QueueObstacle.Count == 0)
+        {
+            return;
+        }
+
+        Grade g = GetGrade(QueueObstacle.Peek());
+
+        if (g != Grade.NONE) // On regarde si il y a collision
+        {
+            Obstacle obs = DeregisterObstacle(); // On retire le premier éléments
+            
+            if (obs.GetInput() == action) // Si les actions matchs
+            {
+                Debug.Log("Success ! " + g.ToString());
+            } else
+            {
+                Debug.Log("Echec");
+            }
+        } else
+        {
+            Debug.Log("Trop tot !");
+        }
+    }
+
+    /// <summary>
+    /// Désenregistre le prochain obstacle
+    /// </summary>
+    private Obstacle DeregisterObstacle()
+    {
+        return QueueObstacle.Dequeue();
+    }
 }

@@ -40,11 +40,25 @@ public abstract class Obstacle : MonoBehaviour
 
     #endregion
 
+    #region Requete
+
+    public InputActionValidArea.InputAction GetInput()
+    {
+        return Type;
+    }
+
+    #endregion
+
     #region Methode
 
+    /// <summary>
+    /// Enregistre le slime référent et le notifie que l'on s'associe à lui en s'enregistrant
+    /// </summary>
+    /// <param name="ss"> Le slime auquel s'associer </param>
     public void SetAssociatedSlime(SlimeServer ss)
     {
         AssociatedSlime = ss;
+        ss.RegisterObstacle(this);
     }
 
     #endregion
