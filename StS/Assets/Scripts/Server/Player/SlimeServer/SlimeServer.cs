@@ -6,9 +6,10 @@ public class SlimeServer : Slime
 {
     // Constante
 
-    private static readonly float MARGIN_ERROR_S = 0.05f; // en % 0-1
-    private static readonly float MARGIN_ERROR_A = 0.20f; // en % 0-1
-    private static readonly float MARGIN_ERROR_B = 0.50f; // en % 0-1
+    private static readonly float MARGIN_ERROR_S = 1f; // en % 0-1
+    private static readonly float MARGIN_ERROR_A = 1.5f; // en % 0-1
+    private static readonly float MARGIN_ERROR_B = 2f; // en % 0-1
+    private static readonly float MARGIN_ERROR_C = 2.5f; // En %
 
     private enum Grade { S, A, B, C, NONE }
 
@@ -18,6 +19,15 @@ public class SlimeServer : Slime
     [Header("InputActionValidArea")]
     [SerializeField] private List<InputActionValidArea> ListInputActionValidArea;
     [SerializeField] private GameObject Spawn_InputActionValidArea;
+
+    [SerializeField] private ASuppr ASUPPR;
+    [SerializeField] private Value toto;
+    private int total;
+    private int cptS;
+    private int cptA;
+    private int cptB;
+    private int cptC;
+    private Value val;
 
     public ulong AssociedClientID { get; set; }
 
@@ -61,6 +71,8 @@ public class SlimeServer : Slime
 
         // On récupére la taille sur Z d'un input action divisé par 2
         InputActionSize_Z_Per2 = CurrentInputActionValidArea.GetComponent<Renderer>().bounds.size.z / 2;
+
+        val = Instantiate(toto, transform);
     }
 
     private void Update()
@@ -70,8 +82,9 @@ public class SlimeServer : Slime
         if (QueueObstacle.Count > 0 
             && QueueObstacle.Peek().transform.position.z < CurrentInputActionValidArea.transform.position.z - InputActionSize_Z_Per2)
         {
+            ++total;
+            val.SetText("S: " + cptS + " A: " + cptA + " B: " + cptB + " C: " + cptC + "/" + total);
             DeregisterObstacle(); // On désenregistre l'obstacle.
-            Debug.Log("Raté !");
         }
     }
 
@@ -194,36 +207,44 @@ public class SlimeServer : Slime
         float PosInputValidArea_Z = CurrentInputActionValidArea.transform.position.z; // Position du référentiel sur Z
 
         // On test si il y a une collision
-        float marg = InputActionSize_Z_Per2;
+        float marg = InputActionSize_Z_Per2 * MARGIN_ERROR_C;
+        Debug.Log(marg);
         if (PosInputValidArea_Z - marg <= PosObs_Z
             && PosObs_Z <= PosInputValidArea_Z + marg)
         {
             // On test si c'est un B
             marg = InputActionSize_Z_Per2 * MARGIN_ERROR_B;
+            Debug.Log(marg);
             if (PosInputValidArea_Z - marg <= PosObs_Z 
                 && PosObs_Z <= PosInputValidArea_Z + marg)
             {
                 // On test si c'est un A
                 marg = InputActionSize_Z_Per2 * MARGIN_ERROR_A;
+                Debug.Log(marg);
                 if (PosInputValidArea_Z - marg <= PosObs_Z
                     && PosObs_Z <= PosInputValidArea_Z + marg)
                 {
                     // On test si c'est un S
                     marg = InputActionSize_Z_Per2 * MARGIN_ERROR_S;
+                    Debug.Log(marg);
                     if (PosInputValidArea_Z - marg <= PosObs_Z
                         && PosObs_Z <= PosInputValidArea_Z + marg)
                     {
+                        ++cptS;
                         return Grade.S;
                     } else
                     {
+                        ++cptA;
                         return Grade.A;
                     }
                 } else
                 {
+                    ++cptB;
                     return Grade.B;
                 }
             } else
             {
+                ++cptC;
                 return Grade.C; // Note C
             }
         } else
@@ -255,14 +276,21 @@ public class SlimeServer : Slime
             
             if (obs.GetInput() == action) // Si les actions matchs
             {
-                Debug.Log("Success ! " + g.ToString());
+                ASuppr tamp = Instantiate(ASUPPR, transform);
+                ++total;
+                val.SetText("S: " + cptS + " A: " + cptA + " B: " + cptB + " C: " + cptC + "/" + total);
+                tamp.SetText(g.ToString() + " !");
             } else
             {
-                Debug.Log("Echec");
+                ASuppr tamp = Instantiate(ASUPPR, transform);
+                ++total;
+                val.SetText("S: " + cptS + " A: " + cptA + " B: " + cptB + " C: " + cptC + "/" + total);
+                tamp.SetText("Raté !");
             }
         } else
         {
-            Debug.Log("Trop tot !");
+            ASuppr tamp = Instantiate(ASUPPR, transform);
+            tamp.SetText("Trop tôt !");
         }
     }
 

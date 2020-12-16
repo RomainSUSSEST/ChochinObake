@@ -11,7 +11,7 @@ public class WorldForest : MonoBehaviour
     public static readonly float DEFAULT_SPEED = 15f; // Vitesse par défaut
     private static readonly float DESTROY_MARGIN = 8; // Distance à rajouté pour supprimer l'obstacle hors champ
 
-    private static readonly float AlgoSensitivity = 0.2f; // en %
+    private static readonly float AlgoSensitivity = 0.3f; // en %
 
 
     // Attributs
@@ -140,7 +140,6 @@ public class WorldForest : MonoBehaviour
                     }
                     
                 }
-                Debug.Log(GroundArray[i] + " " + p.Body.GetBodyType().ToString()+ " i =" + i);
             } else
             {
                 SlimesArray[i] = null;

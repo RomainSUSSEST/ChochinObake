@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8770195880764924824}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1.1}
+  m_LocalPosition: {x: 0, y: 0, z: 4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 612680899142966293}
@@ -88,3 +88,5 @@ MonoBehaviour:
   - {fileID: 6886261881537962951, guid: fa8c9eefe9fb16c4a85edb951d09e6dd, type: 3}
   - {fileID: 9087223816343954746, guid: 0055125b5d85cde4499a84c8c67ba9a5, type: 3}
   Spawn_InputActionValidArea: {fileID: 8770195880764924824}
+  ASUPPR: {fileID: 197952443865398141, guid: fd7ebe4e1256e654783d487a44ea628e, type: 3}
+  toto: {fileID: 786224556150416431, guid: 8826334dd70e80747b9760c4ced9dfcc, type: 3}
