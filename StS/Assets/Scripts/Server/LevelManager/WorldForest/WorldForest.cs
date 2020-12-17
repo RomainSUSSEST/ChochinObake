@@ -8,10 +8,11 @@ public class WorldForest : MonoBehaviour
 {
     // Constante
 
-    public static readonly float DEFAULT_SPEED = 15f; // Vitesse par défaut
+    public static readonly float DEFAULT_SPEED = 12f; // Vitesse par défaut
     private static readonly float DESTROY_MARGIN = 8; // Distance à rajouté pour supprimer l'obstacle hors champ
+    private static readonly float MINIMAL_SPEED = 5f;
 
-    private static readonly float AlgoSensitivity = 0.3f; // en %
+    private static readonly float AlgoSensitivity = 0.2f; // en %
 
 
     // Attributs
@@ -158,9 +159,9 @@ public class WorldForest : MonoBehaviour
         #endregion
 
         // Initialisation des élements
-        Ground.MOVE_SPEED = ((CurrentMap.Count / clip.length) * DEFAULT_SPEED);
+        Ground.MOVE_SPEED = Mathf.Max(((CurrentMap.Count / clip.length) * DEFAULT_SPEED), MINIMAL_SPEED);
         Ground.DESTROY_Z_POSITION = transform.position.z - GroundSize.z - DESTROY_MARGIN;
-
+ 
         #region On Initialise la carte
         InstantiateNewGroundsAt(new Vector3(StartWavesSpawnPosition_X, transform.position.y, transform.position.z));
         InstantiateNewGroundsAt(new Vector3(

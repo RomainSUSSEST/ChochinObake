@@ -61,5 +61,10 @@ public abstract class Obstacle : MonoBehaviour
         ss.RegisterObstacle(this);
     }
 
+    public Vector3 GetCurrentInputActionAreaPosition()
+    {
+        return InputAction_Spawner.transform.position;
+    }
+
     #endregion
 }

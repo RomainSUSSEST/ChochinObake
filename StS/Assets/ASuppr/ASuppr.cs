@@ -17,6 +17,6 @@ public class ASuppr : MonoBehaviour
 
     private void Update()
     {
-        transform.Translate(new Vector3(0, 4f, 0) * Time.deltaTime);
+        transform.Translate(new Vector3(0, -4f, 0) * Time.deltaTime);
     }
 }

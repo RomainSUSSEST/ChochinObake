@@ -84,8 +84,8 @@
                         fingerDown = touch.position;
                         CurrentFingerPosition = touch.position;
 
-                        NbrPress += 1; // On enregistre un clique.
-                        CheckPress();
+                        //NbrPress += 1; // On enregistre un clique.
+                        //CheckPress();
 
                     }
                     else if (touch.phase == TouchPhase.Moved)
@@ -139,27 +139,27 @@
         // Outils
 
 
-        private void CheckPress()
-        {
-            if (NbrPress == 1)
-            {
-                // On enregistre le time du premier press
-                TimeFirstPress = Time.time;
-            }
-            else
-            {
-                if (TimeBeetween(Time.time, TimeFirstPress) < MAX_DELAI_2PRESS)
-                {
-                    NbrPress = 0;
-                    OnDoublePress();
-                }
-                else
-                {
-                    TimeFirstPress = Time.time;
-                    NbrPress = 1;
-                }
-            }
-        }
+        //private void CheckPress()
+        //{
+        //    if (NbrPress == 1)
+        //    {
+        //        // On enregistre le time du premier press
+        //        TimeFirstPress = Time.time;
+        //    }
+        //    else
+        //    {
+        //        if (TimeBeetween(Time.time, TimeFirstPress) < MAX_DELAI_2PRESS)
+        //        {
+        //            NbrPress = 0;
+        //            OnDoublePress();
+        //        }
+        //        else
+        //        {
+        //            TimeFirstPress = Time.time;
+        //            NbrPress = 1;
+        //        }
+        //    }
+        //}
 
         /**
          * SWIPE_THRESHOLD correspond à la distance parcourut vers gauche/droite ou haut/bas et non pas à la distance parcourut.
@@ -253,10 +253,10 @@
             MessagingManager.Instance.RaiseNetworkedEventOnServer(new SwipeRightEvent(ClientID));
         }
 
-        private void OnDoublePress()
-        {
-            MessagingManager.Instance.RaiseNetworkedEventOnServer(new DoublePressEvent(ClientID));
-        }
+        //private void OnDoublePress()
+        //{
+        //    MessagingManager.Instance.RaiseNetworkedEventOnServer(new DoublePressEvent(ClientID));
+        //}
 
         //private void OnTiltLeftRight(float intensity)
         //{

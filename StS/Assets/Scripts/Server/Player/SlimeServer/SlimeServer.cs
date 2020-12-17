@@ -6,10 +6,10 @@ public class SlimeServer : Slime
 {
     // Constante
 
-    private static readonly float MARGIN_ERROR_S = 1f; // en % 0-1
-    private static readonly float MARGIN_ERROR_A = 1.5f; // en % 0-1
-    private static readonly float MARGIN_ERROR_B = 2f; // en % 0-1
-    private static readonly float MARGIN_ERROR_C = 2.5f; // En %
+    private static readonly float MARGIN_ERROR_S = 0.35f; // en % 0-1
+    private static readonly float MARGIN_ERROR_A = 0.7f; // en % 0-1
+    private static readonly float MARGIN_ERROR_B = 1f; // en % 0-1
+    private static readonly float MARGIN_ERROR_C = 1.5f; // En %
 
     private enum Grade { S, A, B, C, NONE }
 
@@ -203,9 +203,9 @@ public class SlimeServer : Slime
     /// <returns></returns>
     private Grade GetGrade(Obstacle obs)
     {
-        float PosObs_Z = obs.transform.position.z; // Position de l'obstacle sur Z
+        float PosObs_Z = obs.GetCurrentInputActionAreaPosition().z; // Position de l'obstacle sur Z
         float PosInputValidArea_Z = CurrentInputActionValidArea.transform.position.z; // Position du référentiel sur Z
-
+        Debug.Log(PosObs_Z + " || " + PosInputValidArea_Z);
         // On test si il y a une collision
         float marg = InputActionSize_Z_Per2 * MARGIN_ERROR_C;
         Debug.Log(marg);
