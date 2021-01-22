@@ -96,6 +96,20 @@
             OpenCamera(m_MainCamera);
         }
 
+        protected override void MobileMusicResult(MobileMusicResultEvent e)
+        {
+            base.MobileMusicResult(e);
+
+            OpenCamera(m_MainCamera);
+        }
+
+        protected override void MobileGamePlay(MobileGamePlayEvent e)
+        {
+            base.MobileGamePlay(e);
+
+            OpenCamera(m_MainCamera);
+        }
+
         #endregion
     }
 

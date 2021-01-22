@@ -23,6 +23,10 @@ public class MobileMusicSelectionEvent : Event
 {
 }
 
+public class MobileMusicResultEvent : Event
+{
+}
+
 public class MobileGamePlayEvent : Event
 {
 }
@@ -57,10 +61,10 @@ public class RespawnButtonClickedEvent : Event
 #endregion
 
 #region Character Selection Menu
-public class RefreshSlimeInformationEvent : Event
+public class RefreshCharacterInformationEvent : Event
 {
-	public SlimeBody body;
-	public SlimeHats hat;
+	public CharacterBody body;
+	public CharacterHats hat;
 }
 
 #endregion

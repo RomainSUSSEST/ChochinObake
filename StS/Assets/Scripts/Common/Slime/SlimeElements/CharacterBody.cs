@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class SlimeBody : MonoBehaviour
+public class CharacterBody : MonoBehaviour
 {
     // Classe imbriqué
 
@@ -26,7 +26,7 @@ public class SlimeBody : MonoBehaviour
 
     [SerializeField] private BodyType m_BodyType;
 
-    private Slime Root;
+    private CharacterPlayer Root;
 
 
     // Life Cycle
@@ -50,7 +50,7 @@ public class SlimeBody : MonoBehaviour
 
     // Méthode
 
-    public void SetSlimeRoot(Slime root)
+    public void SetSlimeRoot(CharacterPlayer root)
     {
         Root = root;
     }

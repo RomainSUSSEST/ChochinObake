@@ -13,26 +13,27 @@ public class RoomModel : MonoBehaviour
     public static readonly string DEFAULT_NAME = "No Name";
 
 
-    // Attributs
+    #region Attributs
 
     [Header("RoomModel")]
 
     [SerializeField] private Button NextButton;
     [SerializeField] private TextMeshProUGUI TextPrinter;
 
-    [SerializeField] private List<SlimeHats> ListHats;
-    [SerializeField] private List<SlimeBody> ListBody;
+    [SerializeField] private List<CharacterHats> ListHats;
+    [SerializeField] private List<CharacterBody> ListBody;
 
     private Dictionary<ulong, Player> Players;
 
-    private List<SlimeBody.BodyType> InvalidBody; // Enregistre la liste des body déjà pris
+    private List<CharacterBody.BodyType> InvalidBody; // Enregistre la liste des body déjà pris
 
     [Header("Panel Add Song")]
 
     [SerializeField] private GameObject PanelSongList;
 
+    #endregion
 
-    // Life Cycle
+    #region Life Cycle
 
     private void OnEnable()
     {
@@ -40,7 +41,7 @@ public class RoomModel : MonoBehaviour
 
         SubscribeEvents();
         Players = new Dictionary<ulong, Player>();
-        InvalidBody = new List<SlimeBody.BodyType>();
+        InvalidBody = new List<CharacterBody.BodyType>();
         PanelSongList.SetActive(false); // On s'assure que le panel de gestion des sons est désactivé.
 
         ActualiseNextButton();
@@ -51,8 +52,9 @@ public class RoomModel : MonoBehaviour
         UnsubscribeEvents();
     }
 
+    #endregion
 
-    // Event subscription
+    #region Event Subscription
 
     public void SubscribeEvents()
     {
@@ -63,6 +65,9 @@ public class RoomModel : MonoBehaviour
         // Network Common Event
         EventManager.Instance.AddListener<PlayerEnterInCharacterSelectionEvent>(PlayerEnterInCharacterSelection);
         EventManager.Instance.AddListener<RequestPlayerReadyInCharacterSelectionEvent>(RequestPlayerReadyInCharacterSelection);
+
+        // SongListModel Panel Event
+        EventManager.Instance.AddListener<SongListModelHasBeenClosedEvent>(SongListModelHasBeenClosed);
     }
 
     public void UnsubscribeEvents()
@@ -74,9 +79,14 @@ public class RoomModel : MonoBehaviour
         // Network Common Event
         EventManager.Instance.RemoveListener<PlayerEnterInCharacterSelectionEvent>(PlayerEnterInCharacterSelection);
         EventManager.Instance.RemoveListener<RequestPlayerReadyInCharacterSelectionEvent>(RequestPlayerReadyInCharacterSelection);
+
+        // SongListModel Panel Event
+        EventManager.Instance.RemoveListener<SongListModelHasBeenClosedEvent>(SongListModelHasBeenClosed);
     }
 
-    // On click button function
+    #endregion
+
+    #region OnClick button
 
     public void SongButtonHasBeenClicked()
     {
@@ -91,8 +101,9 @@ public class RoomModel : MonoBehaviour
         });
     }
 
+    #endregion
 
-    // Network Event Call
+    #region Network event call
 
     private void AddPlayer(ServerConnectionSuccessEvent e)
     {
@@ -201,8 +212,18 @@ public class RoomModel : MonoBehaviour
             new InverseStateOfColorEvent(e.PlayerID.Value, e.BodyType));
     }
 
+    #endregion
 
-    // Outils
+    #region SongListModel Event call back
+
+    private void SongListModelHasBeenClosed(SongListModelHasBeenClosedEvent e)
+    {
+        ActualiseNextButton();
+    }
+
+    #endregion
+
+    #region Tools
 
     private void RefreshListPlayer()
     {
@@ -270,9 +291,9 @@ public class RoomModel : MonoBehaviour
     }
 
     #region Correspondance Slime Type <=> Prefab
-    private SlimeHats GetSlimeHats(SlimeHats.HatsType type)
+    private CharacterHats GetSlimeHats(CharacterHats.HatsType type)
     {
-        foreach (SlimeHats hat in ListHats)
+        foreach (CharacterHats hat in ListHats)
         {
             if (hat.GetHatsType().Equals(type))
             {
@@ -283,9 +304,9 @@ public class RoomModel : MonoBehaviour
         throw new System.Exception("Prefab manquante");
     }
 
-    private SlimeBody GetSlimeBody(SlimeBody.BodyType type)
+    private CharacterBody GetSlimeBody(CharacterBody.BodyType type)
     {
-        foreach (SlimeBody body in ListBody)
+        foreach (CharacterBody body in ListBody)
         {
             if (body.GetBodyType().Equals(type))
             {
@@ -295,5 +316,7 @@ public class RoomModel : MonoBehaviour
 
         throw new System.Exception("Prefab manquante");
     }
+    #endregion
+
     #endregion
 }

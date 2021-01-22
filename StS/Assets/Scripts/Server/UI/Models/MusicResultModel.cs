@@ -1,4 +1,5 @@
-﻿using SDD.Events;
+﻿using CommonVisibleManager;
+using SDD.Events;
 using ServerManager;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,9 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Affiche la musique gagnante et charge la carte associée.
+/// 
+/// Permet également aux joueurs de choisir une difficulté,
+/// le résultat sera la moyenne des difficultés choisi ou medium par défaut.
 /// </summary>
 public class MusicResultModel : MonoBehaviour
 {
@@ -16,6 +20,10 @@ public class MusicResultModel : MonoBehaviour
 
     [SerializeField] private Color PROGRESS_BAR_DEFAULT_COLOR = Color.white;
     [SerializeField] private Color PROGRESS_BAR_ERROR_COLOR = Color.red;
+
+    private static readonly float EASY_DIFFICULTY = 0; // 0%
+    private static readonly float MEDIUM_DIFFICULTY = 0.5f; // 50%
+    private static readonly float HARD_DIFFICULTY = 1; // 100%
 
 
     // Attributs
@@ -35,9 +43,22 @@ public class MusicResultModel : MonoBehaviour
     [SerializeField] private Slider ProgressBar; // Progress Bar
     [SerializeField] private TextMeshProUGUI ProgressBar_State; // Texte indiquant les étapes au sein de la progress bar
 
+    [Header("Difficulty")]
+    [SerializeField] private Slider DifficultyBar;
+    [SerializeField] private Image DifficultyBarImage;
+
+    [SerializeField] private Color EasyColor;
+    [SerializeField] private Color MediumColor;
+    [SerializeField] private Color HardColor;
+
 
     private float TimerCurrentValue; // Valeur courante du timer
     private bool TimerIsEnd;
+
+    private IReadOnlyDictionary<ulong, Player> Players;
+    
+    private float CurrentDifficulty;
+    private float NbrVoteDifficulty;
 
     private bool MapIsLoaded;
     private AudioClip CurrentAudioClip;
@@ -52,16 +73,31 @@ public class MusicResultModel : MonoBehaviour
         {
             SubscribeEvents();
 
+            Players = ServerGameManager.Instance.GetPlayers();
+
+            InitializePlayersDefaultStates();
+
             // On initialise le timer
             TimerCurrentValue = TimerStartValue;
             TimerIsEnd = false;
+
 
             // On intialise les données de chargement de carte
             ProgressBar_State.color = PROGRESS_BAR_DEFAULT_COLOR;
             MapIsLoaded = false;
 
+
             // On initialise la musique gagnante
             SongTitle.text = Path.GetFileName(ServerGameManager.Instance.GetCurrentMusicPath());
+
+
+            // On initialise la difficulté
+            DifficultyBar.value = 0.5f;
+            DifficultyBarImage.color = MediumColor;
+
+            CurrentDifficulty = 0;
+            NbrVoteDifficulty = 0;
+
 
             // Initialisation de la page
 
@@ -88,7 +124,8 @@ public class MusicResultModel : MonoBehaviour
             EventManager.Instance.Raise(new MusicResultGameReadyEvent()
             {
                 audio = CurrentAudioClip,
-                map = CurrentMapData
+                map = CurrentMapData,
+                difficulty = DifficultyBar.value
             });
         }
     }
@@ -165,12 +202,24 @@ public class MusicResultModel : MonoBehaviour
     {
         EventManager.Instance.AddListener<UpdateLoadingProgressionAudioClipEvent>(UpdateLoadingProgressionAudioClip);
         EventManager.Instance.AddListener<UpdateLoadingMapDataEvent>(UpdateLoadingMapData);
+
+        // NetworkedEvent
+
+        EventManager.Instance.AddListener<EasyDifficultySelectedEvent>(EasyDifficultySelected);
+        EventManager.Instance.AddListener<MediumDifficultySelectedEvent>(MediumDifficultySelected);
+        EventManager.Instance.AddListener<HardDifficultySelectedEvent>(HardDifficultySelected);
     }
 
     private void UnsubscribeEvents()
     {
         EventManager.Instance.RemoveListener<UpdateLoadingProgressionAudioClipEvent>(UpdateLoadingProgressionAudioClip);
         EventManager.Instance.RemoveListener<UpdateLoadingMapDataEvent>(UpdateLoadingMapData);
+
+        // NetworkedEvent
+
+        EventManager.Instance.RemoveListener<EasyDifficultySelectedEvent>(EasyDifficultySelected);
+        EventManager.Instance.RemoveListener<MediumDifficultySelectedEvent>(MediumDifficultySelected);
+        EventManager.Instance.RemoveListener<HardDifficultySelectedEvent>(HardDifficultySelected);
     }
 
     #endregion
@@ -185,6 +234,97 @@ public class MusicResultModel : MonoBehaviour
     private void UpdateLoadingMapData(UpdateLoadingMapDataEvent e)
     {
         UpdateLoadingMap(0.5f + (float) e.progression * 0.5f, "Loading Map...");
+    }
+
+    private void EasyDifficultySelected(EasyDifficultySelectedEvent e)
+    {
+        // On regarde si le joueur n'a pas déjà voté
+        if (Players[e.PlayerID.Value].PlayerState == PlayerState.Voted)
+        {
+            return;
+        }
+
+        NbrVoteDifficulty++;
+        CurrentDifficulty += EASY_DIFFICULTY;
+        Players[e.PlayerID.Value].PlayerState = PlayerState.Voted;
+
+        RefreshDifficultyBar();
+
+        // On averti le client que le vote est bien recu.
+        MessagingManager.Instance.RaiseNetworkedEventOnClient(
+            new DifficultyVoteAcceptedEvent(e.PlayerID.Value));
+    }
+
+    private void MediumDifficultySelected(MediumDifficultySelectedEvent e)
+    {
+        // On regarde si le joueur n'a pas déjà voté
+        if (Players[e.PlayerID.Value].PlayerState == PlayerState.Voted)
+        {
+            return;
+        }
+
+        NbrVoteDifficulty++;
+        CurrentDifficulty += MEDIUM_DIFFICULTY;
+        Players[e.PlayerID.Value].PlayerState = PlayerState.Voted;
+
+        RefreshDifficultyBar();
+
+        // On averti le client que le vote est bien recu.
+        MessagingManager.Instance.RaiseNetworkedEventOnClient(
+            new DifficultyVoteAcceptedEvent(e.PlayerID.Value));
+    }
+
+    private void HardDifficultySelected(HardDifficultySelectedEvent e)
+    {
+        // On regarde si le joueur n'a pas déjà voté
+        if (Players[e.PlayerID.Value].PlayerState == PlayerState.Voted)
+        {
+            return;
+        }
+
+        NbrVoteDifficulty++;
+        CurrentDifficulty += HARD_DIFFICULTY;
+        Players[e.PlayerID.Value].PlayerState = PlayerState.Voted;
+
+        RefreshDifficultyBar();
+
+        // On averti le client que le vote est bien recu.
+        MessagingManager.Instance.RaiseNetworkedEventOnClient(
+            new DifficultyVoteAcceptedEvent(e.PlayerID.Value));
+    }
+
+    #endregion
+
+    #region Tools
+
+    private void InitializePlayersDefaultStates()
+    {
+        // On récupére la liste des joueurs
+        IEnumerable<Player> value = Players.Values;
+
+        foreach (Player p in value)
+        {
+            p.PlayerState = PlayerState.WaitingForTheVote;
+        }
+    }
+
+    private void RefreshDifficultyBar()
+    {
+        DifficultyBar.value = CurrentDifficulty / NbrVoteDifficulty;
+
+        if (DifficultyBar.value > 1f / 3f)
+        {
+            if (DifficultyBar.value > 2f / 3f)
+            {
+                DifficultyBarImage.color = HardColor;
+            } else
+            {
+                DifficultyBarImage.color = MediumColor;
+            }
+        } else
+        {
+            DifficultyBarImage.color = EasyColor;
+        }
     }
 
     #endregion

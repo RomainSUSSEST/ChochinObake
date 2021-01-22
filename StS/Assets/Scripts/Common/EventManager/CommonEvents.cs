@@ -35,12 +35,12 @@ public class LobbyInformationEvent : NetworkedEvent
 {
 	// Attributs
 
-	public List<SlimeBody.BodyType> InvalidBody;
+	public List<CharacterBody.BodyType> InvalidBody;
 
 
 	// Constructeur
 
-	public LobbyInformationEvent(ulong PlayerID, List<SlimeBody.BodyType> invalidBody) : base (PlayerID, new Argument()
+	public LobbyInformationEvent(ulong PlayerID, List<CharacterBody.BodyType> invalidBody) : base (PlayerID, new Argument()
 	{
 		Arg = invalidBody,
 		Type = invalidBody.GetType()
@@ -54,8 +54,8 @@ public class RequestPlayerReadyInCharacterSelectionEvent : NetworkedEvent
 	// Attributs
 
 	public bool IsReady;
-	public SlimeHats.HatsType HatType;
-	public SlimeBody.BodyType BodyType;
+	public CharacterHats.HatsType HatType;
+	public CharacterBody.BodyType BodyType;
 	public string Pseudo;
 
 
@@ -68,7 +68,7 @@ public class RequestPlayerReadyInCharacterSelectionEvent : NetworkedEvent
 	 *			Hat, Body, Arms -> A libérer
 	 */
 	public RequestPlayerReadyInCharacterSelectionEvent(ulong playerID, bool isReady
-		, SlimeHats.HatsType hat, SlimeBody.BodyType body, string pseudo)
+		, CharacterHats.HatsType hat, CharacterBody.BodyType body, string pseudo)
 		: base(playerID,
 			new Argument() { Arg = isReady, Type = typeof(bool) },
 			new Argument() { Arg = hat, Type = hat.GetType() },
@@ -93,12 +93,12 @@ public class InverseStateOfColorEvent : NetworkedEvent
 {
 	// Attributs
 
-	public SlimeBody.BodyType BodyType;
+	public CharacterBody.BodyType BodyType;
 
 
 	// Constructeur
 
-	public InverseStateOfColorEvent(ulong playerID, SlimeBody.BodyType bodyType) : base(playerID,
+	public InverseStateOfColorEvent(ulong playerID, CharacterBody.BodyType bodyType) : base(playerID,
 		new Argument() { Arg = bodyType, Type = bodyType.GetType() })
 	{
 		BodyType = bodyType;
@@ -180,6 +180,42 @@ public class MusicVoteAcceptedEvent : NetworkedEvent
 	// Constructeur
 
 	public MusicVoteAcceptedEvent(ulong PlayerID) : base(PlayerID)
+	{
+	}
+}
+
+#endregion
+
+#region ModelMusicResultClient
+
+public class EasyDifficultySelectedEvent : NetworkedEvent
+{
+	public EasyDifficultySelectedEvent(ulong ClientID) : base(ClientID)
+	{
+	}
+}
+
+public class MediumDifficultySelectedEvent : NetworkedEvent
+{
+	public MediumDifficultySelectedEvent(ulong ClientID) : base(ClientID)
+	{
+	}
+}
+
+public class HardDifficultySelectedEvent : NetworkedEvent
+{
+	public HardDifficultySelectedEvent(ulong ClientID) : base(ClientID)
+	{
+	}
+}
+
+#endregion
+
+#region ModelMusicResultServer
+
+public class DifficultyVoteAcceptedEvent : NetworkedEvent
+{
+	public DifficultyVoteAcceptedEvent(ulong PlayerID) : base(PlayerID)
 	{
 	}
 }
@@ -275,5 +311,10 @@ public class GameStartedEvent : NetworkedEvent
 public class ServerEnterInGameMusicSelectionEvent : NetworkedEvent
 {
 }
+
+public class ServerEnterInGameMusicResultEvent : NetworkedEvent
+{
+}
+
 #endregion
 #endregion

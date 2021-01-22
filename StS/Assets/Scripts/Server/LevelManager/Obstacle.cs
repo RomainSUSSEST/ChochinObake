@@ -8,7 +8,7 @@ public abstract class Obstacle : MonoBehaviour
     [SerializeField] private InputActionValidArea.InputAction Type;
     [SerializeField] private Transform InputAction_Spawner;
 
-    private SlimeServer AssociatedSlime;
+    private CharacterServer AssociatedSlime;
 
     #endregion
 
@@ -55,7 +55,7 @@ public abstract class Obstacle : MonoBehaviour
     /// Enregistre le slime référent et le notifie que l'on s'associe à lui en s'enregistrant
     /// </summary>
     /// <param name="ss"> Le slime auquel s'associer </param>
-    public void SetAssociatedSlime(SlimeServer ss)
+    public void SetAssociatedSlime(CharacterServer ss)
     {
         AssociatedSlime = ss;
         ss.RegisterObstacle(this);

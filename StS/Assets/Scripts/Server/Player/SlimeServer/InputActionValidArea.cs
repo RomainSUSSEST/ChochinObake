@@ -10,7 +10,7 @@ public class InputActionValidArea : MonoBehaviour
     #region Attributs
 
     [Header("Slime Body")]
-    [SerializeField] private SlimeBody.BodyType AssociatedBody;
+    [SerializeField] private CharacterBody.BodyType AssociatedBody;
 
     [Header("Associated InputAction_Obstacle")]
 
@@ -44,7 +44,7 @@ public class InputActionValidArea : MonoBehaviour
 
     #region Request
 
-    public SlimeBody.BodyType GetAssociatedBody()
+    public CharacterBody.BodyType GetAssociatedBody()
     {
         return AssociatedBody;
     }

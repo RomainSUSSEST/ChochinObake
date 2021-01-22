@@ -5,7 +5,14 @@ using ServerManager;
 
 public class SongListModel : MonoBehaviour
 {
+    // Constante
+
+    private static readonly float MARGIN_HEIGHT = 5;
+
+
     // Attributs
+
+    [SerializeField] private RectTransform ViewPanel;
 
     [Header("Panel Song List")]
 
@@ -14,7 +21,6 @@ public class SongListModel : MonoBehaviour
     [Header("Song List Text Content")]
 
     [SerializeField] private SongListModel_Song SongPrefab;
-    [SerializeField] private Transform SongInfoSpawnTransform;
     [SerializeField] private Transform ContentNode;
 
     [Header("AddPanel")]
@@ -22,7 +28,6 @@ public class SongListModel : MonoBehaviour
     [SerializeField] private GameObject PanelAddSong;
 
     private List<SongListModel_Song> SongList;
-    private Vector3 CurrentSpawnerPosition;
 
 
     // Life Cycle
@@ -47,6 +52,7 @@ public class SongListModel : MonoBehaviour
     public void CloseButtonHasBeenClicked()
     {
         SongListPanel.SetActive(false); // On désactive le panel courant
+        EventManager.Instance.Raise(new SongListModelHasBeenClosedEvent());
     }
 
     public void AddButtonHasBeenClicked()
@@ -62,29 +68,67 @@ public class SongListModel : MonoBehaviour
     /// </summary>
     private void RefreshListSong()
     {
-        // On detruit les anciennes données et initialise la liste des sons
+        // On detruit les anciennes données
         DestroyListSong();
 
         // On récupére la liste des sons
         string[] songs = ServerAccountManager.Instance.GetSongList();
 
+        // Hauteur d'un bouton de sons & Margin
+        float buttonHeight = SongPrefab.GetComponent<RectTransform>().rect.height;
+        float currentMarginHeight = MARGIN_HEIGHT;
+
+        // On tient compte du rescale de la vue
+        buttonHeight *= ViewPanel.localScale.y;
+        currentMarginHeight *= ViewPanel.localScale.y;
+
+        // On estime la hauteur à allouer
+        float height = (songs.Length + 1) * currentMarginHeight
+            + songs.Length * buttonHeight;
+        height /= ViewPanel.localScale.y;
+
+        // On redimenssione le content
+        RectTransform contentRectTransform = ContentNode.GetComponent<RectTransform>();
+        contentRectTransform.sizeDelta = new Vector2
+            (
+                contentRectTransform.rect.width,
+                height
+            );
+
+        // Position de départ
+
+        Vector3 currentPositionButtonSpawn = new Vector3
+            (
+                contentRectTransform.position.x,
+                (contentRectTransform.position.y
+                    + height * ViewPanel.localScale.y / 2 - currentMarginHeight - buttonHeight / 2),
+                contentRectTransform.position.z
+            );
+
         // On les affiches
         SongListModel_Song currentSong;
         for (int i = 0; i < songs.Length; ++i)
         {
-            currentSong = Instantiate(SongPrefab, CurrentSpawnerPosition, Quaternion.identity, ContentNode);
+            currentSong = Instantiate(SongPrefab, currentPositionButtonSpawn, Quaternion.identity, ContentNode);
             currentSong.SetSongDirectory(songs[i]);
-            CurrentSpawnerPosition -= new Vector3(0, currentSong.GetComponent<RectTransform>().rect.height, 0);
+            currentPositionButtonSpawn -= new Vector3(0, buttonHeight + currentMarginHeight, 0);
 
             // On ajoute le son à la liste
             SongList.Add(currentSong);
         }
+
+        // On décale le content pour afficher le premier en haut
+        contentRectTransform.localPosition = new Vector3
+            (
+                contentRectTransform.localPosition.x,
+                -height / 2 - contentRectTransform.parent.GetComponent<RectTransform>().rect.height,
+                contentRectTransform.localPosition.z
+            );
     }
 
     /// <summary>
     /// Detruit la liste des chansons en nettoyant proprement les ressources alloué.
     /// Puis recréer une liste empty
-    /// Reinitialise la position du spawner
     /// </summary>
     private void DestroyListSong()
     {
@@ -99,9 +143,6 @@ public class SongListModel : MonoBehaviour
 
         // On Initialise la liste des sons.
         SongList = new List<SongListModel_Song>();
-
-        // On Initialise la position du spawner.
-        CurrentSpawnerPosition = SongInfoSpawnTransform.position;
     }
 
     private void SubscribeEvents()

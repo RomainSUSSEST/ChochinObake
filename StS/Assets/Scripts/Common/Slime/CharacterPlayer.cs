@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-public abstract class Slime : MonoBehaviour
+public abstract class CharacterPlayer : MonoBehaviour
 {
     // Attributs
 
-    private SlimeHats Hat;
-    private SlimeBody Body;
+    private CharacterHats Hat;
+    private CharacterBody Body;
 
     private Animator HatAnimator;
     private Animator BodyAnimator;
@@ -13,12 +13,12 @@ public abstract class Slime : MonoBehaviour
 
     // Requetes
 
-    public SlimeHats GetSlimeHat()
+    public CharacterHats GetSlimeHat()
     {
         return Hat;
     }
 
-    public SlimeBody GetSlimeBody()
+    public CharacterBody GetSlimeBody()
     {
         return Body;
     }
@@ -26,7 +26,7 @@ public abstract class Slime : MonoBehaviour
 
     // Méthode
 
-    public void SetHat(SlimeHats hat)
+    public void SetHat(CharacterHats hat)
     {
         // On détruit l'ancien chapeau
 
@@ -39,7 +39,7 @@ public abstract class Slime : MonoBehaviour
         Hat.SetSlimeRoot(this);
     }
 
-    public void SetBody(SlimeBody body)
+    public void SetBody(CharacterBody body)
     {
         // On détruit l'ancien corps
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class SlimeHats : MonoBehaviour
+public class CharacterHats : MonoBehaviour
 {
     // Type imbriquée
 
@@ -26,7 +26,7 @@ public class SlimeHats : MonoBehaviour
 
     [SerializeField] private HatsType m_HatsType;
 
-    private Slime Root;
+    private CharacterPlayer Root;
 
 
     // Life Cycle
@@ -50,7 +50,7 @@ public class SlimeHats : MonoBehaviour
 
     // Méthode
 
-    public void SetSlimeRoot(Slime root)
+    public void SetSlimeRoot(CharacterPlayer root)
     {
         Root = root;
     }

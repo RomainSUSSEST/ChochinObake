@@ -15,6 +15,7 @@
 		private string CurrentMusicPath; // Le path de la musique
 		private AudioClip CurrentAudio; // La musique courante
 		private List<SpectralFluxInfo> CurrentMapData; // Les données de carte
+		private float CurrentDifficulty; // La difficulté actuelle en % de 0 à 1
 
 
 		#region Request
@@ -45,6 +46,15 @@
 		public AudioClip GetCurrentAudioClip()
 		{
 			return CurrentAudio;
+		}
+
+		/// <summary>
+		/// Renvoie la difficulté courante
+		/// </summary>
+		/// <returns> La difficulté de 0 à 1 (0 à 100%) </returns>
+		public float GetCurrentDifficulty()
+		{
+			return CurrentDifficulty;
 		}
 
 		public System.Collections.ObjectModel.ReadOnlyCollection<SpectralFluxInfo> GetCurrentMapData()
@@ -183,6 +193,7 @@
 			// On enregistre les données de carte
 			CurrentAudio = e.audio;
 			CurrentMapData = e.map;
+			CurrentDifficulty = e.difficulty;
 
 			Play();
 		}

@@ -4,13 +4,13 @@
     using System.Collections;
     using UnityEngine;
 
-    public enum GameState { gameMenu, gameJoin, gamePlay, gamePause }
+    public enum GameState { gameMenu, gamePlay, gamePause }
 
     public class ClientGameManager : ClientManager<ClientGameManager>
     {
         #region Attributs
-        private SlimeBody currentBody;
-        private SlimeHats currentHat;
+        private CharacterBody currentBody;
+        private CharacterHats currentHat;
         #endregion
         
         #region Game State
@@ -28,12 +28,12 @@
 
         #region Requests
 
-        public SlimeBody GetCurrentBody()
+        public CharacterBody GetCurrentBody()
         {
             return currentBody;
         }
 
-        public SlimeHats GetCurrentHat()
+        public CharacterHats GetCurrentHat()
         {
             return currentHat;
         }
@@ -49,7 +49,7 @@
             EventManager.Instance.AddListener<LeaveButtonClickedEvent>(LeaveButtonClicked);
             EventManager.Instance.AddListener<PreviousCharacterSelectionButtonClickedEvent>(PreviousCharacterSelectionButtonClicked);
             EventManager.Instance.AddListener<ReadyCharacterSelectionButtonClickedEvent>(ReadyCharacterSelectionButtonClicked);
-            EventManager.Instance.AddListener<RefreshSlimeInformationEvent>(RefreshSlimeInformation);
+            EventManager.Instance.AddListener<RefreshCharacterInformationEvent>(RefreshSlimeInformation);
 
             // UI Resize
             EventManager.Instance.AddListener<ResizeUICompleteEvent>(ResizeUIComplete);
@@ -61,6 +61,7 @@
 
             EventManager.Instance.AddListener<ServerClosedEvent>(ServerClosed);
             EventManager.Instance.AddListener<ServerEnterInGameMusicSelectionEvent>(ServerEnterInGameMusicSelection);
+            EventManager.Instance.AddListener<ServerEnterInGameMusicResultEvent>(ServerEnterInGameMusicResult);
             EventManager.Instance.AddListener<GameStartedEvent>(GameStarted);
         }
 
@@ -73,7 +74,7 @@
             EventManager.Instance.RemoveListener<LeaveButtonClickedEvent>(LeaveButtonClicked);
             EventManager.Instance.RemoveListener<PreviousCharacterSelectionButtonClickedEvent>(PreviousCharacterSelectionButtonClicked);
             EventManager.Instance.RemoveListener<ReadyCharacterSelectionButtonClickedEvent>(ReadyCharacterSelectionButtonClicked);
-            EventManager.Instance.RemoveListener<RefreshSlimeInformationEvent>(RefreshSlimeInformation);
+            EventManager.Instance.RemoveListener<RefreshCharacterInformationEvent>(RefreshSlimeInformation);
 
             // UI Resize
             EventManager.Instance.RemoveListener<ResizeUICompleteEvent>(ResizeUIComplete);
@@ -84,6 +85,7 @@
             // Networked Event
             EventManager.Instance.RemoveListener<ServerClosedEvent>(ServerClosed);
             EventManager.Instance.RemoveListener<ServerEnterInGameMusicSelectionEvent>(ServerEnterInGameMusicSelection);
+            EventManager.Instance.RemoveListener<ServerEnterInGameMusicResultEvent>(ServerEnterInGameMusicResult);
             EventManager.Instance.RemoveListener<GameStartedEvent>(GameStarted);
         }
         #endregion
@@ -145,8 +147,15 @@
         private void MusicSelection()
         {
             SetTimeScale(1);
-            m_GameState = GameState.gameJoin;
+            m_GameState = GameState.gameMenu;
             EventManager.Instance.Raise(new MobileMusicSelectionEvent());
+        }
+
+        private void MusicResult()
+        {
+            SetTimeScale(1);
+            m_GameState = GameState.gameMenu;
+            EventManager.Instance.Raise(new MobileMusicResultEvent());
         }
 
         private void Play()
@@ -178,6 +187,11 @@
             MusicSelection();
         }
 
+        private void ServerEnterInGameMusicResult(ServerEnterInGameMusicResultEvent e)
+        {
+            MusicResult();
+        }
+
         private void GameStarted(GameStartedEvent e)
         {
             Play();
@@ -185,7 +199,7 @@
         #endregion
 
         #region EventCallbackCharacterSelectionMenu
-        private void RefreshSlimeInformation(RefreshSlimeInformationEvent e)
+        private void RefreshSlimeInformation(RefreshCharacterInformationEvent e)
         {
             currentBody = e.body;
             currentHat = e.hat;

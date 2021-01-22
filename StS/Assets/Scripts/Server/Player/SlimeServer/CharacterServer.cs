@@ -1,8 +1,9 @@
 ﻿using SDD.Events;
+using ServerManager;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlimeServer : Slime
+public class CharacterServer : CharacterPlayer
 {
     // Constante
 
@@ -20,15 +21,6 @@ public class SlimeServer : Slime
     [SerializeField] private List<InputActionValidArea> ListInputActionValidArea;
     [SerializeField] private GameObject Spawn_InputActionValidArea;
 
-    [SerializeField] private ASuppr ASUPPR;
-    [SerializeField] private Value toto;
-    private int total;
-    private int cptS;
-    private int cptA;
-    private int cptB;
-    private int cptC;
-    private Value val;
-
     public ulong AssociedClientID { get; set; }
 
     private InputActionValidArea CurrentInputActionValidArea;
@@ -37,6 +29,8 @@ public class SlimeServer : Slime
     private Queue<Obstacle> QueueObstacle; // Queue des obstacles suivant associé à ce slime
 
     private float InputActionSize_Z_Per2; // La taille d'un input action sur l'axe Z divisé par 2
+
+    private int LineIndex; // Index de la ligne ou se trouve le joueur
 
 
     // Life cycle
@@ -71,8 +65,6 @@ public class SlimeServer : Slime
 
         // On récupére la taille sur Z d'un input action divisé par 2
         InputActionSize_Z_Per2 = CurrentInputActionValidArea.GetComponent<Renderer>().bounds.size.z / 2;
-
-        val = Instantiate(toto, transform);
     }
 
     private void Update()
@@ -82,9 +74,9 @@ public class SlimeServer : Slime
         if (QueueObstacle.Count > 0 
             && QueueObstacle.Peek().transform.position.z < CurrentInputActionValidArea.transform.position.z - InputActionSize_Z_Per2)
         {
-            ++total;
-            val.SetText("S: " + cptS + " A: " + cptA + " B: " + cptB + " C: " + cptC + "/" + total);
             DeregisterObstacle(); // On désenregistre l'obstacle.
+            // Trop tard.
+            DecreaseLineIndex();
         }
     }
 
@@ -141,6 +133,60 @@ public class SlimeServer : Slime
         QueueObstacle.Enqueue(obs);
     }
 
+    #region Line Index
+    /// <summary>
+    /// Indique au slime à quelle ligne il appartient, aucun effet de bord
+    /// </summary>
+    /// <param name="index"></param>
+    public void SetLineIndex(int index)
+    {
+        LineIndex = index;
+    }
+
+    /// <summary>
+    /// Si possible, le slime descend d'une ligne, lui et ses obstacles associé s'adapteront
+    /// </summary>
+    public void DecreaseLineIndex()
+    {
+        if (LineIndex > 0) // On vérifie que le minimum n'est pas déjà atteint.
+        {
+            --LineIndex;
+            Vector3 add = new Vector3(0, 0, -ServerLevelManager.DISTANCE_BETWEEN_LINE);
+            transform.Translate(add);
+
+            // On resynchronise les obstacles existant
+
+            Queue<Obstacle>.Enumerator i = QueueObstacle.GetEnumerator();
+            while (i.MoveNext())
+            {
+                Obstacle obs = (Obstacle)i.Current;
+                obs.transform.Translate(add);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Si possible, le slime monte d'une ligne, lui et ses obstacles associé s'adappteront.
+    /// </summary>
+    public void IncreaseLineIndex()
+    {
+        if (LineIndex < ServerLevelManager.NBR_LINE_MAX) // On vérifie que le maximum n'est pas déjà atteint.
+        {
+            ++LineIndex;
+            Vector3 add = new Vector3(0, 0, ServerLevelManager.DISTANCE_BETWEEN_LINE);
+            transform.Translate(add);
+
+            // On resynchronise les obstacles existant
+
+            Queue<Obstacle>.Enumerator i = QueueObstacle.GetEnumerator();
+            while (i.MoveNext())
+            {
+                Obstacle obs = (Obstacle)i.Current;
+                obs.transform.Translate(add);
+            }
+        }
+    }
+    #endregion
 
     // Outils
 
@@ -205,46 +251,38 @@ public class SlimeServer : Slime
     {
         float PosObs_Z = obs.GetCurrentInputActionAreaPosition().z; // Position de l'obstacle sur Z
         float PosInputValidArea_Z = CurrentInputActionValidArea.transform.position.z; // Position du référentiel sur Z
-        Debug.Log(PosObs_Z + " || " + PosInputValidArea_Z);
+
         // On test si il y a une collision
         float marg = InputActionSize_Z_Per2 * MARGIN_ERROR_C;
-        Debug.Log(marg);
         if (PosInputValidArea_Z - marg <= PosObs_Z
             && PosObs_Z <= PosInputValidArea_Z + marg)
         {
             // On test si c'est un B
             marg = InputActionSize_Z_Per2 * MARGIN_ERROR_B;
-            Debug.Log(marg);
             if (PosInputValidArea_Z - marg <= PosObs_Z 
                 && PosObs_Z <= PosInputValidArea_Z + marg)
             {
                 // On test si c'est un A
                 marg = InputActionSize_Z_Per2 * MARGIN_ERROR_A;
-                Debug.Log(marg);
                 if (PosInputValidArea_Z - marg <= PosObs_Z
                     && PosObs_Z <= PosInputValidArea_Z + marg)
                 {
                     // On test si c'est un S
                     marg = InputActionSize_Z_Per2 * MARGIN_ERROR_S;
-                    Debug.Log(marg);
                     if (PosInputValidArea_Z - marg <= PosObs_Z
                         && PosObs_Z <= PosInputValidArea_Z + marg)
                     {
-                        ++cptS;
                         return Grade.S;
                     } else
                     {
-                        ++cptA;
                         return Grade.A;
                     }
                 } else
                 {
-                    ++cptB;
                     return Grade.B;
                 }
             } else
             {
-                ++cptC;
                 return Grade.C; // Note C
             }
         } else
@@ -276,21 +314,16 @@ public class SlimeServer : Slime
             
             if (obs.GetInput() == action) // Si les actions matchs
             {
-                ASuppr tamp = Instantiate(ASUPPR, transform);
-                ++total;
-                val.SetText("S: " + cptS + " A: " + cptA + " B: " + cptB + " C: " + cptC + "/" + total);
-                tamp.SetText(g.ToString() + " !");
+                // Succés
+                IncreaseLineIndex();
             } else
             {
-                ASuppr tamp = Instantiate(ASUPPR, transform);
-                ++total;
-                val.SetText("S: " + cptS + " A: " + cptA + " B: " + cptB + " C: " + cptC + "/" + total);
-                tamp.SetText("Raté !");
+                // Mauvaise touche
+                DecreaseLineIndex();
             }
         } else
         {
-            ASuppr tamp = Instantiate(ASUPPR, transform);
-            tamp.SetText("Trop tôt !");
+            // Trop tot
         }
     }
 

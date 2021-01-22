@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class PanelInGameModel : MonoBehaviour
 {
-    [SerializeField] SlimeClient mySlimePrefab;
+    [SerializeField] CharacterClient mySlimePrefab;
     [SerializeField] private Transform SlimeSpawn;
 
-    private SlimeClient currentSlime;
+    private CharacterClient currentSlime;
 
     // Start is called before the first frame update
     void OnEnable()

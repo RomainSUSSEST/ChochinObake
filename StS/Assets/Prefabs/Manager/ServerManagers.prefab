@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_DoNotDestroyGameObjectOnLoad: 0
-  WorldForest: {fileID: 8125846470437510908, guid: c89b6156e0220cb4fba3e17d2ef0e3a8,
+  WorldForest: {fileID: 1257938603631738033, guid: c89b6156e0220cb4fba3e17d2ef0e3a8,
     type: 3}
 --- !u!1 &1483211568883150
 GameObject:
@@ -543,7 +543,6 @@ Transform:
   - {fileID: 5384132753225669485}
   - {fileID: 4947221284882222}
   - {fileID: 7249379144902040581}
-  - {fileID: 4327441810713427957}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -670,52 +669,6 @@ Transform:
   m_Father: {fileID: 4179950001461168}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8367264889619907611
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4327441810713427957}
-  - component: {fileID: 2300358345499832624}
-  m_Layer: 0
-  m_Name: ServerBendingManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4327441810713427957
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8367264889619907611}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4179950001461168}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2300358345499832624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8367264889619907611}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1ad00911f3606e49ade10bb0e15b872, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_DoNotDestroyGameObjectOnLoad: 0
-  enablePlanet: 0
-  BendingAmount: 0.004
 --- !u!1001 &4468114901962073907
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -892,15 +845,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61371c79fc923ca449908a43c9f9c968, type: 3}
---- !u!1 &7410110294488616850 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3023173489329855006, guid: 61371c79fc923ca449908a43c9f9c968,
-    type: 3}
-  m_PrefabInstance: {fileID: 5702252329048724876}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7410110294488616854 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3023173489329855002, guid: 61371c79fc923ca449908a43c9f9c968,
+    type: 3}
+  m_PrefabInstance: {fileID: 5702252329048724876}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7410110294488616850 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3023173489329855006, guid: 61371c79fc923ca449908a43c9f9c968,
     type: 3}
   m_PrefabInstance: {fileID: 5702252329048724876}
   m_PrefabAsset: {fileID: 0}

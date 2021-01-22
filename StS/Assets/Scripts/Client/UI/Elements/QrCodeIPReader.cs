@@ -4,7 +4,6 @@ using ZXing;
 using SDD.Events;
 using System.Collections;
 using UnityEngine.Android;
-using ClientManager;
 
 public class QrCodeIPReader : MonoBehaviour
 {
@@ -38,10 +37,6 @@ public class QrCodeIPReader : MonoBehaviour
 
     private void OnEnable()
     {
-        // Si on est pas en focus sur ce panel
-        if (ClientGameManager.Instance.GetGameState != GameState.gameJoin)
-            return;
-
         // Si on n'a pas les autorisations
         if (Application.platform == RuntimePlatform.Android
             && !Permission.HasUserAuthorizedPermission(Permission.Camera))

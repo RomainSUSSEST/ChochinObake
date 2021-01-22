@@ -23,6 +23,7 @@
         [SerializeField] private GameObject m_PanelJoinRoom;
         [SerializeField] private GameObject m_PanelCharacterSelection;
         [SerializeField] private GameObject m_PanelMusicSelection;
+        [SerializeField] private GameObject m_PanelMusicResult;
         [SerializeField] private GameObject m_PanelInGame;
 
         private List<GameObject> m_AllPanels;
@@ -74,6 +75,7 @@
             m_AllPanels.Add(m_PanelJoinRoom);
             m_AllPanels.Add(m_PanelCharacterSelection);
             m_AllPanels.Add(m_PanelMusicSelection);
+            m_AllPanels.Add(m_PanelMusicResult);
             m_AllPanels.Add(m_PanelInGame);
         }
 
@@ -198,6 +200,13 @@
             base.MobileMusicSelection(e);
 
             OpenPanel(m_PanelMusicSelection);
+        }
+
+        protected override void MobileMusicResult(MobileMusicResultEvent e)
+        {
+            base.MobileMusicResult(e);
+
+            OpenPanel(m_PanelMusicResult);
         }
 
         protected override void MobileGamePlay(MobileGamePlayEvent e)

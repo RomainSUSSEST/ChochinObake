@@ -82,7 +82,20 @@ public class MusicResultGameReadyEvent : SDD.Events.Event
 {
 	public AudioClip audio;
 	public List<SpectralFluxInfo> map;
+	public float difficulty; // En % de 0 à 1
 }
+#endregion
+
+#region UI Panel
+
+#region SongListModel
+
+public class SongListModelHasBeenClosedEvent : SDD.Events.Event
+{
+}
+
+#endregion
+
 #endregion
 
 #region Level Manager

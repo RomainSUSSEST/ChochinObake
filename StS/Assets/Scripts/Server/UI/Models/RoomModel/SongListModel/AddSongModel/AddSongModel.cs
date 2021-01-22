@@ -107,6 +107,7 @@ public class AddSongModel : MonoBehaviour
         // On setup la ProgressBar
         InitializeProgressBar();
 
+        // On lance l'opération
         ServerAccountManager.Instance.AddYoutubeSongAsync(url);
     }
 
@@ -115,6 +116,13 @@ public class AddSongModel : MonoBehaviour
         ProgressBar_Content.SetActive(true); // On active le panel de progressBar
         ProgressBar_State.color = PROGRESS_BAR_DEFAULT_COLOR; // On set la color à DEFAULT_COLOR
         ProgressBar_CloseButton.gameObject.SetActive(false); // On masque le boutton pour fermer la progressBar.
+
+        #region Clear Progress bar
+
+        ProgressBar.value = 0; // On reset la progression
+        ProgressBar_State.text = ""; // On vide le texte d'état
+
+        #endregion
     }
 
 

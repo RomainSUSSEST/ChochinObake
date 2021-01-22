@@ -5,6 +5,6 @@ public class Player
 {
     public string Pseudo { get; set; }
     public PlayerState PlayerState { get; set; }
-    public SlimeHats Hat { get; set; }
-    public SlimeBody Body { get; set; }
+    public CharacterHats Hat { get; set; }
+    public CharacterBody Body { get; set; }
 }

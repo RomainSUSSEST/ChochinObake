@@ -32,7 +32,7 @@ namespace ServerManager
 
         // Song map data
         private static readonly float MIN_THRESHOLD_INTENSITY = 0.1f;
-        private static readonly float MIN_TIME_BETWEEN_BEATS = 0.4f; // En seconde
+        private static readonly float MIN_TIME_BETWEEN_BEATS = 0.2f; // En seconde
 
 
         // Attributs
@@ -92,9 +92,10 @@ namespace ServerManager
             {
                 UpdatePrepareSongAnErrorOccurred(e.Message);
                 return;
+            } finally
+            {
+                ManagerIsReady(); // On libére le manager
             }
-
-            ManagerIsReady(); // On libére le manager
 
             // On averti que l'opération est terminé
             EventManager.Instance.Raise(new PrepareSongEndEvent());

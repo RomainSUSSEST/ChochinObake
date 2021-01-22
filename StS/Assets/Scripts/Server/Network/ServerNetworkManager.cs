@@ -86,14 +86,23 @@ namespace ServerManager
         {
             base.GameMusicSelectionMenu(e);
 
-            // On averti les téléphone connecté que l'on rentre dans la zone de music selection.
+            // On averti les téléphones connectés que l'on rentre dans la zone de music selection.
             MessagingManager.Instance.RaiseNetworkedEventOnAllClient(new ServerEnterInGameMusicSelectionEvent());
+        }
+
+        protected override void GameMusicResultMenu(GameMusicResultMenuEvent e)
+        {
+            base.GameMusicResultMenu(e);
+
+            // On averti les téléphones connectés que l'on rentre dans la zone de music result.
+            MessagingManager.Instance.RaiseNetworkedEventOnAllClient(new ServerEnterInGameMusicResultEvent());
         }
 
         protected override void GamePlay(GamePlayEvent e)
         {
             base.GamePlay(e);
 
+            // On aaverti les téléphones connectés que la partie commence.
             MessagingManager.Instance.RaiseNetworkedEventOnAllClient(new GameStartedEvent());
         }
 

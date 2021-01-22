@@ -16,10 +16,10 @@ public class CharacterSelectionMenuModel : MonoBehaviour
 
     [Header("Slime Elements")]
 
-    [SerializeField] private List<SlimeHats> ListHat;
-    [SerializeField] private List<SlimeBody> ListBody;
+    [SerializeField] private List<CharacterHats> ListHat;
+    [SerializeField] private List<CharacterBody> ListBody;
 
-    [SerializeField] private SlimeClient PrefabSlimeClient;
+    [SerializeField] private CharacterClient PrefabSlimeClient;
     [SerializeField] private Transform SlimeSpawn;
 
     [SerializeField] private float RotationSpeed;
@@ -41,13 +41,13 @@ public class CharacterSelectionMenuModel : MonoBehaviour
 
     [SerializeField] private RawImage InvalidBodyImage;
 
-    private SlimeClient InstanceSlime;
+    private CharacterClient InstanceSlime;
     private Camera InstanceCamera;
 
     private int IndexHats;
     private int IndexBody;
 
-    private List<SlimeBody.BodyType> InvalidBody; // Contient la liste des corps qui sont déjà pris
+    private List<CharacterBody.BodyType> InvalidBody; // Contient la liste des corps qui sont déjà pris
 
     private bool PlayerIsReady;
 
@@ -100,12 +100,12 @@ public class CharacterSelectionMenuModel : MonoBehaviour
 
     // Requete
 
-    public SlimeHats GetCurrentHats()
+    public CharacterHats GetCurrentHats()
     {
         return ListHat[IndexHats];
     }
 
-    public SlimeBody GetCurrentBody()
+    public CharacterBody GetCurrentBody()
     {
         return ListBody[IndexBody];
     }
@@ -237,11 +237,11 @@ public class CharacterSelectionMenuModel : MonoBehaviour
         if (PlayerIsReady)
         {
             SetReadyButtonColor();
-            EventManager.Instance.Raise(new RefreshSlimeInformationEvent() { body = GetCurrentBody(), hat = GetCurrentHats() });
+            EventManager.Instance.Raise(new RefreshCharacterInformationEvent() { body = GetCurrentBody(), hat = GetCurrentHats() });
         } else
         {
             SetUnreadyButtonColor();
-            EventManager.Instance.Raise(new RefreshSlimeInformationEvent() { body = null, hat = null });
+            EventManager.Instance.Raise(new RefreshCharacterInformationEvent() { body = null, hat = null });
         }
 
         // On réactive le bouton pour changer d'état
@@ -350,7 +350,7 @@ public class CharacterSelectionMenuModel : MonoBehaviour
         InstanceSlime.SetHat(ListHat[IndexHats]);
     }
 
-    private bool IsValidBody(SlimeBody.BodyType body)
+    private bool IsValidBody(CharacterBody.BodyType body)
     {
         return !InvalidBody.Contains(body);
     }
