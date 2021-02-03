@@ -101,9 +101,15 @@ public class SongListModelHasBeenClosedEvent : SDD.Events.Event
 #region Level Manager
 
 #region AlgoProcedural Events
+
 public class GroundEndMapEvent : SDD.Events.Event
 {
 }
+
+public class BackgroundEndMapEvent : SDD.Events.Event
+{
+}
+
 #endregion
 
 #endregion

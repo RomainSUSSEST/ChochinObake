@@ -5,24 +5,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Classe mère des mondes, permet de générer les joueurs et les obstacles.
+/// Classe mère des mondes, permet de générer les joueurs, le backgorund et les obstacles.
 /// 
 /// Leur comportement est ensuite autonome.
 /// </summary>
-public abstract class World : MonoBehaviour
+public class World : MonoBehaviour
 {
-    // Attributs
+    #region Attributes
 
     [Header("Map Elements")]
     [SerializeField] private List<Obstacle> ListObstacle;
-    [SerializeField] private List<Ground> ListGroundColor;
-    [SerializeField] private Ground UnusedGround;
+    [SerializeField] private Ground SpiritWay;
+
+    [SerializeField] private List<Background> ListBackgrounds_P1;
+    [SerializeField] private List<Background> ListBackgrounds_P2;
+    [SerializeField] private List<Background> ListBackgrounds_P3;
 
     [Header("Map Config")]
-    [SerializeField] private Camera MainCamera;
-
-    [SerializeField] private float DistanceBetweenGround = 5.7f;
+    [SerializeField] private float DistanceBetweenGround = 2f;
     [SerializeField] private float ObstacleDistanceToSlimeSpawn;
+    [SerializeField] private float DistanceToBackgroundY = -50;
 
     [Header("SlimeServer")]
     [SerializeField] private CharacterServer CharacterServerPrefab;
@@ -32,19 +34,29 @@ public abstract class World : MonoBehaviour
     private IReadOnlyDictionary<ulong, Player> Players;
 
     #region Gestion des grounds
-    private Ground LastGround; // Dernier ground spawné
-    private Vector3 GroundSize; // Taille des grounds
-    private int NbrWaves; // Nombre de waves
 
-    private float StartWavesSpawnPosition_X; // Position d'apparition des waves
+    private Ground LastSpiritWay; // Dernier ground spawné
+    private Vector3 SpiritWaySize; // Taille des grounds
+    private int NbrWays; // Nombre de waves
 
-    private int CmptWavesHasBeenDestroyed; // Nombre de wave détruite depuis le dernier spawn
+    private float StartWaySpawnPosition_X; // Position d'apparition des waves
+
+    private int CmptWaysHasBeenDestroyed; // Nombre de wave détruite depuis le dernier spawn
+
     #endregion
 
-    #region Wave Array
+    #region Gestion des backgrounds
+
+    private Background LastBackground; // Dernier background spawné
+    private Vector3 BackgroundSize; // Taille des backgrounds
+
+    private float StartBackgroundSpawnPosition_X; // Position x de départ des backgrounds
+
+    #endregion
+
+    #region Character Array
 
     private CharacterServer[] CharacterArray; // CharacterArray[i] contient le Character à la wave i ou null.
-    private Ground[] GroundArray; // Contient la prefab à instancier à la wave i.
 
     #endregion
 
@@ -54,6 +66,8 @@ public abstract class World : MonoBehaviour
     private float CurrentSensitivity;
     private float CurrentThresholdSensitivity;
     private float AheadTimeToSpawn;
+
+    #endregion
 
     #endregion
 
@@ -91,32 +105,36 @@ public abstract class World : MonoBehaviour
         }
         #endregion
 
-        #region Ground & Player
+        #region Background & Ground & Player
 
-        #region Variable
+        #region Variables
 
-        GroundSize = UnusedGround.GetComponent<Renderer>().bounds.size; // On récupére la taille d'un des grounds
-        NbrWaves = Mathf.Max(ServerLevelManager.MIN_NUMBER_WAVES, Players.Count); // Il y a un nombre de wave minimum
-        StartWavesSpawnPosition_X = transform.position.x - (((GroundSize.x + DistanceBetweenGround) * NbrWaves) - DistanceBetweenGround) / 2;
-        
-        CharacterArray = new CharacterServer[NbrWaves];
-        GroundArray = new Ground[NbrWaves];
+        // Ground
+        SpiritWaySize = SpiritWay.GetComponent<Renderer>().bounds.size; // On récupére la taille d'un des grounds
+        NbrWays = Mathf.Max(ServerLevelManager.MIN_NUMBER_WAVES, Players.Count); // Il y a un nombre de wave minimum
+        StartWaySpawnPosition_X = transform.position.x - (((SpiritWaySize.x + DistanceBetweenGround) * NbrWays) - DistanceBetweenGround) / 2;
+
+        // Background
+        BackgroundSize = ListBackgrounds_P1[0].GetComponent<Renderer>().bounds.size;
+        StartBackgroundSpawnPosition_X = transform.position.x - BackgroundSize.x / 2;
+
+        CharacterArray = new CharacterServer[NbrWays];
 
         #endregion
 
-        #region Array Player & Ground initialization
+        #region Array Player initialization
 
-        // On initialise les Array (player & ground)
+        // On initialise l'array player
         int nextValue = 0;
 
-        float slimeSpawn_X = StartWavesSpawnPosition_X + GroundSize.x / 2;
-        float slimeSpawn_Y = transform.position.y + GroundSize.y;
+        float slimeSpawn_X = StartWaySpawnPosition_X + SpiritWaySize.x / 2;
+        float slimeSpawn_Y = transform.position.y + SpiritWaySize.y;
 
         IEnumerator<ulong> enumPlayer = Players.Keys.GetEnumerator(); // Enum sur les joueurs
 
-        int index = NbrWaves % 2 == 0 ? (NbrWaves / 2)-1 : (int)Mathf.Floor(NbrWaves / 2f);
+        int index = NbrWays % 2 == 0 ? (NbrWays / 2)-1 : (int)Mathf.Floor(NbrWays / 2f);
 
-        for (int i = index; 0 <= i && i < NbrWaves; i += nextValue)
+        for (int i = index; 0 <= i && i < NbrWays; i += nextValue)
         {
             if (enumPlayer.MoveNext())
             {
@@ -126,7 +144,7 @@ public abstract class World : MonoBehaviour
                 // Slime Array
                 CharacterArray[i] = Instantiate(CharacterServerPrefab,
                     new Vector3(
-                        slimeSpawn_X + (GroundSize.x + DistanceBetweenGround) * i,
+                        slimeSpawn_X + (SpiritWaySize.x + DistanceBetweenGround) * i,
                         slimeSpawn_Y,
                         transform.position.z + lineIndex * ServerLevelManager.DISTANCE_BETWEEN_LINE),
                     Quaternion.identity, transform); // On créer le slime
@@ -141,22 +159,9 @@ public abstract class World : MonoBehaviour
                 CharacterArray[i].SetBody(p.Body);
                 CharacterArray[i].SetLineIndex(lineIndex);
 
-                // Ground Array
-
-                // On cherche le ground qui correspond au slime body courant.
-                foreach (Ground g in ListGroundColor)
-                {
-                    if (g.GetAssociatedSlimeBody() == p.Body.GetBodyType())
-                    {
-                        GroundArray[i] = g;
-                        break;
-                    }
-                    
-                }
             } else
             {
                 CharacterArray[i] = null;
-                GroundArray[i] = UnusedGround;
             }
 
             if (nextValue <= 0)
@@ -172,22 +177,29 @@ public abstract class World : MonoBehaviour
 
         // Initialisation des constantes pour les élements
         Ground.MOVE_SPEED = Mathf.Min(Mathf.Max(((CurrentMap.Count / clip.length) * ServerLevelManager.DEFAULT_SPEED), ServerLevelManager.MIN_SPEED), ServerLevelManager.MAX_SPEED);
-        Ground.DESTROY_Z_POSITION = transform.position.z - GroundSize.z * 3 / 2;
+        Ground.DESTROY_Z_POSITION = transform.position.z - SpiritWaySize.z * 3 / 2;
+
+        Background.MOVE_SPEED = Ground.MOVE_SPEED / 2;
+        Background.DESTROY_Z_POSITION = transform.position.z - BackgroundSize.z * 3 / 2;
 
         #region On Initialise la carte (Génération)
-        InstantiateNewGroundsAt(new Vector3(StartWavesSpawnPosition_X, transform.position.y, transform.position.z));
+        // Ground
+        InstantiateNewGroundsAt(new Vector3(StartWaySpawnPosition_X, transform.position.y, transform.position.z));
         InstantiateNewGroundsAt(new Vector3(
-             StartWavesSpawnPosition_X,
-             LastGround.transform.position.y,
-             LastGround.transform.position.z + GroundSize.z));
+             StartWaySpawnPosition_X,
+             transform.position.y,
+             LastSpiritWay.transform.position.z + SpiritWaySize.z));
+
+        // Background
+        InstantiateNewBackgroundAt(new Vector3(StartBackgroundSpawnPosition_X, DistanceToBackgroundY, transform.position.z));
+        InstantiateNewBackgroundAt(new Vector3(
+            StartBackgroundSpawnPosition_X,
+            DistanceToBackgroundY,
+            LastBackground.transform.position.z + BackgroundSize.z));
+
         #endregion
+
         #endregion
-
-        //#region Camera
-
-        //InitializeCamera();
-
-        //#endregion
 
         #region Obstacle
 
@@ -286,11 +298,13 @@ public abstract class World : MonoBehaviour
     private void SubscribeEvents()
     {
         EventManager.Instance.AddListener<GroundEndMapEvent>(GroundEndMap);
+        EventManager.Instance.AddListener<BackgroundEndMapEvent>(BackgroundEndMap);
     }
 
     private void UnsubscribeEvents()
     {
         EventManager.Instance.RemoveListener<GroundEndMapEvent>(GroundEndMap);
+        EventManager.Instance.RemoveListener<BackgroundEndMapEvent>(BackgroundEndMap);
     }
 
     #endregion
@@ -299,15 +313,23 @@ public abstract class World : MonoBehaviour
 
     private void GroundEndMap(GroundEndMapEvent e)
     {
-        if (++CmptWavesHasBeenDestroyed >= NbrWaves)
+        if (++CmptWaysHasBeenDestroyed >= NbrWays)
         {
             InstantiateNewGroundsAt(new Vector3(
-                StartWavesSpawnPosition_X,
-                LastGround.transform.position.y,
-                LastGround.transform.position.z + GroundSize.z));
+                StartWaySpawnPosition_X,
+                transform.position.y,
+                LastSpiritWay.transform.position.z + SpiritWaySize.z));
 
-            CmptWavesHasBeenDestroyed = 0;
+            CmptWaysHasBeenDestroyed = 0;
         }
+    }
+
+    private void BackgroundEndMap(BackgroundEndMapEvent e)
+    {
+        InstantiateNewBackgroundAt(new Vector3(
+            StartBackgroundSpawnPosition_X,
+            DistanceToBackgroundY,
+            LastBackground.transform.position.z + BackgroundSize.z));
     }
 
     #endregion
@@ -321,13 +343,42 @@ public abstract class World : MonoBehaviour
     /// <param name="StartPosition"></param>
     private void InstantiateNewGroundsAt(Vector3 StartPosition)
     {
-        for (int i = 0; i < NbrWaves; ++i)
+        for (int i = 0; i < NbrWays; ++i)
         {
-            LastGround = Instantiate(GroundArray[i], new Vector3(
-                StartPosition.x + (GroundSize.x + DistanceBetweenGround) * i,
+            LastSpiritWay = Instantiate(SpiritWay, new Vector3(
+                StartPosition.x + (SpiritWaySize.x + DistanceBetweenGround) * i,
                 StartPosition.y,
                 StartPosition.z),
                 Quaternion.identity, transform);
+        }
+    }
+
+    /// <summary>
+    /// Instantie un background selon StartPosition en tenant compte du temps de la musqiue restant
+    /// 1/3 -> ListBackground_P1
+    /// 2/3 -> ListBackground_P2
+    /// 3/3 -> ListBackground_P3
+    /// 
+    /// Effet de bord : Update LastBackground
+    /// </summary>
+    /// <param name="StartPosition"></param>
+    private void InstantiateNewBackgroundAt(Vector3 StartPosition)
+    {
+        float percentTotalTime = ServerMusicManager.Instance.GetTimeLeftRoundMusic() / ServerMusicManager.Instance.GetTotalDurationRoundMusic();
+
+        int index;
+        if (percentTotalTime < 1f / 3f) // On instantie un background P1
+        {
+            index = Random.Range(0, ListBackgrounds_P1.Count);
+            LastBackground = Instantiate(ListBackgrounds_P1[index], StartPosition, Quaternion.identity, transform);
+        } else if (percentTotalTime < 2f / 3f) // On instantie un background P2
+        {
+            index = Random.Range(0, ListBackgrounds_P2.Count);
+            LastBackground = Instantiate(ListBackgrounds_P2[index], StartPosition, Quaternion.identity, transform);
+        } else // On instantie un background P3
+        {
+            index = Random.Range(0, ListBackgrounds_P3.Count);
+            LastBackground = Instantiate(ListBackgrounds_P3[index], StartPosition, Quaternion.identity, transform);
         }
     }
 
@@ -370,34 +421,6 @@ public abstract class World : MonoBehaviour
         }
         return false;
     }
-
-    //private void InitializeCamera()
-    //{
-    //    float t = NbrWaves / ServerNetworkManager.MAX_PLAYER_CONNECTED;
-
-    //    MainCamera.orthographicSize = Mathf.Lerp(
-    //        ServerLevelManager.MIN_CAMERA_SIZE,
-    //        ServerLevelManager.MAX_CAMERA_SIZE,
-    //        t);
-
-    //    MainCamera.transform.position = new Vector3(
-    //        MainCamera.transform.position.x,
-    //        Mathf.Lerp(
-    //            ServerLevelManager.MIN_CAMERA_YPOS,
-    //            ServerLevelManager.MAX_CAMERA_YPOS,
-    //            t),
-    //        MainCamera.transform.position.z);
-
-    //    MainCamera.transform.rotation = Quaternion.Euler
-    //        (
-    //            Mathf.Lerp(
-    //                ServerLevelManager.MIN_CAMERA_XROT,
-    //                ServerLevelManager.MAX_CAMERA_XROT,
-    //                t),
-    //            MainCamera.transform.rotation.y,
-    //            MainCamera.transform.rotation.z
-    //        );
-    //}
 
     #endregion
 }

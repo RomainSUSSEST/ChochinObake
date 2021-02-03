@@ -33,21 +33,46 @@ namespace ServerManager
 			AudioSource = GetComponent<AudioSource>();
 		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Request
+
+		/// <summary>
+		/// Renvoie la durée de la musique courante en secondes
+		/// </summary>
+		/// <returns></returns>
+		public float GetTotalDurationRoundMusic()
+		{
+			if (ServerGameManager.Instance.GetGameState != GameState.gamePlay)
+				throw new System.Exception("Nous ne sommes pas en partie");
+
+			return AudioSource.clip.length;
+		}
+
+		/// <summary>
+		/// Renvoie le temps restant en pourcentage 
+		/// </summary>
+		public float GetTimeLeftRoundMusic()
+		{
+			if (ServerGameManager.Instance.GetGameState != GameState.gamePlay)
+				throw new System.Exception("Nous ne sommes pas en partie");
+
+			return AudioSource.clip.length - AudioSource.time;
+		}
+
+		#endregion
+
+		#region Methods
 
 		/// <summary>
 		/// Permet de lancer la musique du round courant.
 		/// </summary>
 		public void StartRoundMusic()
 		{
-			AudioClip clip = ServerGameManager.Instance.GetCurrentAudioClip();
+			if (ServerGameManager.Instance.GetGameState != GameState.gamePlay)
+				throw new System.Exception("Nous ne sommes pas en partie");
 
-			if (clip == null)
-			{
-				return;
-			}
+			AudioClip clip = ServerGameManager.Instance.GetCurrentAudioClip();
 
 			PlayMusic(clip);
 		}
@@ -58,8 +83,8 @@ namespace ServerManager
 
         private void PlayMusic(AudioClip clip)
 		{
-			// Si la musique demandé est déjà lancé, ne fait rien. Ou si le clip demandé vaut null
-			if (AudioSource.clip == clip || clip == null)
+			// Si la musique demandé est déjà lancé, ne fait rien.
+			if (AudioSource.clip == clip)
 			{
 				return;
 			}

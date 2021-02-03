@@ -21,20 +21,10 @@
         public static readonly float NBR_LINE_MAX = 4; // Nombre de ligne immatérielle composant le jeu.
         public static readonly float LINE_SLIME_SPAWN = 3f / 4f; // Multiplicateur indiquant à quelle position initialement placé les joueurs par rapport aux nombres de lignes.
 
-        // Camera
-        //public static readonly float MIN_CAMERA_SIZE = 9;
-        //public static readonly float MAX_CAMERA_SIZE = 19;
-
-        //public static readonly float MIN_CAMERA_YPOS = 10;
-        //public static readonly float MAX_CAMERA_YPOS = 19.88f;
-
-        //public static readonly float MIN_CAMERA_XROT = 30;
-        //public static readonly float MAX_CAMERA_XROT = 32.5f;
-
 
         // Attributs
 
-        [SerializeField] private World WorldForest;
+        [SerializeField] private World WorldJapan;
 
         private GameObject CurrentWorld;
 
@@ -70,7 +60,7 @@
         {
             base.GamePlay(e);
 
-            CurrentWorld = Instantiate(WorldForest.gameObject);
+            CurrentWorld = Instantiate(WorldJapan.gameObject);
         }
 
         #endregion

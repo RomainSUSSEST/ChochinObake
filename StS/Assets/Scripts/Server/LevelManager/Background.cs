@@ -1,7 +1,7 @@
 ﻿using SDD.Events;
 using UnityEngine;
 
-public class Ground : MonoBehaviour
+public class Background : MonoBehaviour
 {
     #region Constants
 
@@ -10,7 +10,7 @@ public class Ground : MonoBehaviour
 
     #endregion
 
-    #region Life Cycle
+    #region Life cycle
 
     private void Start()
     {
@@ -21,7 +21,7 @@ public class Ground : MonoBehaviour
     {
         if (transform.position.z <= DESTROY_Z_POSITION)
         {
-            EventManager.Instance.Raise(new GroundEndMapEvent());
+            EventManager.Instance.Raise(new BackgroundEndMapEvent());
             Destroy(this.gameObject);
         }
 
