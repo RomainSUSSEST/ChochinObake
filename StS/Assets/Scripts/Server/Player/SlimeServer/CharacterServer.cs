@@ -170,7 +170,7 @@ public class CharacterServer : CharacterPlayer
     /// </summary>
     public void IncreaseLineIndex()
     {
-        if (LineIndex < ServerLevelManager.NBR_LINE_MAX) // On vérifie que le maximum n'est pas déjà atteint.
+        if (LineIndex < ServerLevelManager.NBR_LINE) // On vérifie que le maximum n'est pas déjà atteint.
         {
             ++LineIndex;
             Vector3 add = new Vector3(0, 0, ServerLevelManager.DISTANCE_BETWEEN_LINE);

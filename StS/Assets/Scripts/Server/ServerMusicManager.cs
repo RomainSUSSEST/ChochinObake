@@ -18,8 +18,6 @@ namespace ServerManager
 
 		// Attributs
 
-		[Header("MusicManager")]
-
 		[SerializeField] private AudioClip MenuMusic;
 
 		private AudioSource AudioSource;
@@ -38,7 +36,7 @@ namespace ServerManager
 		#region Request
 
 		/// <summary>
-		/// Renvoie la durée de la musique courante en secondes
+		/// Renvoie la durée de la musique de la manche courante en secondes
 		/// </summary>
 		/// <returns></returns>
 		public float GetTotalDurationRoundMusic()
@@ -50,7 +48,7 @@ namespace ServerManager
 		}
 
 		/// <summary>
-		/// Renvoie le temps restant en pourcentage 
+		/// Renvoie le temps restant de la musique de la manche courante en secondes
 		/// </summary>
 		public float GetTimeLeftRoundMusic()
 		{
@@ -74,6 +72,7 @@ namespace ServerManager
 
 			AudioClip clip = ServerGameManager.Instance.GetCurrentAudioClip();
 
+			AudioSource.loop = false;
 			PlayMusic(clip);
 		}
 
@@ -150,6 +149,7 @@ namespace ServerManager
 		{
 			base.GameMainMenu(e);
 
+			AudioSource.loop = true;
 			PlayMusic(MenuMusic);
 		}
 
@@ -157,6 +157,7 @@ namespace ServerManager
 		{
 			base.GameRoomMenu(e);
 
+			AudioSource.loop = true;
 			PlayMusic(MenuMusic);
 		}
 
@@ -164,6 +165,7 @@ namespace ServerManager
 		{
 			base.GameOptionsMenu(e);
 
+			AudioSource.loop = true;
 			PlayMusic(MenuMusic);
 		}
 
@@ -171,6 +173,7 @@ namespace ServerManager
 		{
 			base.GameCreditsMenu(e);
 
+			AudioSource.loop = true;
 			PlayMusic(MenuMusic);
 		}
 
@@ -192,6 +195,7 @@ namespace ServerManager
 		{
 			base.GameEnd(e);
 
+			AudioSource.loop = true;
 			PlayMusic(MenuMusic);
 		}
 
@@ -199,6 +203,7 @@ namespace ServerManager
 		{
 			base.GameResult(e);
 
+			AudioSource.loop = true;
 			PlayMusic(MenuMusic);
 		}
 
@@ -206,6 +211,7 @@ namespace ServerManager
 		{
 			base.GameMusicSelectionMenu(e);
 
+			AudioSource.loop = true;
 			PlayMusic(MenuMusic);
 		}
 

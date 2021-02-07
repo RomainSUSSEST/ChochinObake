@@ -112,6 +112,14 @@ public class BackgroundEndMapEvent : SDD.Events.Event
 
 #endregion
 
+#region World
+
+public class MusicRoundEndEvent : SDD.Events.Event
+{
+}
+
+#endregion
+
 #endregion
 
 #region Network Server

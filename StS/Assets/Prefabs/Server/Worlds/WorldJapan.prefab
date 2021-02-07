@@ -46,7 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ListObstacle:
-  - {fileID: 5495056432260345588, guid: 69292888326e1654c90ca33bfd380d44, type: 3}
+  - {fileID: -6284331276853855129, guid: c9329cb25dec50646ba13c48afa371fc, type: 3}
+  - {fileID: 4385990056620760460, guid: b17f3e5344d312f4db455e8a87f21ccb, type: 3}
+  - {fileID: 7851600342712974601, guid: 73cf59d112a2ae542b8db237b75a803b, type: 3}
+  - {fileID: -3276674946392528956, guid: 9733450b875a7764f8b286ab18e75275, type: 3}
   SpiritWay: {fileID: -7649850999668371634, guid: a4a16539f25863540a19c947c2cf8ce5,
     type: 3}
   ListBackgrounds_P1:
@@ -55,9 +58,12 @@ MonoBehaviour:
   - {fileID: 6334749279283006878, guid: 8b2b1a2bf490be2448f9a025bfbfcc8b, type: 3}
   ListBackgrounds_P3:
   - {fileID: 8336393941997048791, guid: 6da6f6793dd954a4eb9e3c1258e013c0, type: 3}
+  EndMapPrefab: {fileID: 6422616787463166639, guid: 67b968496e15a7840a039f1a07295012,
+    type: 3}
   DistanceBetweenGround: 5
-  ObstacleDistanceToSlimeSpawn: 75
+  ObstacleDistanceToSlimeSpawn: 125
   DistanceToBackgroundY: -50
+  DestroyElementsMargin: 5
   CharacterServerPrefab: {fileID: -3312898644491709661, guid: 6047c66e9e3fafe4e88df5fa1f3aaae1,
     type: 3}
 --- !u!1 &7537251288178686362

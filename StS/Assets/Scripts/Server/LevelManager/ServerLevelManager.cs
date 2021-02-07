@@ -18,7 +18,7 @@
 
         public static readonly float DISTANCE_BETWEEN_LINE = 4f;
 
-        public static readonly float NBR_LINE_MAX = 4; // Nombre de ligne immatérielle composant le jeu.
+        public static readonly float NBR_LINE = 4; // Nombre de ligne immatérielle composant le jeu.
         public static readonly float LINE_SLIME_SPAWN = 3f / 4f; // Multiplicateur indiquant à quelle position initialement placé les joueurs par rapport aux nombres de lignes.
 
 
