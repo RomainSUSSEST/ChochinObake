@@ -2,7 +2,7 @@
 
 public abstract class CharacterPlayer : MonoBehaviour
 {
-    // Attributs
+    #region Attributs
 
     private CharacterHats Hat;
     private CharacterBody Body;
@@ -10,8 +10,26 @@ public abstract class CharacterPlayer : MonoBehaviour
     private Animator HatAnimator;
     private Animator BodyAnimator;
 
+    #endregion
 
-    // Requetes
+    #region Life Cycle
+
+    // Life cycle
+
+    private void Awake()
+    {
+        SubscribeEvents();
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeEvents();
+    }
+
+    #endregion
+
+
+    #region Requests
 
     public CharacterHats GetSlimeHat()
     {
@@ -23,8 +41,10 @@ public abstract class CharacterPlayer : MonoBehaviour
         return Body;
     }
 
+    #endregion
 
-    // Méthode
+
+    #region Methods
 
     public void SetHat(CharacterHats hat)
     {
@@ -51,4 +71,14 @@ public abstract class CharacterPlayer : MonoBehaviour
         BodyAnimator = Body.GetComponent<Animator>();
         Body.SetSlimeRoot(this);
     }
+
+    #endregion
+
+    #region Tools
+
+    protected abstract void SubscribeEvents();
+
+    protected abstract void UnsubscribeEvents();
+
+    #endregion
 }

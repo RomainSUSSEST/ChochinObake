@@ -2,6 +2,10 @@
 
 public class Obstacle : MonoBehaviour
 {
+    // Enum
+
+    public enum Elements : int { WATER, EARTH, AIR, FIRE }
+
     #region Constants
 
     public static float DESTROY_Z_POSITION { get; set; } // Position de destruction
@@ -11,8 +15,7 @@ public class Obstacle : MonoBehaviour
     #region Attributs
 
     [Header("Input to success")]
-    [SerializeField] private InputActionValidArea.InputAction Type;
-    [SerializeField] private Transform InputAction_Spawner;
+    [SerializeField] private Elements Type;
 
     private CharacterServer AssociatedSlime;
 
@@ -33,16 +36,6 @@ public class Obstacle : MonoBehaviour
 
     private void Start()
     {
-        // On décale l'obstacle d'un décalage pour centrer le point de pivot sur le spawner d'input (sur Z)
-        transform.Translate(
-            new Vector3(0,
-                        0,
-                        transform.position.z - InputAction_Spawner.transform.position.z)
-            ); // Initialisation
-
-        // On instancie l'input action associé, de la bonne couleur
-        Instantiate(AssociatedSlime.GetInputAction(Type), InputAction_Spawner);
-
         // On avance l'obstacle
         transform.Translate(new Vector3(0, 0, -Ground.MOVE_SPEED * Time.deltaTime));
     }
@@ -51,7 +44,7 @@ public class Obstacle : MonoBehaviour
 
     #region Requete
 
-    public InputActionValidArea.InputAction GetInput()
+    public Elements GetElement()
     {
         return Type;
     }
@@ -61,18 +54,13 @@ public class Obstacle : MonoBehaviour
     #region Methode
 
     /// <summary>
-    /// Enregistre le slime référent et le notifie que l'on s'associe à lui en s'enregistrant
+    /// Enregistre le joueur référent et le notifie que l'on s'associe à lui en s'enregistrant
     /// </summary>
-    /// <param name="ss"> Le slime auquel s'associer </param>
-    public void SetAssociatedSlime(CharacterServer ss)
+    /// <param name="ss"> Le joueur auquel s'associer </param>
+    public void SetAssociatedCharacter(CharacterServer ss)
     {
         AssociatedSlime = ss;
         ss.RegisterObstacle(this);
-    }
-
-    public Vector3 GetCurrentInputActionAreaPosition()
-    {
-        return InputAction_Spawner.transform.position;
     }
 
     #endregion

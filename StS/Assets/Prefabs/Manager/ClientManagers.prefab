@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &430777171435056674
+--- !u!1 &1910126212869873982
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,42 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4164708664847643237}
-  - component: {fileID: 427868635545932123}
+  - component: {fileID: 1360296207409285427}
+  - component: {fileID: 2991121131149217755}
   m_Layer: 0
-  m_Name: InputsManager
+  m_Name: ClientInputManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4164708664847643237
+--- !u!4 &1360296207409285427
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 430777171435056674}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_GameObject: {fileID: 1910126212869873982}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4471142093843847052}
-  m_RootOrder: 1
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &427868635545932123
+--- !u!114 &2991121131149217755
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 430777171435056674}
+  m_GameObject: {fileID: 1910126212869873982}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e16d8b24d69176d4ba054a126bbebe6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_DoNotDestroyGameObjectOnLoad: 0
-  SWIPE_THRESHOLD: 20
-  TILT_THRESHOLD: 0.05
-  REFRESH_TILT_DELAY: 0.05
-  DEFAULT_INCLINAISON: 0.3
-  MAX_DELAI_2PRESS: 1
 --- !u!1 &1933076680568730194
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,7 +106,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4471142093843847052}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7576163861891832365
 MonoBehaviour:
@@ -251,11 +246,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3848831761682172749}
-  - {fileID: 4164708664847643237}
   - {fileID: 1422650124624241298}
   - {fileID: 9037604170173995872}
   - {fileID: 2515187384449028356}
   - {fileID: 3003770434503127565}
+  - {fileID: 1360296207409285427}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -288,7 +283,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4471142093843847052}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8143138706301954726
 MonoBehaviour:
@@ -308,7 +303,7 @@ MonoBehaviour:
   m_PanelJoinRoom: {fileID: 0}
   m_PanelCharacterSelection: {fileID: 0}
   m_PanelMusicSelection: {fileID: 0}
-  m_PanelChooseMusic: {fileID: 0}
+  m_PanelMusicResult: {fileID: 0}
   m_PanelInGame: {fileID: 0}
 --- !u!1 &5360442918479095922
 GameObject:
@@ -340,7 +335,7 @@ Transform:
   m_Children:
   - {fileID: 1010803518131721320}
   m_Father: {fileID: 4471142093843847052}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3242256642859602597
 MonoBehaviour:
@@ -385,7 +380,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4471142093843847052}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2746290871915710485
 MonoBehaviour:

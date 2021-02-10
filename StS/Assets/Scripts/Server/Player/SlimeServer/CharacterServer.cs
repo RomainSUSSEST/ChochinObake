@@ -17,108 +17,64 @@ public class CharacterServer : CharacterPlayer
 
     // Attributs
 
-    [Header("InputActionValidArea")]
-    [SerializeField] private List<InputActionValidArea> ListInputActionValidArea;
-    [SerializeField] private GameObject Spawn_InputActionValidArea;
-
     public ulong AssociedClientID { get; set; }
-
-    private InputActionValidArea CurrentInputActionValidArea;
-    private Animator InputActionValidArea_Animator;
 
     private Queue<Obstacle> QueueObstacle; // Queue des obstacles suivant associé à ce slime
 
-    private float InputActionSize_Z_Per2; // La taille d'un input action sur l'axe Z divisé par 2
+    private float CharacterSizeZ_Per2; // La taille du joueur sur l'axe Z divisé par 2
 
     private int LineIndex; // Index de la ligne ou se trouve le joueur
 
-
-    // Life cycle
-
-    private void Awake()
-    {
-        SubscribeEvent();
-    }
-
-    private void OnDestroy()
-    {
-        UnsubscribeEvent();
-    }
+    #region Life Cycle
 
     private void Start()
     {
-        foreach (InputActionValidArea input in ListInputActionValidArea) // On récupére la validArea associé.
-        {
-            if (input.GetAssociatedBody() == GetSlimeBody().GetBodyType())
-            {
-                CurrentInputActionValidArea = Instantiate(input,
-                    Spawn_InputActionValidArea.transform);
-
-                InputActionValidArea_Animator = CurrentInputActionValidArea.GetComponent<Animator>();
-
-                break;
-            }
-        }
-
-        // On initialise la Queue des obstacles associé
+        // On initialise la Queue des obstacles associés
         QueueObstacle = new Queue<Obstacle>();
 
-        // On récupére la taille sur Z d'un input action divisé par 2
-        InputActionSize_Z_Per2 = CurrentInputActionValidArea.GetComponent<Renderer>().bounds.size.z / 2;
+        // On récupére la taille sur Z du joueur divisé par 2
+        CharacterSizeZ_Per2 = /*GetSlimeBody().GetComponent<Renderer>().bounds.size.z / 2*/ 1.5f;
     }
 
     private void Update()
     {
-        // Les obstacles ne doivent pas valoir null, puisqu'il se détruise loin derriere les slimes !
+        // Les obstacles ne doivent normalement pas valoir null, puisqu'il se détruise loin derriere les joueurs !\\
+
         // Si un obstacle enregistré à dépassé la position limite (sur Z), il est considéré comme raté.
         if (QueueObstacle.Count > 0 
-            && QueueObstacle.Peek().transform.position.z < CurrentInputActionValidArea.transform.position.z - InputActionSize_Z_Per2)
+            && QueueObstacle.Peek().transform.position.z < transform.position.z - CharacterSizeZ_Per2 * MARGIN_ERROR_C)
         {
             DeregisterObstacle(); // On désenregistre l'obstacle.
-            // Trop tard.
-            DecreaseLineIndex();
+            
+            // Gestion des lignes \\
+            DecreaseLineIndex(); // On décrémente d'une ligne.
         }
     }
 
-
-    // Requete
-
-    public Vector3 GetInputActionValidAreaPosition()
-    {
-        return Spawn_InputActionValidArea.transform.position;
-    }
-
-    public InputAction_Obstacle GetInputAction(InputActionValidArea.InputAction type)
-    {
-        return CurrentInputActionValidArea.GetInputAction(type);
-    }
+    #endregion
 
 
     // Méthode
 
     #region Event subscription
-    private void SubscribeEvent()
+    protected override void SubscribeEvents()
     {
         // ClientInputsManager
-        EventManager.Instance.AddListener<SwipeUpEvent>(SwipeUp);
-        EventManager.Instance.AddListener<SwipeLeftEvent>(SwipeLeft);
-        EventManager.Instance.AddListener<SwipeRightEvent>(SwipeRight);
-        EventManager.Instance.AddListener<SwipeDownEvent>(SwipeDown);
-
-        EventManager.Instance.AddListener<DoublePressEvent>(DoublePress);
+        EventManager.Instance.AddListener<FireEvent>(Fire);
+        EventManager.Instance.AddListener<EarthEvent>(Earth);
+        EventManager.Instance.AddListener<WaterEvent>(Water);
+        EventManager.Instance.AddListener<AirEvent>(Air);
 
         EventManager.Instance.AddListener<ServerDisconnectionSuccessEvent>(OnClientDisconnected);
     }
 
-    private void UnsubscribeEvent()
+    protected override void UnsubscribeEvents()
     {
         // ClientInputsManager
-        EventManager.Instance.RemoveListener<SwipeUpEvent>(SwipeUp);
-        EventManager.Instance.RemoveListener<SwipeLeftEvent>(SwipeLeft);
-        EventManager.Instance.RemoveListener<SwipeRightEvent>(SwipeRight);
-        EventManager.Instance.RemoveListener<SwipeDownEvent>(SwipeDown);
-
-        EventManager.Instance.RemoveListener<DoublePressEvent>(DoublePress);
+        EventManager.Instance.RemoveListener<FireEvent>(Fire);
+        EventManager.Instance.RemoveListener<EarthEvent>(Earth);
+        EventManager.Instance.RemoveListener<WaterEvent>(Water);
+        EventManager.Instance.RemoveListener<AirEvent>(Air);
 
         EventManager.Instance.RemoveListener<ServerDisconnectionSuccessEvent>(OnClientDisconnected);
     }
@@ -127,7 +83,7 @@ public class CharacterServer : CharacterPlayer
     /// <summary>
     /// Permet d'enregistrer un obstacle aupres du slime
     /// </summary>
-    /// <param name="obs"></param>
+    /// <param name="obs"> l'obstacle à enregistrer </param>
     public void RegisterObstacle(Obstacle obs)
     {
         QueueObstacle.Enqueue(obs);
@@ -188,7 +144,7 @@ public class CharacterServer : CharacterPlayer
     }
     #endregion
 
-    // Outils
+    #region Tools
 
     #region EventCallBack
     private void OnClientDisconnected(ServerDisconnectionSuccessEvent e)
@@ -199,45 +155,38 @@ public class CharacterServer : CharacterPlayer
         }
     }
 
-    private void SwipeUp(SwipeUpEvent e)
+    private void Fire(FireEvent e)
     {
         if (e.DoesThisConcernMe(AssociedClientID))
         {
-            InputPressed(InputActionValidArea.InputAction.SWIPE_TOP);
+            InputPressed(Obstacle.Elements.FIRE);
         }
     }
 
-    private void SwipeRight(SwipeRightEvent e)
+    private void Earth(EarthEvent e)
     {
         if (e.DoesThisConcernMe(AssociedClientID))
         {
-            InputPressed(InputActionValidArea.InputAction.SWIPE_RIGHT);
+            InputPressed(Obstacle.Elements.EARTH);
         }
     }
 
-    private void SwipeLeft(SwipeLeftEvent e)
+    private void Water(WaterEvent e)
     {
         if (e.DoesThisConcernMe(AssociedClientID))
         {
-            InputPressed(InputActionValidArea.InputAction.SWIPE_LEFT);
+            InputPressed(Obstacle.Elements.WATER);
         }
     }
 
-    private void SwipeDown(SwipeDownEvent e)
+    private void Air(AirEvent e)
     {
         if (e.DoesThisConcernMe(AssociedClientID))
         {
-            InputPressed(InputActionValidArea.InputAction.SWIPE_BOTTOM);
+            InputPressed(Obstacle.Elements.AIR);
         }
     }
 
-    private void DoublePress(DoublePressEvent e)
-    {
-        if (e.DoesThisConcernMe(AssociedClientID))
-        {
-            InputPressed(InputActionValidArea.InputAction.DOUBLE_PRESS);
-        }
-    }
     #endregion
 
     /// <summary>
@@ -249,26 +198,26 @@ public class CharacterServer : CharacterPlayer
     /// <returns></returns>
     private Grade GetGrade(Obstacle obs)
     {
-        float PosObs_Z = obs.GetCurrentInputActionAreaPosition().z; // Position de l'obstacle sur Z
-        float PosInputValidArea_Z = CurrentInputActionValidArea.transform.position.z; // Position du référentiel sur Z
+        float PosObs_Z = obs.transform.position.z; // Position de l'obstacle sur Z
+        float PosInputValidArea_Z = transform.position.z; // Position du référentiel sur Z
 
         // On test si il y a une collision
-        float marg = InputActionSize_Z_Per2 * MARGIN_ERROR_C;
+        float marg = CharacterSizeZ_Per2 * MARGIN_ERROR_C;
         if (PosInputValidArea_Z - marg <= PosObs_Z
             && PosObs_Z <= PosInputValidArea_Z + marg)
         {
             // On test si c'est un B
-            marg = InputActionSize_Z_Per2 * MARGIN_ERROR_B;
+            marg = CharacterSizeZ_Per2 * MARGIN_ERROR_B;
             if (PosInputValidArea_Z - marg <= PosObs_Z 
                 && PosObs_Z <= PosInputValidArea_Z + marg)
             {
                 // On test si c'est un A
-                marg = InputActionSize_Z_Per2 * MARGIN_ERROR_A;
+                marg = CharacterSizeZ_Per2 * MARGIN_ERROR_A;
                 if (PosInputValidArea_Z - marg <= PosObs_Z
                     && PosObs_Z <= PosInputValidArea_Z + marg)
                 {
                     // On test si c'est un S
-                    marg = InputActionSize_Z_Per2 * MARGIN_ERROR_S;
+                    marg = CharacterSizeZ_Per2 * MARGIN_ERROR_S;
                     if (PosInputValidArea_Z - marg <= PosObs_Z
                         && PosObs_Z <= PosInputValidArea_Z + marg)
                     {
@@ -295,11 +244,8 @@ public class CharacterServer : CharacterPlayer
     /// Gére le comportement du slime en cas d'input pressé par le joueur.
     /// </summary>
     /// <param name="action"> L'action effectué par le joueur </param>
-    private void InputPressed(InputActionValidArea.InputAction action)
+    private void InputPressed(Obstacle.Elements action)
     {
-        // On lance l'animation d'un input effectué
-        InputActionValidArea_Animator.SetTrigger("InputTriggered");
-
         // S'il n'y a pas d'obstacle suivant
         if (QueueObstacle.Count == 0)
         {
@@ -312,7 +258,7 @@ public class CharacterServer : CharacterPlayer
         {
             Obstacle obs = DeregisterObstacle(); // On retire le premier éléments
             
-            if (obs.GetInput() == action) // Si les actions matchs
+            if (obs.GetElement() == action) // Si les actions matchs
             {
                 // Succés
                 IncreaseLineIndex();
@@ -334,4 +280,6 @@ public class CharacterServer : CharacterPlayer
     {
         return QueueObstacle.Dequeue();
     }
+
+    #endregion
 }

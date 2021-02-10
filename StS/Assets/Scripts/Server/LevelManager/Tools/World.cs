@@ -416,7 +416,7 @@ public class World : MonoBehaviour
            foreach (CharacterServer ss in CharacterArray)
             {
                 if (ss != null) {
-                    Vector3 pos = ss.GetInputActionValidAreaPosition();
+                    Vector3 pos = ss.transform.position;
 
                     // On instantie l'obstacle à ObstacleDistanceToSlimeSpawn de InputActionValidAreaPosition
                     curObstacle = Instantiate(ListObstacle[index], new Vector3(
@@ -426,7 +426,7 @@ public class World : MonoBehaviour
                         Quaternion.identity,
                         transform);
 
-                    curObstacle.SetAssociatedSlime(ss); // On associe le character à l'obstacle
+                    curObstacle.SetAssociatedCharacter(ss); // On associe le character à l'obstacle
                 }
             }
             return true;

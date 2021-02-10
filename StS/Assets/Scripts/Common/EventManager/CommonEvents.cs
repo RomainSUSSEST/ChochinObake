@@ -227,77 +227,30 @@ public class DifficultyVoteAcceptedEvent : NetworkedEvent
 #endregion
 
 #region MobileInputs
-public class DoublePressEvent : NetworkedEvent
+public class FireEvent : NetworkedEvent
 {
-	public DoublePressEvent(ulong playerID) : base(playerID)
+	public FireEvent(ulong playerID) : base(playerID)
 	{
 	}
 }
 
-public class SwipeLeftEvent : NetworkedEvent
+public class EarthEvent : NetworkedEvent
 {
-	public SwipeLeftEvent(ulong playerID) : base(playerID)
+	public EarthEvent(ulong playerID) : base(playerID)
 	{
 	}
 }
 
-public class SwipeRightEvent : NetworkedEvent
+public class WaterEvent : NetworkedEvent
 {
-	public SwipeRightEvent(ulong playerID) : base(playerID)
+	public WaterEvent(ulong playerID) : base(playerID)
 	{
 	}
 }
 
-public class SwipeUpEvent : NetworkedEvent
+public class AirEvent : NetworkedEvent
 {
-	public SwipeUpEvent(ulong playerID) : base(playerID)
-	{
-	}
-}
-
-public class SwipeDownEvent : NetworkedEvent
-{
-	public SwipeDownEvent(ulong playerID) : base(playerID)
-	{
-	}
-}
-
-// Movement
-
-/**
-* Classe représentant les mouvements
-*/
-public abstract class MovementEvent : NetworkedEvent
-{
-	// Attributs
-
-	public float intensity { get; }
-
-
-	// Constructeur
-
-	public MovementEvent(ulong playerID, float intensity) : base(playerID,
-		new Argument()
-		{
-			Arg = intensity,
-			Type = typeof(float)
-		})
-	{
-		this.intensity = intensity;
-	}
-}
-
-// Direction
-
-public class TiltLeftRightEvent : MovementEvent
-{
-	public TiltLeftRightEvent(ulong playerID, float intensity) : base(playerID, intensity)
-	{
-	}
-}
-public class TiltTopBottomEvent : MovementEvent
-{
-	public TiltTopBottomEvent(ulong playerID, float intensity) : base(playerID, intensity)
+	public AirEvent(ulong playerID) : base(playerID)
 	{
 	}
 }

@@ -46,10 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ListObstacle:
-  - {fileID: -6284331276853855129, guid: c9329cb25dec50646ba13c48afa371fc, type: 3}
-  - {fileID: 4385990056620760460, guid: b17f3e5344d312f4db455e8a87f21ccb, type: 3}
-  - {fileID: 7851600342712974601, guid: 73cf59d112a2ae542b8db237b75a803b, type: 3}
-  - {fileID: -3276674946392528956, guid: 9733450b875a7764f8b286ab18e75275, type: 3}
+  - {fileID: 8080760333427922659, guid: 13a01394fcacbc24e80c167cc065eda5, type: 3}
+  - {fileID: -8043289557370616314, guid: 0de0f933b8ddcee4ea2e4eee1548ddf3, type: 3}
+  - {fileID: 1709044040026594026, guid: e0a42a32ce546cc44885a37bb904dc8b, type: 3}
+  - {fileID: 9015342484449853566, guid: 3d6175cb15b4ec2418d05a7c689b3d74, type: 3}
   SpiritWay: {fileID: -7649850999668371634, guid: a4a16539f25863540a19c947c2cf8ce5,
     type: 3}
   ListBackgrounds_P1:
