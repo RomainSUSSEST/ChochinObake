@@ -114,6 +114,11 @@ public class BackgroundEndMapEvent : SDD.Events.Event
 
 #region World
 
+public class RoundStartEvent : SDD.Events.Event
+{
+	public IReadOnlyCollection<CharacterPlayer> RoundPlayers;
+}
+
 public class MusicRoundEndEvent : SDD.Events.Event
 {
 }

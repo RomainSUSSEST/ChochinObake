@@ -196,7 +196,7 @@ public class CharacterServer : CharacterPlayer
     /// </summary>
     /// <param name="obs"></param>
     /// <returns></returns>
-    private Grade GetGrade(Obstacle obs)
+    private Grade GetGrade(Obstacle obs) // TODO
     {
         float PosObs_Z = obs.transform.position.z; // Position de l'obstacle sur Z
         float PosInputValidArea_Z = transform.position.z; // Position du référentiel sur Z

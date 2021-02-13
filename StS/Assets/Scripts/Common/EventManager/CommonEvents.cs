@@ -1,4 +1,5 @@
 ﻿using SDD.Events;
+using System;
 using System.Collections.Generic;
 
 #region UI Events
@@ -254,6 +255,43 @@ public class AirEvent : NetworkedEvent
 	{
 	}
 }
+
+public class InputListenRequestEvent : NetworkedEvent
+{
+	[Serializable]
+	public enum Input { TILT_LEFT, TILT_RIGHT, TILT_TOP, TILT_BOTTOM }
+
+	#region Attributes
+
+	public Input Type;
+	public float During;
+	public float RefreshDelai;
+
+    #endregion
+
+    public InputListenRequestEvent(ulong PlayerID, Input input, float during, float refreshDelai) : base(PlayerID,
+		new Argument() { Arg = input, Type = input.GetType() },
+		new Argument() { Arg = during, Type = typeof(float) },
+		new Argument() { Arg = refreshDelai, Type = typeof(float) })
+	{
+
+		Type = input;
+		During = during;
+		RefreshDelai = refreshDelai;
+	}
+}
+
+public class InputListenAnswerEvent : NetworkedEvent
+{
+	public bool Value;
+
+	public InputListenAnswerEvent(ulong PlayerID, bool value) : 
+		base(PlayerID, new Argument() { Arg = value, Type = typeof(bool)})
+	{
+		Value = value;
+	}
+}
+
 #endregion
 
 #region ServerState

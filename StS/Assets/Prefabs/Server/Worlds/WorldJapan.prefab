@@ -63,7 +63,7 @@ MonoBehaviour:
   DistanceBetweenGround: 5
   ObstacleDistanceToSlimeSpawn: 125
   DistanceToBackgroundY: -50
-  DestroyElementsMargin: 5
+  DestroyElementsMargin: 10
   CharacterServerPrefab: {fileID: -3312898644491709661, guid: 6047c66e9e3fafe4e88df5fa1f3aaae1,
     type: 3}
 --- !u!1 &7537251288178686362

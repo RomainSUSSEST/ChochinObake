@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using SDD.Events;
 
 namespace ServerManager
 {
@@ -60,27 +61,27 @@ namespace ServerManager
 
 		#endregion
 
-		#region Methods
+		#region Subs methods
 
-		/// <summary>
-		/// Permet de lancer la musique du round courant.
-		/// </summary>
-		public void StartRoundMusic()
+		public override void SubscribeEvents()
 		{
-			if (ServerGameManager.Instance.GetGameState != GameState.gamePlay)
-				throw new System.Exception("Nous ne sommes pas en partie");
+			base.SubscribeEvents();
 
-			AudioClip clip = ServerGameManager.Instance.GetCurrentAudioClip();
-
-			AudioSource.loop = false;
-			PlayMusic(clip);
+			EventManager.Instance.AddListener<RoundStartEvent>(RoundStart);
 		}
 
-        #endregion
+		public override void UnsubscribeEvents()
+		{
+			base.UnsubscribeEvents();
 
-        #region Tools
+			EventManager.Instance.RemoveListener<RoundStartEvent>(RoundStart);
+		}
 
-        private void PlayMusic(AudioClip clip)
+		#endregion
+
+		#region Tools
+
+		private void PlayMusic(AudioClip clip)
 		{
 			// Si la musique demandé est déjà lancé, ne fait rien.
 			if (AudioSource.clip == clip)
@@ -138,14 +139,23 @@ namespace ServerManager
 			yield break;
 		}
 
-        #endregion
+		#endregion
 
+		#region CallBack Event
 
-        // Event GameState function
+		private void RoundStart(RoundStartEvent e)
+		{
+			AudioClip clip = ServerGameManager.Instance.GetCurrentAudioClip();
 
-        #region Event Function
+			AudioSource.loop = false;
+			PlayMusic(clip);
+		}
 
-        protected override void GameMainMenu(GameMainMenuEvent e)
+		#endregion
+
+		#region GameEvent Function
+
+		protected override void GameMainMenu(GameMainMenuEvent e)
 		{
 			base.GameMainMenu(e);
 
