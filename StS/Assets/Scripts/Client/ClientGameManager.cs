@@ -51,9 +51,6 @@
             EventManager.Instance.AddListener<ReadyCharacterSelectionButtonClickedEvent>(ReadyCharacterSelectionButtonClicked);
             EventManager.Instance.AddListener<RefreshCharacterInformationEvent>(RefreshSlimeInformation);
 
-            // UI Resize
-            EventManager.Instance.AddListener<ResizeUICompleteEvent>(ResizeUIComplete);
-
             // Network
             EventManager.Instance.AddListener<ServerConnectionSuccessEvent>(ServerConnectionSuccess);
 
@@ -76,9 +73,6 @@
             EventManager.Instance.RemoveListener<ReadyCharacterSelectionButtonClickedEvent>(ReadyCharacterSelectionButtonClicked);
             EventManager.Instance.RemoveListener<RefreshCharacterInformationEvent>(RefreshSlimeInformation);
 
-            // UI Resize
-            EventManager.Instance.RemoveListener<ResizeUICompleteEvent>(ResizeUIComplete);
-
             // Network
             EventManager.Instance.RemoveListener<ServerConnectionSuccessEvent>(ServerConnectionSuccess);
 
@@ -92,20 +86,26 @@
 
         #region Manager Implementation
 
+        protected override IEnumerator Start()
+        {
+            yield return base.Start();
+
+            // On attend que tous les managers soit pret
+            while (!ManagersStates.AllManagersReady())
+                yield return new CoroutineTools.WaitForFrames(1);
+
+            // On lance le menu
+            MainMenu();
+        }
+
         protected override IEnumerator InitCoroutine()
         {
-            // On demande le redimenssionnement des UI.
-            EventManager.Instance.Raise(new ResizeUIRequestEvent());
 
             yield break;
         }
         #endregion
 
-        #region Callbacks to Events issued by MenuManager
-        private void ResizeUIComplete(ResizeUICompleteEvent e)
-        {
-            MainMenu();
-        }
+        #region Callbacks to Events issued by MenuManage
 
         private void JoinButtonClicked(JoinButtonClickedEvent e)
         {

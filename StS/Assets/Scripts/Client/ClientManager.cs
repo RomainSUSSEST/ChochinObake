@@ -1,21 +1,55 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ClientManager<T> : ClientSingletonGameStateObserver<T> where T:Component
+public abstract class ClientManager<T> : ClientSingletonGameStateObserver<T> where T : Component
 {
-    protected bool m_IsReady = false;
 
-    public bool IsReady { get { return m_IsReady; } }
+	#region Attributes
 
-    protected abstract IEnumerator InitCoroutine();
+	private ManagersStates reference;
 
-    // Use this for initialization
+	#endregion
 
-    protected virtual IEnumerator Start()
-    {
-        m_IsReady = false;
-        yield return StartCoroutine(InitCoroutine());
-        m_IsReady = true;
-    }
+	#region Request
+
+	public bool IsReady
+	{
+		get
+		{
+			return reference.state;
+		}
+	}
+
+	#endregion
+
+	#region Life cycle
+
+	protected override void Awake()
+	{
+		base.Awake();
+
+		reference = new ManagersStates();
+	}
+
+	protected virtual IEnumerator Start()
+	{
+		reference.state = false;
+		yield return StartCoroutine(InitCoroutine());
+		reference.state = true;
+	}
+
+	protected override void OnDestroy()
+	{
+		base.OnDestroy();
+
+		reference.Destroy();
+	}
+
+	#endregion
+
+	#region Tools
+
+	protected abstract IEnumerator InitCoroutine();
+
+	#endregion
 }

@@ -22,24 +22,6 @@ namespace ServerManager
 		private List<GameObject> m_AllPanels;
 		#endregion
 
-		#region Events' subscription
-		public override void SubscribeEvents()
-		{
-			base.SubscribeEvents();
-
-			// UI
-			EventManager.Instance.AddListener<ResizeUIRequestEvent>(ResizeUIRequest);
-		}
-
-		public override void UnsubscribeEvents()
-		{
-			base.UnsubscribeEvents();
-
-			// UI
-			EventManager.Instance.RemoveListener<ResizeUIRequestEvent>(ResizeUIRequest);
-		}
-		#endregion
-
 		#region Manager implementation
 		protected override IEnumerator InitCoroutine()
 		{
@@ -96,35 +78,6 @@ namespace ServerManager
 		{
 			OpenPanel(null);
 		}
-        #endregion
-
-        #region Canvas Methods
-		private void ResizeUIRequest(ResizeUIRequestEvent e)
-		{
-			StartCoroutine("ResizeUI");
-		}
-
-		private IEnumerator ResizeUI()
-		{
-			// On ouvre tout les panels
-			OpenAllPanel();
-
-			// On attend une frame le temps de les activer.
-			yield return new CoroutineTools.WaitForFrames(1);
-
-			// Envoie un event pour demander aux sous composant de se redimensionner
-			EventManager.Instance.Raise(new ResizeUIEvent());
-
-			// On ferme les panels.
-			CloseAllPanel();
-
-			// On attend que tous les panels se désactive
-			yield return new CoroutineTools.WaitForFrames(1);
-
-			// On indique que la redimension est terminé.
-			EventManager.Instance.Raise(new ResizeUICompleteEvent());
-		}
-
         #endregion
 
         #region UI OnClick Events

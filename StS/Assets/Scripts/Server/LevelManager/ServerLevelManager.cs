@@ -100,7 +100,7 @@
             GenerateInGameEvents = true;
             RoundPlayers = e.RoundPlayers;
 
-            StartCoroutine("InGameEvents");
+            StartCoroutine("InGameEventsManager");
         }
 
         private void MusicRoundEnd(MusicRoundEndEvent e)
@@ -112,14 +112,15 @@
 
         #region Coroutines
 
-        private IEnumerator InGameEvents()
+        private IEnumerator InGameEventsManager()
         {
             while (GenerateInGameEvents)
             {
+                Debug.Log("Debut");
                 yield return new WaitForSeconds(TIME_BETWEEN_IN_GAME_EVENTS);
 
                 // On choisi un event
-                int index = (int) ServerMusicManager.Instance.GetTimeLeftRoundMusic() % AllInGameEventsList.Count;
+                int index = Random.Range(0, AllInGameEventsList.Count);
 
                 foreach (CharacterServer c in RoundPlayers)
                 {
@@ -129,6 +130,8 @@
                         e.SetAssociatedCharacter(c);
                     }
                 }
+
+                yield return new WaitForSeconds(InGameEvents.EVENT_TIME);
             }
         }
 

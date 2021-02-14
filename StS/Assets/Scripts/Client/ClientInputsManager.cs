@@ -1,5 +1,6 @@
 ﻿using CommonVisibleManager;
 using SDD.Events;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -12,7 +13,22 @@ namespace ClientManager
 
         public bool TiltLeft()
         {
-            return true;
+            return Input.acceleration.x < 0;
+        }
+
+        public bool TiltRight()
+        {
+            return Input.acceleration.x > 0;
+        }
+
+        public bool TiltTop()
+        {
+            return Input.acceleration.z > 0;
+        }
+
+        public bool TiltBottom()
+        {
+            return Input.acceleration.z < 0;
         }
 
         #endregion
@@ -49,16 +65,16 @@ namespace ClientManager
             switch (e.Type)
             {
                 case InputListenRequestEvent.Input.TILT_LEFT:
-                    StartCoroutine(InputListenAnswer(e.During, e.RefreshDelai));
+                    StartCoroutine(InputListenAnswer(e.During, e.RefreshDelai, TiltLeft));
                     break;
                 case InputListenRequestEvent.Input.TILT_BOTTOM:
-                    StartCoroutine(InputListenAnswer(e.During, e.RefreshDelai));
+                    StartCoroutine(InputListenAnswer(e.During, e.RefreshDelai, TiltBottom));
                     break;
                 case InputListenRequestEvent.Input.TILT_RIGHT:
-                    StartCoroutine(InputListenAnswer(e.During, e.RefreshDelai));
+                    StartCoroutine(InputListenAnswer(e.During, e.RefreshDelai, TiltRight));
                     break;
                 default:
-                    StartCoroutine(InputListenAnswer(e.During, e.RefreshDelai));
+                    StartCoroutine(InputListenAnswer(e.During, e.RefreshDelai, TiltTop));
                     break;
             }
         }
@@ -67,18 +83,18 @@ namespace ClientManager
 
         #region Coroutine
 
-        private IEnumerator InputListenAnswer(float during, float refreshDelai)
+        private IEnumerator InputListenAnswer(float during, float refreshDelai, Func<bool> condition)
         {
             float cmptTotalTime = 0;
             float cmptRefreshTime = 0;
-            while (cmptTotalTime < during)
+            while (cmptTotalTime <= during) // Tant que le temps cible n'est pas atteint
             {
-                if (cmptRefreshTime >= refreshDelai)
+                if (cmptRefreshTime >= refreshDelai) // Si on doit actualiser
                 {
-                    EventManager.Instance.Raise(
+                    MessagingManager.Instance.RaiseNetworkedEventOnServer(
                         new InputListenAnswerEvent(
                             ClientNetworkManager.Instance.GetPlayerID().Value,
-                            true));
+                            condition()));
 
                     cmptRefreshTime -= refreshDelai;
                 }

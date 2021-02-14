@@ -188,6 +188,11 @@ MonoBehaviour:
   m_DoNotDestroyGameObjectOnLoad: 0
   WorldJapan: {fileID: 1257938603631738033, guid: c89b6156e0220cb4fba3e17d2ef0e3a8,
     type: 3}
+  AllInGameEventsList:
+  - {fileID: 1722893344957148503, guid: 9853e8ff20e46884a966b68d0fcc7973, type: 3}
+  - {fileID: 2286065433457864762, guid: cb78d2a4e0ddec54db161ee2fd84d0e8, type: 3}
+  - {fileID: 4140283706301543825, guid: 02097e7ea412c474f835336ba5fd24d8, type: 3}
+  - {fileID: 3425975028305400061, guid: f78fc1007461ae4429c629eed9a26e3c, type: 3}
 --- !u!1 &1483211568883150
 GameObject:
   m_ObjectHideFlags: 0

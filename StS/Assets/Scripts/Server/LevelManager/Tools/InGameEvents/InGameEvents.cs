@@ -5,14 +5,14 @@ public abstract class InGameEvents : MonoBehaviour
 {
     #region Constants
 
-    public static readonly float EVENT_TIME = 5;
+    public static readonly float EVENT_TIME = 5; // Durée d'un évènement
 
     #endregion
 
     #region Attributes
 
-    protected CharacterServer AssociatedCharacter;
-    private bool IsSuccess;
+    protected CharacterServer AssociatedCharacter; // Joueur concerné par l'évènement
+    private bool IsSuccess; // Si l'évènement est réussis à l'instant T
 
     #endregion
 

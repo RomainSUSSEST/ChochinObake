@@ -29,25 +29,6 @@
         private List<GameObject> m_AllPanels;
         #endregion
 
-        #region Events Subscription
-
-        public override void SubscribeEvents()
-        {
-            base.SubscribeEvents();
-
-            // UI
-            EventManager.Instance.AddListener<ResizeUIRequestEvent>(ResizeUIRequest);
-        }
-
-        public override void UnsubscribeEvents()
-        {
-            base.UnsubscribeEvents();
-
-            // UI
-            EventManager.Instance.RemoveListener<ResizeUIRequestEvent>(ResizeUIRequest);
-        }
-        #endregion
-
         #region Manager Implementation
 
         protected override IEnumerator InitCoroutine()
@@ -96,47 +77,6 @@
         private void CloseAllPanel()
         {
             OpenPanel(null);
-        }
-        #endregion
-
-        #region Canvas Methods
-
-        private void ResizeUIRequest(ResizeUIRequestEvent e)
-        {
-            StartCoroutine("ResizeUI");
-        }
-
-        private IEnumerator ResizeUI()
-        {
-            // redimensionne les canvas selon la dimension de l'écran. ---
-            RectTransform rectTransform = m_MainCanvas.GetComponent<RectTransform>();
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width);
-            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Screen.height);
-
-            // Reduction des canvas pour la taille des cameras ---
-
-            m_MainCanvas.GetComponent<RectTransform>();
-            // calcul du nouveau scale
-            float scale = ClientCameraManager.MENU_CAMERA_ORTHOGRAPHIQUE_SIZE * 2 / Screen.height;
-            rectTransform.localScale = new Vector3(scale, scale, scale);
-
-            // On ouvre tout les panels
-            OpenAllPanel();
-
-            // On attend une frame le temps de les activer
-            yield return new WaitForFrames(1);
-
-            // Envoie un event pour demander aux sous composant de se redimensionner
-            EventManager.Instance.Raise(new ResizeUIEvent());
-
-            // On ferme les panels.
-            CloseAllPanel();
-
-            // On attend que tous les panels se désactive
-            yield return new WaitForFrames(1);
-
-            // On indiquee que la redimension est terminé.
-            EventManager.Instance.Raise(new ResizeUICompleteEvent());
         }
         #endregion
 

@@ -2,18 +2,6 @@
 using System;
 using System.Collections.Generic;
 
-#region UI Events
-public class ResizeUIEvent : Event
-{
-}
-public class ResizeUIRequestEvent : Event
-{
-}
-public class ResizeUICompleteEvent : Event
-{
-}
-#endregion
-
 #region Network type but local raise
 public class ServerConnectionSuccessEvent : Event
 {

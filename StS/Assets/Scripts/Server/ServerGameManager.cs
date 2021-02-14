@@ -101,9 +101,6 @@
 
 			EventManager.Instance.AddListener<MusicResultGameReadyEvent>(MusicResultGameReady);
 
-			// UI Resize
-			EventManager.Instance.AddListener<ResizeUICompleteEvent>(ResizeUIComplete);
-
 			// Network Event
 			EventManager.Instance.AddListener<ServerDisconnectionSuccessEvent>(ClientDisconnected);
 		}
@@ -127,29 +124,35 @@
 
 			EventManager.Instance.RemoveListener<MusicResultGameReadyEvent>(MusicResultGameReady);
 
-			// UI Resize
-			EventManager.Instance.RemoveListener<ResizeUICompleteEvent>(ResizeUIComplete);
-
 			// Network Event
 			EventManager.Instance.RemoveListener<ServerDisconnectionSuccessEvent>(ClientDisconnected);
 		}
 		#endregion
 
 		#region Manager implementation
+
+		protected override IEnumerator Start()
+		{
+			yield return base.Start();
+
+			// On attend que tous les managers soit pret
+			while (!ManagersStates.AllManagersReady())
+				yield return new CoroutineTools.WaitForFrames(1);
+
+			// On lance le menu
+			MainMenu();
+		}
+
 		protected override IEnumerator InitCoroutine()
 		{
-			// On demande le redimensionnement des UI.
-			EventManager.Instance.Raise(new ResizeUIRequestEvent());
+			// Gérer la qualité
 
 			yield break;
 		}
 		#endregion
 
 		#region Callbacks to Events issued by MenuManager
-		private void ResizeUIComplete(ResizeUICompleteEvent e)
-		{
-			MainMenu();
-		}
+
 		private void PlayButtonClicked(PlayButtonClickedEvent e)
 		{
 			RoomMenu();
