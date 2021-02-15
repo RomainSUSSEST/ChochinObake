@@ -116,7 +116,6 @@
         {
             while (GenerateInGameEvents)
             {
-                Debug.Log("Debut");
                 yield return new WaitForSeconds(TIME_BETWEEN_IN_GAME_EVENTS);
 
                 // On choisi un event

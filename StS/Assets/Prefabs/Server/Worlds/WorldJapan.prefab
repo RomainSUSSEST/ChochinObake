@@ -54,8 +54,10 @@ MonoBehaviour:
     type: 3}
   ListBackgrounds_P1:
   - {fileID: -4891027330480624937, guid: 53a5881f2d5fc2b479238dfb58ed4a1c, type: 3}
+  - {fileID: -4891027330480624937, guid: 010461066cddc1641b896f4ce88bb677, type: 3}
   ListBackgrounds_P2:
   - {fileID: 6334749279283006878, guid: 8b2b1a2bf490be2448f9a025bfbfcc8b, type: 3}
+  - {fileID: 6334749279283006878, guid: 99d41db780a317c4d9b8110c6b8f0ffd, type: 3}
   ListBackgrounds_P3:
   - {fileID: 8336393941997048791, guid: 6da6f6793dd954a4eb9e3c1258e013c0, type: 3}
   EndMapPrefab: {fileID: 6422616787463166639, guid: 67b968496e15a7840a039f1a07295012,

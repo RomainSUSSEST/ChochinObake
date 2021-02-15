@@ -377,8 +377,8 @@ public class World : MonoBehaviour
     /// <param name="StartPosition"></param>
     private void InstantiateNewBackgroundAt(Vector3 StartPosition)
     {
-        float percentTotalTime = ServerMusicManager.Instance.GetTimeLeftRoundMusic() / ServerMusicManager.Instance.GetTotalDurationRoundMusic();
-
+        float percentTotalTime = ServerMusicManager.Instance.GetCurrentTimeRoundMusic() / ServerMusicManager.Instance.GetTotalDurationRoundMusic();
+        Debug.Log(percentTotalTime);
         int index;
         if (percentTotalTime < 1f / 3f) // On instantie un background P1
         {

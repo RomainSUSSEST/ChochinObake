@@ -23,17 +23,6 @@ namespace ServerManager
 
 		private AudioSource AudioSource;
 
-        #region Life Cycle
-
-        protected override void Awake()
-		{
-			base.Awake();
-
-			AudioSource = GetComponent<AudioSource>();
-		}
-
-		#endregion
-
 		#region Request
 
 		/// <summary>
@@ -57,6 +46,11 @@ namespace ServerManager
 				throw new System.Exception("Nous ne sommes pas en partie");
 
 			return AudioSource.clip.length - AudioSource.time;
+		}
+
+		public float GetCurrentTimeRoundMusic()
+		{
+			return AudioSource.time;
 		}
 
 		#endregion
@@ -136,6 +130,8 @@ namespace ServerManager
 
         protected override IEnumerator InitCoroutine()
 		{
+			AudioSource = GetComponent<AudioSource>();
+
 			yield break;
 		}
 
