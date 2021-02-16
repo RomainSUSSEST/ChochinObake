@@ -26,7 +26,7 @@ public class World : MonoBehaviour
 
     [Header("Map Config")]
     [SerializeField] private float DistanceBetweenGround = 2f;
-    [SerializeField] private float ObstacleDistanceToSlimeSpawn;
+    [SerializeField] private float ObstacleDistanceToCharacterSpawn;
     [SerializeField] private float DistanceToBackgroundY = -50;
     [SerializeField] private float DestroyElementsMargin = 10f;
 
@@ -226,7 +226,7 @@ public class World : MonoBehaviour
 
         // On calcul le temps d'avance que doivent prendre les obstacles pour apparaitre à ObstacleDistanceToSpawn
         // du spawn des slimes et tj arriver au moment du beats.
-        AheadTimeToSpawn = ObstacleDistanceToSlimeSpawn / Ground.MOVE_SPEED;
+        AheadTimeToSpawn = ObstacleDistanceToCharacterSpawn / Ground.MOVE_SPEED;
 
         #endregion
 
@@ -378,7 +378,7 @@ public class World : MonoBehaviour
     private void InstantiateNewBackgroundAt(Vector3 StartPosition)
     {
         float percentTotalTime = ServerMusicManager.Instance.GetCurrentTimeRoundMusic() / ServerMusicManager.Instance.GetTotalDurationRoundMusic();
-        Debug.Log(percentTotalTime);
+
         int index;
         if (percentTotalTime < 1f / 3f) // On instantie un background P1
         {
@@ -405,7 +405,7 @@ public class World : MonoBehaviour
         // Si le beats n'est pas ignoré
         if (flux.prunedSpectralFlux > CurrentThresholdSensitivity)
         {
-            // On cherche à combien de pourcentage du maximum correspond le beats.
+            // On cherche à combien de pourcentage du maximum correspond le beats sans compter le threshold.
             float curPercentOfMax = (flux.prunedSpectralFlux - CurrentThresholdSensitivity)
                 / (CurrentMaxPrunedSpectralFlux - CurrentThresholdSensitivity); // Max : 1
 
@@ -419,11 +419,11 @@ public class World : MonoBehaviour
                 if (ss != null) {
                     Vector3 pos = ss.transform.position;
 
-                    // On instantie l'obstacle à ObstacleDistanceToSlimeSpawn de InputActionValidAreaPosition
+                    // On instantie l'obstacle à ObstacleDistanceToSlimeSpawn
                     curObstacle = Instantiate(ListObstacle[index], new Vector3(
                         pos.x,
                         pos.y,
-                        pos.z + ObstacleDistanceToSlimeSpawn),
+                        pos.z + ObstacleDistanceToCharacterSpawn),
                         Quaternion.identity,
                         transform);
 
@@ -439,7 +439,7 @@ public class World : MonoBehaviour
     {
         Vector3 pos = transform.position;
         Instantiate(EndMapPrefab,
-            new Vector3(pos.x, pos.y, pos.z + ObstacleDistanceToSlimeSpawn + ServerLevelManager.DISTANCE_BETWEEN_LINE * ServerLevelManager.NBR_LINE),
+            new Vector3(pos.x, pos.y, pos.z + ObstacleDistanceToCharacterSpawn + ServerLevelManager.DISTANCE_BETWEEN_LINE * ServerLevelManager.NBR_LINE),
             Quaternion.identity,
             transform);
 

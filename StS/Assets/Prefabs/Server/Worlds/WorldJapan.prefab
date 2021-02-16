@@ -46,10 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ListObstacle:
-  - {fileID: 8080760333427922659, guid: 13a01394fcacbc24e80c167cc065eda5, type: 3}
-  - {fileID: -8043289557370616314, guid: 0de0f933b8ddcee4ea2e4eee1548ddf3, type: 3}
-  - {fileID: 1709044040026594026, guid: e0a42a32ce546cc44885a37bb904dc8b, type: 3}
-  - {fileID: 9015342484449853566, guid: 3d6175cb15b4ec2418d05a7c689b3d74, type: 3}
+  - {fileID: 5263388471638210397, guid: 83eba6d052dc3044695d146588185386, type: 3}
+  - {fileID: 1711945929624613477, guid: 3804962cf6e3e14469618036c823c7f2, type: 3}
+  - {fileID: 2348343853278795309, guid: 8f2e41f6ab20d094f9206837b616d63a, type: 3}
+  - {fileID: 2791495481825735679, guid: f21c86efd266b9f4496008e32b64a9f6, type: 3}
   SpiritWay: {fileID: -7649850999668371634, guid: a4a16539f25863540a19c947c2cf8ce5,
     type: 3}
   ListBackgrounds_P1:
@@ -63,7 +63,7 @@ MonoBehaviour:
   EndMapPrefab: {fileID: 6422616787463166639, guid: 67b968496e15a7840a039f1a07295012,
     type: 3}
   DistanceBetweenGround: 5
-  ObstacleDistanceToSlimeSpawn: 125
+  ObstacleDistanceToCharacterSpawn: 125
   DistanceToBackgroundY: -50
   DestroyElementsMargin: 10
   CharacterServerPrefab: {fileID: -3312898644491709661, guid: 6047c66e9e3fafe4e88df5fa1f3aaae1,

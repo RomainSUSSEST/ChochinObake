@@ -17,7 +17,7 @@ public class Obstacle : MonoBehaviour
     [Header("Input to success")]
     [SerializeField] private Elements Type;
 
-    private CharacterServer AssociatedSlime;
+    private CharacterServer AssociatedCharacter;
 
     #endregion
 
@@ -59,7 +59,7 @@ public class Obstacle : MonoBehaviour
     /// <param name="ss"> Le joueur auquel s'associer </param>
     public void SetAssociatedCharacter(CharacterServer ss)
     {
-        AssociatedSlime = ss;
+        AssociatedCharacter = ss;
         ss.RegisterObstacle(this);
     }
 
