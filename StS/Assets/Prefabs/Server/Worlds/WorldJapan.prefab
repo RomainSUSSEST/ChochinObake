@@ -55,12 +55,25 @@ MonoBehaviour:
   ListBackgrounds_P1:
   - {fileID: -4891027330480624937, guid: 53a5881f2d5fc2b479238dfb58ed4a1c, type: 3}
   - {fileID: -4891027330480624937, guid: 010461066cddc1641b896f4ce88bb677, type: 3}
+  - {fileID: -4891027330480624937, guid: c204a1f9df7ca5747b3b31ec748dec7c, type: 3}
+  - {fileID: -4891027330480624937, guid: 0572bc36c5dd0ac419cafa2649ca7812, type: 3}
+  - {fileID: -4891027330480624937, guid: 044dacf86cc04144aabbbae1e423809f, type: 3}
+  - {fileID: -4891027330480624937, guid: a091b6d58c4d5fc4684327da752cb974, type: 3}
+  - {fileID: -4891027330480624937, guid: 37eb8885f370cef42b585adf9c945c44, type: 3}
   ListBackgrounds_P2:
   - {fileID: 6334749279283006878, guid: 8b2b1a2bf490be2448f9a025bfbfcc8b, type: 3}
   - {fileID: 6334749279283006878, guid: 99d41db780a317c4d9b8110c6b8f0ffd, type: 3}
+  - {fileID: 6334749279283006878, guid: adb9c76858a5f8341a85a3ff73002ede, type: 3}
+  - {fileID: 6334749279283006878, guid: 4910129b925fb3c43bd4aa3408607d19, type: 3}
+  - {fileID: 6334749279283006878, guid: 2c17b6cdeec58b541aa1c5803bdd8675, type: 3}
+  - {fileID: 6334749279283006878, guid: 5c5d3796435c0e84eb2bbab1c7fb474a, type: 3}
   ListBackgrounds_P3:
   - {fileID: 8336393941997048791, guid: 6da6f6793dd954a4eb9e3c1258e013c0, type: 3}
-  EndMapPrefab: {fileID: 6422616787463166639, guid: 67b968496e15a7840a039f1a07295012,
+  - {fileID: 8336393941997048791, guid: b11690da54dc2da4c8e74098fbd7c3fb, type: 3}
+  - {fileID: 8336393941997048791, guid: 22ef33a65b25f64409104dde3902ff05, type: 3}
+  - {fileID: 8336393941997048791, guid: 6c1773d8dcf54b3489f8e50308030955, type: 3}
+  - {fileID: 8336393941997048791, guid: fd5ae169fb1ea214dbbd3de7bc34ea3f, type: 3}
+  EndMapPrefab: {fileID: 2722715495655724742, guid: ee9903a992725f74898880f5641e95e8,
     type: 3}
   DistanceBetweenGround: 5
   ObstacleDistanceToCharacterSpawn: 125
