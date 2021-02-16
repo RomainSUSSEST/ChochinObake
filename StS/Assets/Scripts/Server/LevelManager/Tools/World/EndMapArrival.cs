@@ -4,12 +4,6 @@ public class EndMapArrival : MonoBehaviour
 {
     #region Life Cycle
 
-    private void Start()
-    {
-        // On avance l'obstacle
-        transform.Translate(new Vector3(0, 0, -Ground.MOVE_SPEED * Time.deltaTime));
-    }
-
     private void Update()
     {
         // On avance

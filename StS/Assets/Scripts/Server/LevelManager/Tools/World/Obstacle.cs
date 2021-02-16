@@ -19,9 +19,16 @@ public class Obstacle : MonoBehaviour
 
     private CharacterServer AssociatedCharacter;
 
+    private float SizePer2_Z; // Taille sur l'axe Z de l'obstacle divisé par 2.
+
     #endregion
 
     #region Life Cycle
+
+    private void Start()
+    {
+        SizePer2_Z = GetComponent<Renderer>().bounds.size.z / 2;
+    }
 
     private void Update()
     {
@@ -36,6 +43,11 @@ public class Obstacle : MonoBehaviour
     #endregion
 
     #region Requete
+
+    public float GetSizePer2_Z()
+    {
+        return SizePer2_Z;
+    }
 
     public Elements GetElement()
     {
