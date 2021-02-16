@@ -27,10 +27,10 @@ public abstract class InGameEvents : MonoBehaviour
 
         if (IsSuccess)
         {
-            // Reussis
+            Debug.Log("Event réussis !");
         } else
         {
-            // Echec
+            Debug.Log("Event raté !");
         }
 
         UnsubscribeEvents();

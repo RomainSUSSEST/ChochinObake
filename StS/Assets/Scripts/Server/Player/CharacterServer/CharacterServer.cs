@@ -7,10 +7,10 @@ public class CharacterServer : CharacterPlayer
 {
     // Constante
 
-    private static readonly float MARGIN_ERROR_S = 0.35f; // en % 0-1
-    private static readonly float MARGIN_ERROR_A = 0.7f; // en % 0-1
-    private static readonly float MARGIN_ERROR_B = 1f; // en % 0-1
-    private static readonly float MARGIN_ERROR_C = 1.5f; // En %
+    private static readonly float MARGIN_ERROR_S = 0.3f; // en % 0-1
+    private static readonly float MARGIN_ERROR_A = 0.5f; // en % 0-1
+    private static readonly float MARGIN_ERROR_B = 0.8f; // en % 0-1
+    private static readonly float MARGIN_ERROR_C = 1f; // En %
 
     private enum Grade { S, A, B, C, NONE }
 
@@ -21,8 +21,6 @@ public class CharacterServer : CharacterPlayer
 
     private Queue<Obstacle> QueueObstacle; // Queue des obstacles suivant associé à ce slime
 
-    private float CharacterSizeZ_Per2; // La taille du joueur sur l'axe Z divisé par 2
-
     private int LineIndex; // Index de la ligne ou se trouve le joueur
 
     #region Life Cycle
@@ -31,23 +29,26 @@ public class CharacterServer : CharacterPlayer
     {
         // On initialise la Queue des obstacles associés
         QueueObstacle = new Queue<Obstacle>();
-
-        // On récupére la taille sur Z du joueur divisé par 2
-        CharacterSizeZ_Per2 = /*GetSlimeBody().GetComponent<Renderer>().bounds.size.z / 2*/ 1.5f;
     }
 
     private void Update()
     {
-        // Les obstacles ne doivent normalement pas valoir null, puisqu'il se détruise loin derriere les joueurs !\\
-
-        // Si un obstacle enregistré à dépassé la position limite (sur Z), il est considéré comme raté.
-        if (QueueObstacle.Count > 0 
-            && QueueObstacle.Peek().transform.position.z < transform.position.z - CharacterSizeZ_Per2 * MARGIN_ERROR_C)
+        if (QueueObstacle.Count > 0) // Si il y a un obstacle
         {
-            DeregisterObstacle(); // On désenregistre l'obstacle.
-            
-            // Gestion des lignes \\
-            DecreaseLineIndex(); // On décrémente d'une ligne.
+            Obstacle obs = QueueObstacle.Peek();
+            if (obs == null) // Si celui-ci est null
+            {
+                QueueObstacle.Dequeue();
+            } else
+            {
+                // Si un obstacle enregistré à dépassé la position limite (sur Z), il est considéré comme raté.
+                if (obs.transform.position.z < transform.position.z - obs.GetSizePer2_Z() * MARGIN_ERROR_C)
+                {
+                    DeregisterObstacle(); // On désenregistre l'obstacle.
+
+                    ObstacleMiss();
+                }
+            }
         }
     }
 
@@ -102,24 +103,24 @@ public class CharacterServer : CharacterPlayer
     /// <summary>
     /// Si possible, le slime descend d'une ligne, lui et ses obstacles associé s'adapteront
     /// </summary>
-    public void DecreaseLineIndex()
-    {
-        if (LineIndex > 0) // On vérifie que le minimum n'est pas déjà atteint.
-        {
-            --LineIndex;
-            Vector3 add = new Vector3(0, 0, -ServerLevelManager.DISTANCE_BETWEEN_LINE);
-            transform.Translate(add);
+    //public void DecreaseLineIndex()
+    //{
+    //    if (LineIndex > 0) // On vérifie que le minimum n'est pas déjà atteint.
+    //    {
+    //        --LineIndex;
+    //        Vector3 add = new Vector3(0, 0, -ServerLevelManager.DISTANCE_BETWEEN_LINE);
+    //        transform.Translate(add);
 
-            // On resynchronise les obstacles existant
+    //        // On resynchronise les obstacles existant
 
-            Queue<Obstacle>.Enumerator i = QueueObstacle.GetEnumerator();
-            while (i.MoveNext())
-            {
-                Obstacle obs = (Obstacle)i.Current;
-                obs.transform.Translate(add);
-            }
-        }
-    }
+    //        Queue<Obstacle>.Enumerator i = QueueObstacle.GetEnumerator();
+    //        while (i.MoveNext())
+    //        {
+    //            Obstacle obs = (Obstacle)i.Current;
+    //            obs.transform.Translate(add);
+    //        }
+    //    }
+    //}
 
     /// <summary>
     /// Si possible, le slime monte d'une ligne, lui et ses obstacles associé s'adappteront.
@@ -199,27 +200,27 @@ public class CharacterServer : CharacterPlayer
     private Grade GetGrade(Obstacle obs) // TODO
     {
         float PosObs_Z = obs.transform.position.z; // Position de l'obstacle sur Z
-        float PosInputValidArea_Z = transform.position.z; // Position du référentiel sur Z
+        float PosCharacter_Z = transform.position.z; // Position du joueur sur Z
 
         // On test si il y a une collision
-        float marg = CharacterSizeZ_Per2 * MARGIN_ERROR_C;
-        if (PosInputValidArea_Z - marg <= PosObs_Z
-            && PosObs_Z <= PosInputValidArea_Z + marg)
+        float marg = obs.GetSizePer2_Z() * MARGIN_ERROR_C;
+        if (PosObs_Z - marg <= PosCharacter_Z
+            && PosCharacter_Z <= PosObs_Z + marg)
         {
             // On test si c'est un B
-            marg = CharacterSizeZ_Per2 * MARGIN_ERROR_B;
-            if (PosInputValidArea_Z - marg <= PosObs_Z 
-                && PosObs_Z <= PosInputValidArea_Z + marg)
+            marg = obs.GetSizePer2_Z() * MARGIN_ERROR_B;
+            if (PosObs_Z - marg <= PosCharacter_Z
+                && PosCharacter_Z <= PosObs_Z + marg)
             {
                 // On test si c'est un A
-                marg = CharacterSizeZ_Per2 * MARGIN_ERROR_A;
-                if (PosInputValidArea_Z - marg <= PosObs_Z
-                    && PosObs_Z <= PosInputValidArea_Z + marg)
+                marg = obs.GetSizePer2_Z() * MARGIN_ERROR_A;
+                if (PosObs_Z - marg <= PosCharacter_Z
+                    && PosCharacter_Z <= PosObs_Z + marg)
                 {
                     // On test si c'est un S
-                    marg = CharacterSizeZ_Per2 * MARGIN_ERROR_S;
-                    if (PosInputValidArea_Z - marg <= PosObs_Z
-                        && PosObs_Z <= PosInputValidArea_Z + marg)
+                    marg = obs.GetSizePer2_Z() * MARGIN_ERROR_S;
+                    if (PosObs_Z - marg <= PosCharacter_Z
+                        && PosCharacter_Z <= PosObs_Z + marg)
                     {
                         return Grade.S;
                     } else
@@ -260,16 +261,16 @@ public class CharacterServer : CharacterPlayer
             
             if (obs.GetElement() == action) // Si les actions matchs
             {
-                // Succés
-                IncreaseLineIndex();
+                ObstacleSuccess(g);
             } else
             {
                 // Mauvaise touche
-                DecreaseLineIndex();
+                ObstacleFail();
             }
         } else
         {
             // Trop tot
+            ObstacleToEarly();
         }
     }
 
@@ -280,6 +281,30 @@ public class CharacterServer : CharacterPlayer
     {
         return QueueObstacle.Dequeue();
     }
+
+    #region ObstacleStatus
+
+    private void ObstacleMiss()
+    {
+        Debug.Log("Raté !");
+    }
+
+    private void ObstacleFail()
+    {
+        Debug.Log("Mauvaise Touche !");
+    }
+
+    private void ObstacleSuccess(Grade g)
+    {
+        Debug.Log(g);
+    }
+
+    private void ObstacleToEarly()
+    {
+        Debug.Log("Trop tot !");
+    }
+
+    #endregion
 
     #endregion
 }

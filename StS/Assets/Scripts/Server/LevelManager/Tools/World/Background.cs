@@ -12,11 +12,6 @@ public class Background : MonoBehaviour
 
     #region Life cycle
 
-    private void Start()
-    {
-        transform.Translate(new Vector3(0, 0, -MOVE_SPEED * Time.deltaTime));
-    }
-
     private void Update()
     {
         if (transform.position.z <= DESTROY_Z_POSITION)

@@ -419,7 +419,7 @@ public class World : MonoBehaviour
                 if (ss != null) {
                     Vector3 pos = ss.transform.position;
 
-                    // On instantie l'obstacle à ObstacleDistanceToSlimeSpawn
+                    // On instantie l'obstacle à ObstacleDistanceToCharacterSpawn
                     curObstacle = Instantiate(ListObstacle[index], new Vector3(
                         pos.x,
                         pos.y,
