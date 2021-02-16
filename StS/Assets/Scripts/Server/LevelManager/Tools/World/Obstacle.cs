@@ -33,13 +33,6 @@ public class Obstacle : MonoBehaviour
         // On avance l'obstacle
         transform.Translate(new Vector3(0, 0, -Ground.MOVE_SPEED * Time.deltaTime));
     }
-
-    private void Start()
-    {
-        // On avance l'obstacle
-        transform.Translate(new Vector3(0, 0, -Ground.MOVE_SPEED * Time.deltaTime));
-    }
-
     #endregion
 
     #region Requete
