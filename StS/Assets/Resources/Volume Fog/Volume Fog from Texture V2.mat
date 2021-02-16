@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Volume Fog from Texture V2
+  m_Shader: {fileID: -6465566751694194690, guid: 7f0c3240ab8bee84ebf1ef9b1887b3dc,
+    type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Noise:
+        m_Texture: {fileID: 11700000, guid: 30f8e26307d135449aae67c8f450264a, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_4EEA1A9E: 0.1
+    - Vector1_522DD793: 10
+    - Vector1_5E73A52C: 17.08
+    - Vector1_6098A7A7: 10.16
+    - Vector1_6DD21BAC: 13.18
+    - Vector1_6F1EA0F8: 50
+    - Vector1_705D9E76: 3.87
+    - Vector1_7EF60CFD: 1.37
+    - Vector1_952E6200: 1.02
+    - Vector1_A8E3BAE4: 8.59
+    - Vector1_AF6ECEBD: 1.09
+    - Vector1_B0641435: 102.9
+    m_Colors:
+    - Color_69AD1AD: {r: 0.9150943, g: 0.9150943, b: 0.9150943, a: 0}
