@@ -24,11 +24,17 @@ public class World : MonoBehaviour
 
     [SerializeField] private GameObject EndMapPrefab; // Arrivé
 
+    [SerializeField] private Material CustomFog;
+
     [Header("Map Config")]
     [SerializeField] private float DistanceBetweenGround = 2f;
     [SerializeField] private float ObstacleDistanceToCharacterSpawn;
     [SerializeField] private float DistanceToBackgroundY = -50;
-    [SerializeField] private float DestroyElementsMargin = 10f;
+    [SerializeField] private float DestroyElementsMargin = 10f; // Distance supplémentaire avant de détruire un élément
+
+    [SerializeField] private float FogSpeed_X;
+    [SerializeField] private float FogSpeed_Y;
+    [SerializeField] private float FogRatio_Z;
 
     [Header("SlimeServer")]
     [SerializeField] private CharacterServer CharacterServerPrefab;
@@ -119,7 +125,7 @@ public class World : MonoBehaviour
         StartWaySpawnPosition_X = transform.position.x - (((SpiritWaySize.x + DistanceBetweenGround) * NbrWays) - DistanceBetweenGround) / 2;
 
         // Background
-        BackgroundSize = ListBackgrounds_P1[0].GetComponent<Renderer>().bounds.size;
+        BackgroundSize = Vector3.one * Background.SIZE;
         StartBackgroundSpawnPosition_X = transform.position.x - BackgroundSize.x / 2;
 
         // Player
@@ -229,6 +235,12 @@ public class World : MonoBehaviour
         AheadTimeToSpawn = ObstacleDistanceToCharacterSpawn / Ground.MOVE_SPEED;
 
         #endregion
+
+        #endregion
+
+        #region Shader (Fog)
+
+        CustomFog.SetVector("_FogSpeed", new Vector3(FogSpeed_X, FogSpeed_Y, FogRatio_Z * Background.MOVE_SPEED));
 
         #endregion
 
