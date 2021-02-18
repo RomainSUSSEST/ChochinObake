@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 
 public class NoiseMaker : MonoBehaviour
@@ -73,13 +70,5 @@ public class NoiseMaker : MonoBehaviour
 
         // Apply the changes to the texture and upload the updated texture to the GPU
         texture.Apply();
-    }
-
-
-    [MenuItem("Create/3D Texture")]
-    static void CreateTexture3D()
-    {
-        // Save the texture to your Unity Project
-        AssetDatabase.CreateAsset(texture, "Assets/3DTexture.asset");
     }
 }

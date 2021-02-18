@@ -42,7 +42,7 @@ public class CharacterServer : CharacterPlayer
             } else
             {
                 // Si un obstacle enregistré à dépassé la position limite (sur Z), il est considéré comme raté.
-                if (obs.transform.position.z < transform.position.z - obs.GetSizePer2_Z() * MARGIN_ERROR_C)
+                if (obs.transform.position.z < transform.position.z - obs.GetSizePer2_Z() * MARGIN_ERROR_A)
                 {
                     DeregisterObstacle(); // On désenregistre l'obstacle.
 
@@ -258,7 +258,7 @@ public class CharacterServer : CharacterPlayer
         if (g != Grade.NONE) // On regarde si il y a collision
         {
             Obstacle obs = DeregisterObstacle(); // On retire le premier éléments
-            
+
             if (obs.GetElement() == action) // Si les actions matchs
             {
                 ObstacleSuccess(g);
