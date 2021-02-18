@@ -3,6 +3,7 @@ using SDD.Events;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ClientManager
 {
@@ -21,14 +22,14 @@ namespace ClientManager
             return Input.acceleration.x > 0;
         }
 
-        public bool TiltTop()
-        {
-            return Input.acceleration.z > 0;
-        }
-
-        public bool TiltBottom()
+        public bool TiltFront()
         {
             return Input.acceleration.z < 0;
+        }
+
+        public bool TiltBack()
+        {
+            return Input.acceleration.z > 0;
         }
 
         #endregion
@@ -67,14 +68,14 @@ namespace ClientManager
                 case InputListenRequestEvent.Input.TILT_LEFT:
                     StartCoroutine(InputListenAnswer(e.During, e.RefreshDelai, TiltLeft));
                     break;
-                case InputListenRequestEvent.Input.TILT_BOTTOM:
-                    StartCoroutine(InputListenAnswer(e.During, e.RefreshDelai, TiltBottom));
+                case InputListenRequestEvent.Input.TILT_BACK:
+                    StartCoroutine(InputListenAnswer(e.During, e.RefreshDelai, TiltBack));
                     break;
                 case InputListenRequestEvent.Input.TILT_RIGHT:
                     StartCoroutine(InputListenAnswer(e.During, e.RefreshDelai, TiltRight));
                     break;
                 default:
-                    StartCoroutine(InputListenAnswer(e.During, e.RefreshDelai, TiltTop));
+                    StartCoroutine(InputListenAnswer(e.During, e.RefreshDelai, TiltFront));
                     break;
             }
         }

@@ -1243,6 +1243,11 @@ PrefabInstance:
       propertyPath: NetworkConfig.RegisteredScenes.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2991121131149217755, guid: 468abcc6260b42b48b519d1f1a02066a,
+        type: 3}
+      propertyPath: ASuppr
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3687522774547103576, guid: 468abcc6260b42b48b519d1f1a02066a,
         type: 3}
       propertyPath: m_Name
