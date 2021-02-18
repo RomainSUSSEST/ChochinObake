@@ -247,7 +247,7 @@ public class AirEvent : NetworkedEvent
 public class InputListenRequestEvent : NetworkedEvent
 {
 	[Serializable]
-	public enum Input { TILT_LEFT, TILT_RIGHT, TILT_TOP, TILT_BOTTOM }
+	public enum Input { TILT_LEFT, TILT_RIGHT, TILT_FRONT, TILT_BACK }
 
 	#region Attributes
 

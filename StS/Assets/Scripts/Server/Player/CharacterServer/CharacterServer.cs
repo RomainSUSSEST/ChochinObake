@@ -250,6 +250,7 @@ public class CharacterServer : CharacterPlayer
         // S'il n'y a pas d'obstacle suivant
         if (QueueObstacle.Count == 0)
         {
+            ObstacleToEarly();
             return;
         }
 
