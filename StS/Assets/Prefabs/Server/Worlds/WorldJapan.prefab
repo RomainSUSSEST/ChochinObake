@@ -69,11 +69,10 @@ MonoBehaviour:
   - {fileID: 1279544879720385959, guid: 233210d60ec81cc43af90615f5b36bdf, type: 3}
   - {fileID: -2554923092862991398, guid: 4a5e473658aa5b849a79888bd33acee3, type: 3}
   ListBackgrounds_P3:
-  - {fileID: 8336393941997048791, guid: 6da6f6793dd954a4eb9e3c1258e013c0, type: 3}
+  - {fileID: 8570771098190126100, guid: b9dc0ba50b16e7a43aedb02b6cdeed8a, type: 3}
   - {fileID: 8935692200439144563, guid: 27622e39262138d47a40dc29a325511e, type: 3}
   - {fileID: 5413527915732397166, guid: 1d2c205f0092b9e48b5ccbae87d66512, type: 3}
   - {fileID: 1913948603405316674, guid: ad1a2cabd95cd5941943bfe1594f0891, type: 3}
-  - {fileID: 8570771098190126100, guid: b9dc0ba50b16e7a43aedb02b6cdeed8a, type: 3}
   EndMapPrefab: {fileID: 2722715495655724742, guid: ee9903a992725f74898880f5641e95e8,
     type: 3}
   CustomFog: {fileID: 2100000, guid: 37be7088ba90ff845b67168a2ae58a8f, type: 2}

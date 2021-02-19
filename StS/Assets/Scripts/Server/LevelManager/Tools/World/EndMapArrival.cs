@@ -10,7 +10,9 @@ public class EndMapArrival : MonoBehaviour
         transform.Translate(new Vector3(0, 0, -Ground.MOVE_SPEED * Time.deltaTime));
 
         if (transform.localPosition.z <= 0)
+        {
             Ground.MOVE_SPEED = 0;
+        }
     }
 
     #endregion
