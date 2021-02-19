@@ -197,7 +197,7 @@ public class World : MonoBehaviour
 
         #region On Initialise la carte (Génération)
         // Ground
-        InstantiateNewGroundsAt(new Vector3(StartWaySpawnPosition_X, transform.position.y, transform.position.z));
+        InstantiateNewGroundsAt(new Vector3(StartWaySpawnPosition_X, transform.position.y, transform.position.z - DestroyElementsMargin));
         InstantiateNewGroundsAt(new Vector3(
              StartWaySpawnPosition_X,
              transform.position.y,

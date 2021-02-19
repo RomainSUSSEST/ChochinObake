@@ -34,18 +34,19 @@
         #region Attributes
 
         [SerializeField] private World WorldJapan;
+        [SerializeField] private GameObject DepartureWorldJapan; // Départ
+
+        [SerializeField] private Transform DepartureSpawn;
 
         [SerializeField] private List<InGameEvents> AllInGameEventsList;
 
         private GameObject CurrentWorld;
+        private GameObject CurrentMenuBackground;
 
         private bool GenerateInGameEvents;
         private IReadOnlyCollection<CharacterPlayer> RoundPlayers;
 
         #endregion
-
-        // Requetes
-
 
         // Méthodes
 
@@ -85,7 +86,48 @@
         {
             base.GamePlay(e);
 
+            Destroy(CurrentMenuBackground);
             CurrentWorld = Instantiate(WorldJapan.gameObject);
+        }
+
+        protected override void GameMainMenu(GameMainMenuEvent e)
+        {
+            base.GameMainMenu(e);
+
+            if (CurrentMenuBackground == null)
+            {
+                CurrentMenuBackground = Instantiate(DepartureWorldJapan, DepartureSpawn);
+            }
+        }
+
+        protected override void GameRoomMenu(GameRoomMenuEvent e)
+        {
+            base.GameRoomMenu(e);
+
+            if (CurrentMenuBackground == null)
+            {
+                CurrentMenuBackground = Instantiate(DepartureWorldJapan, DepartureSpawn);
+            }
+        }
+
+        protected override void GameMusicSelectionMenu(GameMusicSelectionMenuEvent e)
+        {
+            base.GameMusicSelectionMenu(e);
+
+            if (CurrentMenuBackground == null)
+            {
+                CurrentMenuBackground = Instantiate(DepartureWorldJapan, DepartureSpawn);
+            }
+        }
+
+        protected override void GameMusicResultMenu(GameMusicResultMenuEvent e)
+        {
+            base.GameMusicResultMenu(e);
+
+            if (CurrentMenuBackground == null)
+            {
+                CurrentMenuBackground = Instantiate(DepartureWorldJapan, DepartureSpawn);
+            }
         }
 
         #endregion
