@@ -138,8 +138,8 @@ public class World : MonoBehaviour
         // On initialise l'array player
         int nextValue = 0;
 
-        float slimeSpawn_X = StartWaySpawnPosition_X + SpiritWaySize.x / 2;
-        float slimeSpawn_Y = transform.position.y + SpiritWaySize.y;
+        float slimeSpawn_X = StartWaySpawnPosition_X;
+        float slimeSpawn_Y = transform.position.y;
 
         IEnumerator<ulong> enumPlayer = Players.Keys.GetEnumerator(); // Enum sur les joueurs
 

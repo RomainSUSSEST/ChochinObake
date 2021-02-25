@@ -47,11 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ListObstacle:
-  - {fileID: 5263388471638210397, guid: 83eba6d052dc3044695d146588185386, type: 3}
-  - {fileID: 1711945929624613477, guid: 3804962cf6e3e14469618036c823c7f2, type: 3}
-  - {fileID: 2348343853278795309, guid: 8f2e41f6ab20d094f9206837b616d63a, type: 3}
-  - {fileID: 2791495481825735679, guid: f21c86efd266b9f4496008e32b64a9f6, type: 3}
-  SpiritWay: {fileID: -7649850999668371634, guid: a4a16539f25863540a19c947c2cf8ce5,
+  - {fileID: 4289569682823642378, guid: 06ee0afae6c010e4a9e45167066bf949, type: 3}
+  - {fileID: 3152408339051806622, guid: cac8be6c65dbda64baf6ae545519a99d, type: 3}
+  - {fileID: 2096312291873945420, guid: 76c57292e5cf6754d9b766f475550774, type: 3}
+  - {fileID: 3898611679829802222, guid: 26c2a936c33aa6849b852e7c86dd842f, type: 3}
+  SpiritWay: {fileID: -2556694190936260469, guid: 56ff7e31b591d3549937ff25b6bd6758,
     type: 3}
   ListBackgrounds_P1:
   - {fileID: -5738886790046306438, guid: f6bad080220038742931c3da6da61eb9, type: 3}
