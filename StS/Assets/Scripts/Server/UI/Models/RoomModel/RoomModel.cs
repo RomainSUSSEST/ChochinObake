@@ -20,7 +20,6 @@ public class RoomModel : MonoBehaviour
     [SerializeField] private Button NextButton;
     [SerializeField] private TextMeshProUGUI TextPrinter;
 
-    [SerializeField] private List<CharacterHats> ListHats;
     [SerializeField] private List<CharacterBody> ListBody;
 
     private Dictionary<ulong, Player> Players;
@@ -110,7 +109,6 @@ public class RoomModel : MonoBehaviour
         Players.Add(e.ClientID, new Player()
         {
             PlayerState = PlayerState.Connection,
-            Hat = null,
             Body = null,
             Pseudo = ""
         });
@@ -183,7 +181,7 @@ public class RoomModel : MonoBehaviour
             p.PlayerState = PlayerState.Ready;
 
             // On enregistre la customisation
-            p.Hat = GetSlimeHats(e.HatType);
+
             p.Body = GetSlimeBody(e.BodyType);
             p.Pseudo = e.Pseudo;
 
@@ -196,7 +194,6 @@ public class RoomModel : MonoBehaviour
 
             // On désenregistre la customisation
 
-            p.Hat = null;
             p.Body = null;
             p.Pseudo = "";
         }
@@ -291,18 +288,6 @@ public class RoomModel : MonoBehaviour
     }
 
     #region Correspondance Slime Type <=> Prefab
-    private CharacterHats GetSlimeHats(CharacterHats.HatsType type)
-    {
-        foreach (CharacterHats hat in ListHats)
-        {
-            if (hat.GetHatsType().Equals(type))
-            {
-                return hat;
-            }
-        }
-
-        throw new System.Exception("Prefab manquante");
-    }
 
     private CharacterBody GetSlimeBody(CharacterBody.BodyType type)
     {

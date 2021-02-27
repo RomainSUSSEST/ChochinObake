@@ -43,7 +43,6 @@ public class RequestPlayerReadyInCharacterSelectionEvent : NetworkedEvent
 	// Attributs
 
 	public bool IsReady;
-	public CharacterHats.HatsType HatType;
 	public CharacterBody.BodyType BodyType;
 	public string Pseudo;
 
@@ -56,16 +55,14 @@ public class RequestPlayerReadyInCharacterSelectionEvent : NetworkedEvent
 	 *		else
 	 *			Hat, Body, Arms -> A libérer
 	 */
-	public RequestPlayerReadyInCharacterSelectionEvent(ulong playerID, bool isReady
-		, CharacterHats.HatsType hat, CharacterBody.BodyType body, string pseudo)
+	public RequestPlayerReadyInCharacterSelectionEvent(ulong playerID, bool isReady,
+		CharacterBody.BodyType body, string pseudo)
 		: base(playerID,
 			new Argument() { Arg = isReady, Type = typeof(bool) },
-			new Argument() { Arg = hat, Type = hat.GetType() },
 			new Argument() { Arg = body, Type = body.GetType() },
 			new Argument() { Arg = pseudo, Type = typeof(string) })
 	{
 		IsReady = isReady;
-		HatType = hat;
 		BodyType = body;
 		Pseudo = pseudo;
 	}

@@ -10,7 +10,6 @@
     {
         #region Attributs
         private CharacterBody currentBody;
-        private CharacterHats currentHat;
         #endregion
         
         #region Game State
@@ -33,10 +32,6 @@
             return currentBody;
         }
 
-        public CharacterHats GetCurrentHat()
-        {
-            return currentHat;
-        }
         #endregion
 
         #region Events subscription
@@ -202,7 +197,6 @@
         private void RefreshSlimeInformation(RefreshCharacterInformationEvent e)
         {
             currentBody = e.body;
-            currentHat = e.hat;
         }
         #endregion
     }

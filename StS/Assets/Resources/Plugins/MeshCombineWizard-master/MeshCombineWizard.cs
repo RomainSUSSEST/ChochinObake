@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
@@ -121,3 +122,4 @@ public class MeshCombineWizard : ScriptableWizard
 		resultGO.transform.position = originalPosition;
 	}
 }
+#endif

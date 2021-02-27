@@ -16,7 +16,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
 
     [Header("Slime Elements")]
 
-    [SerializeField] private List<CharacterHats> ListHat;
     [SerializeField] private List<CharacterBody> ListBody;
 
     [SerializeField] private CharacterClient PrefabSlimeClient;
@@ -56,7 +55,7 @@ public class CharacterSelectionMenuModel : MonoBehaviour
 
     public void Start()
     {
-        if (ListHat.Count == 0 || ListBody.Count == 0)
+        if (ListBody.Count == 0)
         {
             throw new System.Exception("Erreur dans l'initialisation de la classe CharacterSelectionMenu");
         }
@@ -100,11 +99,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
 
     // Requete
 
-    public CharacterHats GetCurrentHats()
-    {
-        return ListHat[IndexHats];
-    }
-
     public CharacterBody GetCurrentBody()
     {
         return ListBody[IndexBody];
@@ -114,16 +108,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
     // Méthode
 
     #region Button has been clicked
-
-    public void LeftHatButtonHasBeenClicked()
-    {
-        MoveHat(Direction.Left);
-    }
-
-    public void RightHatButtonHasBeenClicked()
-    {
-        MoveHat(Direction.Right);
-    }
 
     public void LeftBodyButtonHasBeenClicked()
     {
@@ -172,7 +156,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
         // On crée un objet SlimeClient sur spawn point et on le rend enfant de spawn point
         InstanceSlime = Instantiate(PrefabSlimeClient, SlimeSpawn.position, SlimeSpawn.rotation, SlimeSpawn);
 
-        SetHat();
         SetBody();
 
         // On vérifie que les boutons d'édition soit activé
@@ -222,7 +205,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
                 new RequestPlayerReadyInCharacterSelectionEvent(
                     ClientNetworkManager.Instance.GetPlayerID().Value,
                     !PlayerIsReady,
-                    GetCurrentHats().GetHatsType(),
                     GetCurrentBody().GetBodyType(),
                     Pseudo.GetPseudo()));
         }
@@ -237,11 +219,11 @@ public class CharacterSelectionMenuModel : MonoBehaviour
         if (PlayerIsReady)
         {
             SetReadyButtonColor();
-            EventManager.Instance.Raise(new RefreshCharacterInformationEvent() { body = GetCurrentBody(), hat = GetCurrentHats() });
+            EventManager.Instance.Raise(new RefreshCharacterInformationEvent() { body = GetCurrentBody() });
         } else
         {
             SetUnreadyButtonColor();
-            EventManager.Instance.Raise(new RefreshCharacterInformationEvent() { body = null, hat = null });
+            EventManager.Instance.Raise(new RefreshCharacterInformationEvent() { body = null });
         }
 
         // On réactive le bouton pour changer d'état
@@ -288,25 +270,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
         }
     }
 
-    private void MoveHat(Direction d)
-    {
-        if (d == Direction.Left)
-        {
-            --IndexHats;
-
-            if (IndexHats < 0)
-            {
-                IndexHats = ListHat.Count - 1;
-            }
-
-        } else
-        {
-            IndexHats = (IndexHats + 1) % ListHat.Count;
-        }
-
-        SetHat();
-    }
-
     private void MoveBody(Direction d)
     {
         if (d == Direction.Left)
@@ -343,11 +306,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
         }
 
         InstanceSlime.SetBody(ListBody[IndexBody]);
-    }
-
-    private void SetHat()
-    {
-        InstanceSlime.SetHat(ListHat[IndexHats]);
     }
 
     private bool IsValidBody(CharacterBody.BodyType body)

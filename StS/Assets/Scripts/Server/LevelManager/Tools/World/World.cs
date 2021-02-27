@@ -165,8 +165,8 @@ public class World : MonoBehaviour
                 // On récupére le Player associé
                 Player p = Players[CharacterArray[i].AssociedClientID];
 
-                // On set le hat et le body
-                CharacterArray[i].SetHat(p.Hat);
+                // On set le body
+
                 CharacterArray[i].SetBody(p.Body);
                 CharacterArray[i].SetLineIndex(lineIndex);
 

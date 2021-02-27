@@ -64,7 +64,6 @@ public class RespawnButtonClickedEvent : Event
 public class RefreshCharacterInformationEvent : Event
 {
 	public CharacterBody body;
-	public CharacterHats hat;
 }
 
 #endregion
