@@ -6,9 +6,6 @@ public abstract class CharacterPlayer : MonoBehaviour
 
     private CharacterBody Body;
 
-    private Animator HatAnimator;
-    private Animator BodyAnimator;
-
     #endregion
 
     #region Life Cycle
@@ -49,8 +46,6 @@ public abstract class CharacterPlayer : MonoBehaviour
 
         // On crée et positionne le nouveau
         this.Body = Instantiate(body, transform, false);
-        BodyAnimator = Body.GetComponent<Animator>();
-        Body.SetSlimeRoot(this);
     }
 
     #endregion

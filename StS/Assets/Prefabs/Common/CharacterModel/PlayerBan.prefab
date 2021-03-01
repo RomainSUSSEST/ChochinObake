@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 893767017847334901}
   - component: {fileID: 4928279726297528225}
-  - component: {fileID: 6691458163965923840}
+  - component: {fileID: 7561194252211754788}
   m_Layer: 0
   m_Name: PlayerBan
   m_TagString: Untagged
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BodyType: 0
---- !u!95 &6691458163965923840
+--- !u!95 &7561194252211754788
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 0

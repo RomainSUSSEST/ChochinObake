@@ -29,6 +29,8 @@ public class CharacterServer : CharacterPlayer
     {
         // On initialise la Queue des obstacles associés
         QueueObstacle = new Queue<Obstacle>();
+
+        GetSlimeBody().IsRunning(true); // On lance l'animation de course
     }
 
     private void Update()
@@ -247,6 +249,9 @@ public class CharacterServer : CharacterPlayer
     /// <param name="action"> L'action effectué par le joueur </param>
     private void InputPressed(Obstacle.Elements action)
     {
+        // On lance l'animation d'attaque
+        GetSlimeBody().Attack();
+
         // S'il n'y a pas d'obstacle suivant
         if (QueueObstacle.Count == 0)
         {

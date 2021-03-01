@@ -22,21 +22,23 @@ public class CharacterBody : MonoBehaviour
     }
 
 
+    // Constants
+
+    private static readonly int ATTACK_COUNT = 2;
+
+
     // Attributs
 
     [SerializeField] private BodyType m_BodyType;
 
-    private CharacterPlayer Root;
+    private Animator Animator;
 
 
-    // Life Cycle
+    // Life cycle
 
-    private void Start()
+    private void Awake()
     {
-        if (Root == null)
-        {
-            throw new Exception("Root non initialisé");
-        }
+        Animator = GetComponent<Animator>();
     }
 
 
@@ -48,10 +50,16 @@ public class CharacterBody : MonoBehaviour
     }
 
 
-    // Méthode
+    // Methods
 
-    public void SetSlimeRoot(CharacterPlayer root)
+    public void IsRunning(bool b)
     {
-        Root = root;
+        Animator.SetBool("IsRunning", b);
+    }
+
+    public void Attack()
+    {
+        Animator.SetInteger("AttackIndex", UnityEngine.Random.Range(0, ATTACK_COUNT));
+        Animator.SetTrigger("Attack");
     }
 }
