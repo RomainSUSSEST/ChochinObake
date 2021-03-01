@@ -21,8 +21,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
     [SerializeField] private CharacterClient PrefabSlimeClient;
     [SerializeField] private Transform SlimeSpawn;
 
-    [SerializeField] private float RotationSpeed;
-
     [Header("Editor")]
 
     [SerializeField] private List<GameObject> HaveToDisableWhenIsReady;
@@ -43,7 +41,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
     private CharacterClient InstanceSlime;
     private Camera InstanceCamera;
 
-    private int IndexHats;
     private int IndexBody;
 
     private List<CharacterBody.BodyType> InvalidBody; // Contient la liste des corps qui sont déjà pris
@@ -60,7 +57,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
             throw new System.Exception("Erreur dans l'initialisation de la classe CharacterSelectionMenu");
         }
 
-        IndexHats = 0;
         IndexBody = 0;
     }
 
@@ -160,10 +156,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
 
         // On vérifie que les boutons d'édition soit activé
         ActivatePersonnalisation(true);
-
-        // On fait tourner le slime.
-        RotateObjectAroundPivot rotateObjectAroundPivot = InstanceSlime.gameObject.AddComponent<RotateObjectAroundPivot>();
-        rotateObjectAroundPivot.SetRotateSpeed(RotationSpeed);
 
         // On met la couleur du button ready en accord avec l'étape de personnalisation
         SetUnreadyButtonColor();
