@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BodyType: 0
+  m_BodyStory: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tristique
+    rhoncus ipsum.
 --- !u!95 &7561194252211754788
 Animator:
   serializedVersion: 3

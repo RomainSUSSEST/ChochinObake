@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using CommonVisibleManager;
 using ClientManager;
+using TMPro;
 
 public class CharacterSelectionMenuModel : MonoBehaviour
 {
@@ -27,12 +28,16 @@ public class CharacterSelectionMenuModel : MonoBehaviour
 
     [SerializeField] private PseudoInputField Pseudo;
 
+    [SerializeField] private TextMeshProUGUI YourStory;
+
     [Header("Button Ready")]
 
     [SerializeField] private Button ButtonReady;
     [SerializeField] private Image ButtonReadyImage;
     [SerializeField] private Color ReadyButtonColor;
     [SerializeField] private Color UnreadyButtonColor;
+    [SerializeField] private Sprite UnreadyButtonSprite;
+    [SerializeField] private Sprite ReadyButtonSprite;
 
     [Header("Invalid Body Effect")]
 
@@ -297,7 +302,7 @@ public class CharacterSelectionMenuModel : MonoBehaviour
             DisableInvalidBodyImage();
         }
 
-        InstanceSlime.SetBody(ListBody[IndexBody]);
+        YourStory.text = InstanceSlime.SetBody(ListBody[IndexBody]).GetStoryBody();
     }
 
     private bool IsValidBody(CharacterBody.BodyType body)
@@ -319,12 +324,14 @@ public class CharacterSelectionMenuModel : MonoBehaviour
 
     private void SetReadyButtonColor()
     {
-        ButtonReadyImage.color = ReadyButtonColor;
+        ButtonReady.image.sprite = ReadyButtonSprite;
+        //ButtonReadyImage.color = ReadyButtonColor;
     }
 
     private void SetUnreadyButtonColor()
     {
-        ButtonReadyImage.color = UnreadyButtonColor;
+        ButtonReady.image.sprite = UnreadyButtonSprite;
+        //ButtonReadyImage.color = UnreadyButtonColor;
     }
     #endregion
 

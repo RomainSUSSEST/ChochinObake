@@ -30,6 +30,7 @@ public class CharacterBody : MonoBehaviour
     // Attributs
 
     [SerializeField] private BodyType m_BodyType;
+    [TextArea][SerializeField] private string m_BodyStory;
 
     private Animator Animator;
 
@@ -47,6 +48,11 @@ public class CharacterBody : MonoBehaviour
     public BodyType GetBodyType()
     {
         return m_BodyType;
+    }
+
+    public string GetStoryBody()
+    {
+        return m_BodyStory;
     }
 
 

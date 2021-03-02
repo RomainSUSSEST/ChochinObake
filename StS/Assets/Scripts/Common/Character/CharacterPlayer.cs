@@ -27,7 +27,7 @@ public abstract class CharacterPlayer : MonoBehaviour
 
     #region Requests
 
-    public CharacterBody GetSlimeBody()
+    public CharacterBody GetCharacterBody()
     {
         return Body;
     }
@@ -37,15 +37,14 @@ public abstract class CharacterPlayer : MonoBehaviour
 
     #region Methods
 
-    public void SetBody(CharacterBody body)
+    public CharacterBody SetBody(CharacterBody body)
     {
         // On détruit l'ancien corps
-
         if (Body != null)
             Destroy(Body.gameObject);
 
         // On crée et positionne le nouveau
-        this.Body = Instantiate(body, transform, false);
+        return this.Body = Instantiate(body, transform, false);
     }
 
     #endregion
