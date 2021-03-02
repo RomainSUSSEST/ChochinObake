@@ -47,10 +47,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ListObstacle:
-  - {fileID: 4289569682823642378, guid: 06ee0afae6c010e4a9e45167066bf949, type: 3}
-  - {fileID: 3152408339051806622, guid: cac8be6c65dbda64baf6ae545519a99d, type: 3}
-  - {fileID: 2096312291873945420, guid: 76c57292e5cf6754d9b766f475550774, type: 3}
-  - {fileID: 3898611679829802222, guid: 26c2a936c33aa6849b852e7c86dd842f, type: 3}
+  - {fileID: 5944911326717529495, guid: 06ee0afae6c010e4a9e45167066bf949, type: 3}
+  - {fileID: 7295685317582713917, guid: 9291cbd0c844f9c4eb32d4d9cee72a20, type: 3}
+  - {fileID: 4675252321863456737, guid: 76c57292e5cf6754d9b766f475550774, type: 3}
+  - {fileID: 8128525627912478552, guid: e10d86d3c62ac6c44843dcbc08d6b3cc, type: 3}
+  - {fileID: 4629841901535894059, guid: 746cab2634c325240816982299f1d9e4, type: 3}
+  - {fileID: 84952877122883852, guid: cac8be6c65dbda64baf6ae545519a99d, type: 3}
+  - {fileID: 4704214868337630260, guid: 38be83df9c432be4c83cbb086311f36e, type: 3}
+  - {fileID: 8764815260275675061, guid: 26c2a936c33aa6849b852e7c86dd842f, type: 3}
   SpiritWay: {fileID: -2556694190936260469, guid: 56ff7e31b591d3549937ff25b6bd6758,
     type: 3}
   ListBackgrounds_P1:

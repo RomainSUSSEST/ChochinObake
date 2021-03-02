@@ -1,5 +1,6 @@
 ﻿using SDD.Events;
 using ServerManager;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -216,17 +217,18 @@ public class World : MonoBehaviour
 
         #region Obstacle
 
-        // On récupére le MaxPrunedSpectralFlux
-        CurrentMaxPrunedSpectralFlux = 0;
-        foreach (SpectralFluxInfo sf in CurrentMap)
+        float[] tampon = new float[CurrentMap.Count];
+
+        // On recopie le tableau
+        for (int i = 0; i < CurrentMap.Count; ++i)
         {
-            if (sf.prunedSpectralFlux > CurrentMaxPrunedSpectralFlux)
-            {
-                CurrentMaxPrunedSpectralFlux = sf.prunedSpectralFlux;
-            }
+            tampon[i] = CurrentMap[i].prunedSpectralFlux;
         }
 
-        CurrentThresholdSensitivity = CurrentMaxPrunedSpectralFlux * CurrentSensitivity; // On calcul la valeur de seuil minimal de la sensitivité de l'algo
+        Array.Sort(tampon); // On trie
+
+        CurrentMaxPrunedSpectralFlux = tampon[tampon.Length - 1]; // On récupére le maximum
+        CurrentThresholdSensitivity = tampon[(int) Math.Floor(tampon.Length * CurrentSensitivity)]; // On calcul la valeur de seuil minimal de la sensitivité de l'algo
 
         #region Variable (AHeadTimeToSpawn)
 
@@ -394,15 +396,15 @@ public class World : MonoBehaviour
         int index;
         if (percentTotalTime < 1f / 3f) // On instantie un background P1
         {
-            index = Random.Range(0, ListBackgrounds_P1.Count);
+            index = UnityEngine.Random.Range(0, ListBackgrounds_P1.Count);
             LastBackground = Instantiate(ListBackgrounds_P1[index], StartPosition, Quaternion.identity, transform);
         } else if (percentTotalTime < 2f / 3f) // On instantie un background P2
         {
-            index = Random.Range(0, ListBackgrounds_P2.Count);
+            index = UnityEngine.Random.Range(0, ListBackgrounds_P2.Count);
             LastBackground = Instantiate(ListBackgrounds_P2[index], StartPosition, Quaternion.identity, transform);
         } else // On instantie un background P3
         {
-            index = Random.Range(0, ListBackgrounds_P3.Count);
+            index = UnityEngine.Random.Range(0, ListBackgrounds_P3.Count);
             LastBackground = Instantiate(ListBackgrounds_P3[index], StartPosition, Quaternion.identity, transform);
         }
     }
@@ -415,7 +417,7 @@ public class World : MonoBehaviour
     private bool AddObstacle(SpectralFluxInfo flux)
     {
         // Si le beats n'est pas ignoré
-        if (flux.prunedSpectralFlux > CurrentThresholdSensitivity)
+        if (flux.prunedSpectralFlux >= CurrentThresholdSensitivity)
         {
             // On cherche à combien de pourcentage du maximum correspond le beats sans compter le threshold.
             float curPercentOfMax = (flux.prunedSpectralFlux - CurrentThresholdSensitivity)

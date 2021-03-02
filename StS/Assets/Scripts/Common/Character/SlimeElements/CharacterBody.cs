@@ -24,7 +24,7 @@ public class CharacterBody : MonoBehaviour
 
     // Constants
 
-    private static readonly int ATTACK_COUNT = 2;
+    private static readonly int ATTACK_COUNT = 1;
 
 
     // Attributs

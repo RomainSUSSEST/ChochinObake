@@ -19,8 +19,8 @@
         public static readonly float MIN_SPEED = 17f;
         public static readonly float MAX_SPEED = 24f;
 
-        public static readonly float ALGO_MIN_SENSITIVITY = 0.2f; // en % (gestion de la difficulté) 0 = D / 0.1 = M / 0.2 = F
-        public static readonly float ALGO_MAX_SENSITIVITY = 0f;
+        public static readonly float ALGO_MIN_SENSITIVITY = 0.7f; // en % (gestion de la difficulté) 0 = D / 0.1 = M / 0.2 = F
+        public static readonly float ALGO_MAX_SENSITIVITY = 0.3f;
 
         public static readonly float DISTANCE_BETWEEN_LINE = 4f;
 

@@ -16,6 +16,7 @@ public class Obstacle : MonoBehaviour
 
     [Header("Input to success")]
     [SerializeField] private Elements Type;
+    [SerializeField] private GameObject LanternGFX;
 
     private CharacterServer AssociatedCharacter;
 
@@ -27,7 +28,7 @@ public class Obstacle : MonoBehaviour
 
     private void Start()
     {
-        SizePer2_Z = GetComponent<Renderer>().bounds.size.z / 2;
+        SizePer2_Z = LanternGFX.GetComponent<Renderer>().bounds.size.z / 2;
     }
 
     private void Update()

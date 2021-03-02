@@ -292,22 +292,22 @@ public class CharacterServer : CharacterPlayer
 
     private void ObstacleMiss()
     {
-        Debug.Log("Raté !");
+        //Debug.Log("Raté !");
     }
 
     private void ObstacleFail()
     {
-        Debug.Log("Mauvaise Touche !");
+        //Debug.Log("Mauvaise Touche !");
     }
 
     private void ObstacleSuccess(Grade g)
     {
-        Debug.Log(g);
+        //Debug.Log(g);
     }
 
     private void ObstacleToEarly()
     {
-        Debug.Log("Trop tot !");
+        //Debug.Log("Trop tot !");
     }
 
     #endregion
