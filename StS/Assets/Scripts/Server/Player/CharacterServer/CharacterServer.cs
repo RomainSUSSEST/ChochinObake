@@ -7,10 +7,10 @@ public class CharacterServer : CharacterPlayer
 {
     // Constante
 
-    private static readonly float MARGIN_ERROR_S = 0.3f; // en % 0-1
-    private static readonly float MARGIN_ERROR_A = 0.5f; // en % 0-1
-    private static readonly float MARGIN_ERROR_B = 0.8f; // en % 0-1
-    private static readonly float MARGIN_ERROR_C = 1f; // En %
+    private static readonly float MARGIN_ERROR_S = 0.25f; // en m
+    private static readonly float MARGIN_ERROR_A = 0.5f; // en m
+    private static readonly float MARGIN_ERROR_B = 0.79f; // en m
+    private static readonly float MARGIN_ERROR_C = 1.125f; // en m
 
     private enum Grade { S, A, B, C, NONE }
 
@@ -43,8 +43,10 @@ public class CharacterServer : CharacterPlayer
                 QueueObstacle.Dequeue();
             } else
             {
+                float PosCharacterInputArea_Z = GetCharacterBody().GetValidArea().position.z; // Position de l'input area du joueur sur Z
+
                 // Si un obstacle enregistré à dépassé la position limite (sur Z), il est considéré comme raté.
-                if (obs.transform.position.z < transform.position.z - obs.GetSizePer2_Z() * MARGIN_ERROR_A)
+                if (obs.transform.position.z < PosCharacterInputArea_Z - MARGIN_ERROR_C)
                 {
                     DeregisterObstacle(); // On désenregistre l'obstacle.
 
@@ -57,7 +59,7 @@ public class CharacterServer : CharacterPlayer
     #endregion
 
 
-    // Méthode
+    #region Methods
 
     #region Event subscription
     protected override void SubscribeEvents()
@@ -147,6 +149,40 @@ public class CharacterServer : CharacterPlayer
     }
     #endregion
 
+    #region Override Triggered Attack
+
+    public override void TriggeredAttackFire()
+    {
+        base.TriggeredAttackFire();
+
+        TriggeredAttack(Obstacle.Elements.FIRE);
+    }
+
+    public override void TriggerAttackAir()
+    {
+        base.TriggerAttackAir();
+
+        TriggeredAttack(Obstacle.Elements.AIR);
+    }
+
+    public override void TriggerAttackWater()
+    {
+        base.TriggerAttackWater();
+
+        TriggeredAttack(Obstacle.Elements.WATER);
+    }
+
+    public override void TriggeredAttackEarth()
+    {
+        base.TriggeredAttackEarth();
+
+        TriggeredAttack(Obstacle.Elements.EARTH);
+    }
+
+    #endregion
+
+    #endregion
+
     #region Tools
 
     #region EventCallBack
@@ -162,7 +198,7 @@ public class CharacterServer : CharacterPlayer
     {
         if (e.DoesThisConcernMe(AssociedClientID))
         {
-            InputPressed(Obstacle.Elements.FIRE);
+            GetCharacterBody().StartAttackFire();
         }
     }
 
@@ -170,7 +206,7 @@ public class CharacterServer : CharacterPlayer
     {
         if (e.DoesThisConcernMe(AssociedClientID))
         {
-            InputPressed(Obstacle.Elements.EARTH);
+            GetCharacterBody().StartAttackEarth();
         }
     }
 
@@ -178,7 +214,7 @@ public class CharacterServer : CharacterPlayer
     {
         if (e.DoesThisConcernMe(AssociedClientID))
         {
-            InputPressed(Obstacle.Elements.WATER);
+            GetCharacterBody().StartAttackWater();
         }
     }
 
@@ -186,7 +222,7 @@ public class CharacterServer : CharacterPlayer
     {
         if (e.DoesThisConcernMe(AssociedClientID))
         {
-            InputPressed(Obstacle.Elements.AIR);
+            GetCharacterBody().StartAttackAir();
         }
     }
 
@@ -202,27 +238,23 @@ public class CharacterServer : CharacterPlayer
     private Grade GetGrade(Obstacle obs) // TODO
     {
         float PosObs_Z = obs.transform.position.z; // Position de l'obstacle sur Z
-        float PosCharacter_Z = transform.position.z; // Position du joueur sur Z
+        float PosCharacterInputArea_Z = GetCharacterBody().GetValidArea().position.z; // Position de l'input area du joueur sur Z
 
         // On test si il y a une collision
-        float marg = obs.GetSizePer2_Z() * MARGIN_ERROR_C;
-        if (PosObs_Z - marg <= PosCharacter_Z
-            && PosCharacter_Z <= PosObs_Z + marg)
+        if (PosCharacterInputArea_Z + MARGIN_ERROR_C >= PosObs_Z
+            && PosObs_Z >= PosCharacterInputArea_Z - MARGIN_ERROR_C)
         {
             // On test si c'est un B
-            marg = obs.GetSizePer2_Z() * MARGIN_ERROR_B;
-            if (PosObs_Z - marg <= PosCharacter_Z
-                && PosCharacter_Z <= PosObs_Z + marg)
+            if (PosCharacterInputArea_Z + MARGIN_ERROR_B >= PosObs_Z
+                && PosObs_Z >= PosCharacterInputArea_Z - MARGIN_ERROR_B)
             {
                 // On test si c'est un A
-                marg = obs.GetSizePer2_Z() * MARGIN_ERROR_A;
-                if (PosObs_Z - marg <= PosCharacter_Z
-                    && PosCharacter_Z <= PosObs_Z + marg)
+                if (PosCharacterInputArea_Z + MARGIN_ERROR_A >= PosObs_Z
+                    && PosObs_Z >= PosCharacterInputArea_Z - MARGIN_ERROR_A)
                 {
                     // On test si c'est un S
-                    marg = obs.GetSizePer2_Z() * MARGIN_ERROR_S;
-                    if (PosObs_Z - marg <= PosCharacter_Z
-                        && PosCharacter_Z <= PosObs_Z + marg)
+                    if (PosCharacterInputArea_Z + MARGIN_ERROR_S >= PosObs_Z
+                        && PosObs_Z >= PosCharacterInputArea_Z - MARGIN_ERROR_S)
                     {
                         return Grade.S;
                     } else
@@ -244,18 +276,15 @@ public class CharacterServer : CharacterPlayer
     }
 
     /// <summary>
-    /// Gére le comportement du slime en cas d'input pressé par le joueur.
+    /// Traite les actions d'attaque du joueur pour identifier les collisions.
     /// </summary>
-    /// <param name="action"> L'action effectué par le joueur </param>
-    private void InputPressed(Obstacle.Elements action)
+    /// <param name="action"></param>
+    private void TriggeredAttack(Obstacle.Elements action)
     {
-        // On lance l'animation d'attaque
-        GetCharacterBody().Attack();
-
         // S'il n'y a pas d'obstacle suivant
         if (QueueObstacle.Count == 0)
         {
-            ObstacleToEarly();
+            NoObstacles();
             return;
         }
 
@@ -290,6 +319,11 @@ public class CharacterServer : CharacterPlayer
 
     #region ObstacleStatus
 
+    private void NoObstacles()
+    {
+
+    }
+
     private void ObstacleMiss()
     {
         //Debug.Log("Raté !");
@@ -297,11 +331,13 @@ public class CharacterServer : CharacterPlayer
 
     private void ObstacleFail()
     {
+        GetCharacterBody().Animation_AttackFailure();
         //Debug.Log("Mauvaise Touche !");
     }
 
     private void ObstacleSuccess(Grade g)
     {
+        GetCharacterBody().Animation_AttackSuccess();
         //Debug.Log(g);
     }
 

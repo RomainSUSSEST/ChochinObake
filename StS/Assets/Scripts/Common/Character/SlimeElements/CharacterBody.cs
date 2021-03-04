@@ -22,17 +22,19 @@ public class CharacterBody : MonoBehaviour
     }
 
 
-    // Constants
-
-    private static readonly int ATTACK_COUNT = 1;
-
-
     // Attributs
 
     [SerializeField] private BodyType m_BodyType;
     [TextArea][SerializeField] private string m_BodyStory;
 
+    [SerializeField] private Transform ValidArea;
+
+    [SerializeField] private ParticleSystem m_AttackSuccess;
+    [SerializeField] private ParticleSystem m_AttackFailure;
+
     private Animator Animator;
+
+    private CharacterPlayer AssociatedCharacterPlayer;
 
 
     // Life cycle
@@ -55,17 +57,83 @@ public class CharacterBody : MonoBehaviour
         return m_BodyStory;
     }
 
+    public Transform GetValidArea()
+    {
+        return ValidArea;
+    }
+
 
     // Methods
+
+    public void SetAssociatedCharacterPlayer(CharacterPlayer cp)
+    {
+        AssociatedCharacterPlayer = cp;
+    }
 
     public void IsRunning(bool b)
     {
         Animator.SetBool("IsRunning", b);
     }
 
-    public void Attack()
+    #region Start attack
+
+    public void StartAttackFire()
     {
-        Animator.SetInteger("AttackIndex", UnityEngine.Random.Range(0, ATTACK_COUNT));
-        Animator.SetTrigger("Attack");
+        Animator.SetTrigger("StartAttackFire");
     }
+
+    public void StartAttackEarth()
+    {
+        Animator.SetTrigger("StartAttackEarth");
+    }
+
+    public void StartAttackWater()
+    {
+        Animator.SetTrigger("StartAttackWater");
+    }
+
+    public void StartAttackAir()
+    {
+        Animator.SetTrigger("StartAttackAir");
+    }
+
+    #endregion
+
+    #region Trigger attack
+
+    public void TriggerAttackFire()
+    {
+        AssociatedCharacterPlayer.TriggeredAttackFire();
+    }
+
+    public void TriggerAttackWater()
+    {
+        AssociatedCharacterPlayer.TriggerAttackWater();
+    }
+
+    public void TriggerAttackEarth()
+    {
+        AssociatedCharacterPlayer.TriggeredAttackEarth();
+    }
+
+    public void TriggerAttackAir()
+    {
+        AssociatedCharacterPlayer.TriggerAttackAir();
+    }
+
+    #endregion
+
+    #region Attack Effect
+
+    public void Animation_AttackSuccess()
+    {
+        m_AttackSuccess.Play();
+    }
+
+    public void Animation_AttackFailure()
+    {
+        m_AttackFailure.Play();
+    }
+
+    #endregion
 }

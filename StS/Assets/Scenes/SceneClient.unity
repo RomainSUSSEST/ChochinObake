@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 1209472270}
   - component: {fileID: 1209472269}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: Sun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -544,6 +544,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2529156675689417371, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2035169389}
+    - target: {fileID: 2529156675689417371, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HardButtonHasBeenClicked
       objectReference: {fileID: 0}
     - target: {fileID: 2805779090470864952, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
         type: 3}
@@ -1040,11 +1050,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 17.569
       objectReference: {fileID: 0}
+    - target: {fileID: 7757831011611896451, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7875325343295942087, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
         type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8100717397775316584, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2035169389}
+    - target: {fileID: 8100717397775316584, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: MediumButtonHasBeenClicked
+      objectReference: {fileID: 0}
     - target: {fileID: 8113778754747949862, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1114,6 +1139,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8903758979846227541, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2035169389}
+    - target: {fileID: 8903758979846227541, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: EasyButtonHasBeenClicked
       objectReference: {fileID: 0}
     - target: {fileID: 8938567028376229063, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
         type: 3}
@@ -1440,5 +1475,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e16d8b24d69176d4ba054a126bbebe6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2035169389 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8832272178199175296, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
+    type: 3}
+  m_PrefabInstance: {fileID: 1263433518}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cec423bb140b394c8c1add790ef40b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

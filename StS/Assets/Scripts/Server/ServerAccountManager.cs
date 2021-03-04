@@ -32,7 +32,7 @@ namespace ServerManager
 
         // Song map data
         private static readonly float MIN_THRESHOLD_INTENSITY = 0.1f;
-        private static readonly float MIN_TIME_BETWEEN_BEATS = 0.2f; // En seconde
+        private static readonly float MIN_TIME_BETWEEN_BEATS = 0.3f; // En seconde
 
 
         // Attributs
@@ -286,14 +286,13 @@ namespace ServerManager
             // On crée le répertoire stockant les données
 
                 // On récupére les charactères interdit
-            char[] tampon = Path.GetInvalidPathChars();
-            char[] invalidChar = new char[tampon.Length + 1];
+            char[] tampon = Path.GetInvalidFileNameChars();
+            char[] invalidChar = new char[tampon.Length];
             int i;
             for (i = 0; i < tampon.Length; ++i)
             {
                 invalidChar[i] = tampon[i];
             }
-            invalidChar[i] = '/'; // On rajoute un charactère à la liste.
 
 
             string newFolder = Replace(video.Title, invalidChar, ""); // Nouveau dossier à créer
