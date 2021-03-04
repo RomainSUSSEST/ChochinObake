@@ -338,7 +338,7 @@ public class CharacterServer : CharacterPlayer
     private void ObstacleSuccess(Grade g)
     {
         GetCharacterBody().Animation_AttackSuccess();
-        //Debug.Log(g);
+        Debug.Log(g);
     }
 
     private void ObstacleToEarly()
