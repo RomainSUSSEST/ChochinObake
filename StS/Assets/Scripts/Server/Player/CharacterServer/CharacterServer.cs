@@ -5,16 +5,6 @@ using UnityEngine;
 
 public class CharacterServer : CharacterPlayer
 {
-    // Constante
-
-    private static readonly float MARGIN_ERROR_S = 0.25f; // en m
-    private static readonly float MARGIN_ERROR_A = 0.5f; // en m
-    private static readonly float MARGIN_ERROR_B = 0.79f; // en m
-    private static readonly float MARGIN_ERROR_C = 1.125f; // en m
-
-    private enum Grade { S, A, B, C, NONE }
-
-
     // Attributs
 
     public ulong AssociedClientID { get; set; }
@@ -40,13 +30,10 @@ public class CharacterServer : CharacterPlayer
             Obstacle obs = QueueObstacle.Peek();
             if (obs == null) // Si celui-ci est null
             {
-                QueueObstacle.Dequeue();
+                DeregisterObstacle();
             } else
             {
-                float PosCharacterInputArea_Z = GetCharacterBody().GetValidArea().position.z; // Position de l'input area du joueur sur Z
-
-                // Si un obstacle enregistré à dépassé la position limite (sur Z), il est considéré comme raté.
-                if (obs.transform.position.z < PosCharacterInputArea_Z - MARGIN_ERROR_C)
+                if (obs.GetStatut() == Obstacle.Statut.MISS)
                 {
                     DeregisterObstacle(); // On désenregistre l'obstacle.
 
@@ -229,53 +216,6 @@ public class CharacterServer : CharacterPlayer
     #endregion
 
     /// <summary>
-    /// Renvoie Grade 'NONE' -> Aucune collision avec l'obstacle
-    /// Renvoie Grade 'S', 'A', 'B', 'C' -> Selon les seuil défini en constante pour noter la qualité
-    /// du timing de l'input effectué
-    /// </summary>
-    /// <param name="obs"></param>
-    /// <returns></returns>
-    private Grade GetGrade(Obstacle obs) // TODO
-    {
-        float PosObs_Z = obs.transform.position.z; // Position de l'obstacle sur Z
-        float PosCharacterInputArea_Z = GetCharacterBody().GetValidArea().position.z; // Position de l'input area du joueur sur Z
-
-        // On test si il y a une collision
-        if (PosCharacterInputArea_Z + MARGIN_ERROR_C >= PosObs_Z
-            && PosObs_Z >= PosCharacterInputArea_Z - MARGIN_ERROR_C)
-        {
-            // On test si c'est un B
-            if (PosCharacterInputArea_Z + MARGIN_ERROR_B >= PosObs_Z
-                && PosObs_Z >= PosCharacterInputArea_Z - MARGIN_ERROR_B)
-            {
-                // On test si c'est un A
-                if (PosCharacterInputArea_Z + MARGIN_ERROR_A >= PosObs_Z
-                    && PosObs_Z >= PosCharacterInputArea_Z - MARGIN_ERROR_A)
-                {
-                    // On test si c'est un S
-                    if (PosCharacterInputArea_Z + MARGIN_ERROR_S >= PosObs_Z
-                        && PosObs_Z >= PosCharacterInputArea_Z - MARGIN_ERROR_S)
-                    {
-                        return Grade.S;
-                    } else
-                    {
-                        return Grade.A;
-                    }
-                } else
-                {
-                    return Grade.B;
-                }
-            } else
-            {
-                return Grade.C; // Note C
-            }
-        } else
-        {
-            return Grade.NONE; // Pas de collision
-        }        
-    }
-
-    /// <summary>
     /// Traite les actions d'attaque du joueur pour identifier les collisions.
     /// </summary>
     /// <param name="action"></param>
@@ -288,24 +228,25 @@ public class CharacterServer : CharacterPlayer
             return;
         }
 
-        Grade g = GetGrade(QueueObstacle.Peek());
+        Obstacle obs = QueueObstacle.Peek();
 
-        if (g != Grade.NONE) // On regarde si il y a collision
+        switch (obs.GetStatut())
         {
-            Obstacle obs = DeregisterObstacle(); // On retire le premier éléments
+            case Obstacle.Statut.EARLY:
+                ObstacleToEarly();
+                break;
+            case Obstacle.Statut.SUCCESS:
+                DeregisterObstacle();
 
-            if (obs.GetElement() == action) // Si les actions matchs
-            {
-                ObstacleSuccess(g);
-            } else
-            {
-                // Mauvaise touche
-                ObstacleFail();
-            }
-        } else
-        {
-            // Trop tot
-            ObstacleToEarly();
+                if (obs.GetElement() == action)
+                {
+                    obs.DestroyKanji();
+                    ObstacleSuccess();
+                }
+                else
+                    ObstacleFail();
+
+                break;
         }
     }
 
@@ -326,19 +267,19 @@ public class CharacterServer : CharacterPlayer
 
     private void ObstacleMiss()
     {
-        //Debug.Log("Raté !");
+        Debug.Log("Raté !");
     }
 
     private void ObstacleFail()
     {
         GetCharacterBody().Animation_AttackFailure();
-        //Debug.Log("Mauvaise Touche !");
+        Debug.Log("Mauvaise Touche !");
     }
 
-    private void ObstacleSuccess(Grade g)
+    private void ObstacleSuccess()
     {
         GetCharacterBody().Animation_AttackSuccess();
-        Debug.Log(g);
+        Debug.Log("Réussite !");
     }
 
     private void ObstacleToEarly()
