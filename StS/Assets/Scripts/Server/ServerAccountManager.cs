@@ -32,7 +32,7 @@ namespace ServerManager
 
         // Song map data
         private static readonly float MIN_THRESHOLD_INTENSITY = 0.1f;
-        private static readonly float MIN_TIME_BETWEEN_BEATS = 0.3f; // En seconde
+        private static readonly float MIN_TIME_BETWEEN_BEATS = 0.275f; // En seconde
 
 
         // Attributs

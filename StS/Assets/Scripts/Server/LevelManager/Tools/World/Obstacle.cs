@@ -22,10 +22,13 @@ public class Obstacle : MonoBehaviour
 
     [SerializeField] private GameObject Kanji;
     [SerializeField] private float ValidInputArea_Threshold;
+    // Temps en plus après le perfect match
     [SerializeField] private float ValidInputArea_Delai; // min 0
     [SerializeField] private GameObject InternValidInput;
     [SerializeField] private GameObject ExternValidInput;
+
     [SerializeField] private Material ValidInputMaterial;
+    [SerializeField] private Material InvalidInputMaterial;
 
     private CharacterServer AssociatedCharacter;
 
@@ -33,6 +36,8 @@ public class Obstacle : MonoBehaviour
     private float PositionEnd; // Position d'arrivé prévu.
 
     private Statut m_Statut;
+
+    private Coroutine m_IndicatorManagement;
 
     #endregion
 
@@ -43,7 +48,7 @@ public class Obstacle : MonoBehaviour
         PositionStart = transform.position.z;
         PositionEnd = AssociatedCharacter.GetCharacterBody().GetValidArea().transform.position.z;
 
-        StartCoroutine("IndicatorManagement");
+        m_IndicatorManagement = StartCoroutine("IndicatorManagement");
     }
 
     private void Update()
@@ -86,10 +91,12 @@ public class Obstacle : MonoBehaviour
 
     /// <summary>
     /// Détruit le kanji de l'osbtacle
+    /// Arrete la coroutine de gestion du timing.
     /// </summary>
     public void DestroyKanji()
     {
         Destroy(Kanji.gameObject);
+        StopCoroutine(m_IndicatorManagement);
     }
 
     #endregion
@@ -98,7 +105,7 @@ public class Obstacle : MonoBehaviour
 
     private IEnumerator IndicatorManagement()
     {
-        m_Statut = Statut.EARLY;
+        m_Statut = Statut.EARLY; // Early
 
         float tampon;
         do
@@ -111,15 +118,37 @@ public class Obstacle : MonoBehaviour
             yield return new CoroutineTools.WaitForFrames(1);
         }
         while (tampon < ValidInputArea_Threshold);
-        
+
+        Renderer Intern;
+        Renderer Extern;
+
         // On peut appuyer
 
-        InternValidInput.GetComponent<Renderer>().material = ValidInputMaterial;
-        ExternValidInput.GetComponent<Renderer>().material = ValidInputMaterial;
+        Intern = InternValidInput.GetComponent<Renderer>();
+        Extern = ExternValidInput.GetComponent<Renderer>();
+
+        // On change la couleur
+
+        Intern.material = ValidInputMaterial;
+        Extern.material = ValidInputMaterial;
 
         m_Statut = Statut.SUCCESS;
 
-        yield return new WaitForSeconds(ValidInputArea_Delai);
+        // On continue de retrecir le cercle
+        do
+        {
+            tampon = Mathf.InverseLerp(PositionStart, PositionEnd, transform.position.z);
+
+            ExternValidInput.transform.localScale = Vector3.one * (3 - tampon * tampon * 2);
+
+            yield return new CoroutineTools.WaitForFrames(1);
+        }
+        while (tampon < 1);
+
+        yield return new WaitForSeconds(ValidInputArea_Delai); // Temps rajouté en plus après le perfect match
+
+        Intern.material = InvalidInputMaterial;
+        Extern.material = InvalidInputMaterial;
 
         m_Statut = Statut.MISS;
     }

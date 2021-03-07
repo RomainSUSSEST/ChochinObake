@@ -12,16 +12,12 @@ public class Ground : MonoBehaviour
 
     #region Life Cycle
 
-    private void Start()
-    {
-        transform.Translate(new Vector3(0, 0, -MOVE_SPEED * Time.deltaTime));
-    }
-
     private void Update()
     {
         if (transform.position.z <= DESTROY_Z_POSITION)
         {
             EventManager.Instance.Raise(new GroundEndMapEvent());
+
             Destroy(this.gameObject);
         }
 

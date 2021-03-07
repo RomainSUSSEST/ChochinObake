@@ -47,11 +47,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 1
   Kanji: {fileID: 7063550124513133389}
-  ValidInputArea_Threshold: 0.98
-  ValidInputArea_Delai: 0.5
+  ValidInputArea_Threshold: 0.95
+  ValidInputArea_Delai: 0.28
   InternValidInput: {fileID: 1420084635242303737}
   ExternValidInput: {fileID: 5527726859935985812}
   ValidInputMaterial: {fileID: 2100000, guid: d3a060aae15cb864ea9360fd919cb297, type: 2}
+  InvalidInputMaterial: {fileID: 2100000, guid: 3033ee82d6b1f114abcdeba565dc9707,
+    type: 2}
 --- !u!1 &8730497454775721786
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,6 +9,8 @@ public class Background : MonoBehaviour
     public static float MOVE_SPEED { get; set; } // Vitesse unit/s
     public static float DESTROY_Z_POSITION { get; set; } // Position de destruction
 
+    public static bool LOOP;
+
     #endregion
 
     #region Life cycle
@@ -17,7 +19,11 @@ public class Background : MonoBehaviour
     {
         if (transform.position.z <= DESTROY_Z_POSITION)
         {
-            EventManager.Instance.Raise(new BackgroundEndMapEvent());
+            if (LOOP)
+            {
+                EventManager.Instance.Raise(new BackgroundEndMapEvent());
+            }
+            
             Destroy(this.gameObject);
         }
 

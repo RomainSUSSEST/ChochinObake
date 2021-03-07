@@ -9,9 +9,10 @@ public class EndMapArrival : MonoBehaviour
         // On avance
         transform.Translate(new Vector3(0, 0, -Ground.MOVE_SPEED * Time.deltaTime));
 
-        if (transform.localPosition.z <= 0)
+        if (transform.localPosition.z <= 0) // Car enfant du world
         {
             Ground.MOVE_SPEED = 0;
+            Background.MOVE_SPEED = 0;
         }
     }
 

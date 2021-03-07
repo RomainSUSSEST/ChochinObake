@@ -10,6 +10,8 @@ using UnityEngine;
 /// le ground, le background, les obstacles et l'arrivée.
 /// 
 /// Leur comportement est ensuite autonome.
+/// 
+/// Pour le gameplay et le scoring, voir ServerLevelManager
 /// </summary>
 public class World : MonoBehaviour
 {
@@ -30,12 +32,16 @@ public class World : MonoBehaviour
     [Header("Map Config")]
     [SerializeField] private float DistanceBetweenGround = 2f;
     [SerializeField] private float ObstacleDistanceToCharacterSpawn;
+    [SerializeField] private float ArrivalDistanceToCharacterSpawn;
     [SerializeField] private float DistanceToBackgroundY = -50;
     [SerializeField] private float DestroyElementsMargin = 10f; // Distance supplémentaire avant de détruire un élément
 
     [SerializeField] private float FogSpeed_X;
     [SerializeField] private float FogSpeed_Y;
     [SerializeField] private float FogRatio_Z;
+
+    [SerializeField] private float RoundEnd_SpeedUpCoefficient;
+    [SerializeField] private float RoundEnd_SpeedUpDelai;
 
     [Header("SlimeServer")]
     [SerializeField] private CharacterServer CharacterServerPrefab;
@@ -190,11 +196,12 @@ public class World : MonoBehaviour
         // Initialisation des constantes pour les élements
         Ground.MOVE_SPEED = Mathf.Min(Mathf.Max(((CurrentMap.Count / clip.length) * ServerLevelManager.DEFAULT_SPEED), ServerLevelManager.MIN_SPEED), ServerLevelManager.MAX_SPEED);
         Ground.DESTROY_Z_POSITION = transform.position.z - SpiritWaySize.z - DestroyElementsMargin;
-
+        Debug.Log("Speed : " + Ground.MOVE_SPEED + " Obstacle : " + CurrentMap.Count + " Length : " + clip.length);
         Obstacle.DESTROY_Z_POSITION = transform.position.z - DestroyElementsMargin;
 
-        Background.MOVE_SPEED = Ground.MOVE_SPEED / 2;
+        Background.MOVE_SPEED = Ground.MOVE_SPEED / 1.4f;
         Background.DESTROY_Z_POSITION = transform.position.z - BackgroundSize.z;
+        Background.LOOP = true;
 
         #region On Initialise la carte (Génération)
         // Ground
@@ -316,6 +323,32 @@ public class World : MonoBehaviour
             yield return new CoroutineTools.WaitForFrames(1);
             time += Time.deltaTime; // On ajoute le temps passé
         }
+    }
+
+    private IEnumerator SpeedUpMapElements()
+    {
+        float time = 0;
+
+        float StartGroundSpeed = Ground.MOVE_SPEED;
+        float StartBackgroundSpeed = Background.MOVE_SPEED;
+
+        float EndGroundSpeed = StartGroundSpeed * RoundEnd_SpeedUpCoefficient;
+        float EndBackgroundSpeed = StartBackgroundSpeed * RoundEnd_SpeedUpCoefficient;
+
+        float percent;
+        while (time < RoundEnd_SpeedUpDelai)
+        {
+            percent = time / RoundEnd_SpeedUpDelai;
+            
+            Ground.MOVE_SPEED = Mathf.Lerp(StartGroundSpeed, EndGroundSpeed, percent);
+            Background.MOVE_SPEED = Mathf.Lerp(StartBackgroundSpeed, EndBackgroundSpeed, percent);
+
+            yield return new CoroutineTools.WaitForFrames(1);
+            time += Time.deltaTime;
+        }
+
+        Ground.MOVE_SPEED = EndGroundSpeed;
+        Background.MOVE_SPEED = EndBackgroundSpeed;
     }
 
     #endregion
@@ -449,14 +482,25 @@ public class World : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Fonction appelée lorsque la musique est terminée
+    /// </summary>
     private void MusicRoundEnd()
     {
+        // On génère l'arrivée
         Vector3 pos = transform.position;
         Instantiate(EndMapPrefab,
-            new Vector3(pos.x, pos.y, pos.z + ObstacleDistanceToCharacterSpawn + ServerLevelManager.DISTANCE_BETWEEN_LINE * ServerLevelManager.NBR_LINE),
+            new Vector3(pos.x, pos.y, pos.z + ArrivalDistanceToCharacterSpawn),
             Quaternion.identity,
             transform);
 
+        // Désactivation du background
+        Background.LOOP = false;
+
+        // On accèlère le défilement
+        StartCoroutine("SpeedUpMapElements");
+
+        // On averti de la fin de la chanson
         EventManager.Instance.Raise(new MusicRoundEndEvent());
     }
 

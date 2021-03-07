@@ -146,11 +146,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 3
   Kanji: {fileID: 9197469113144655933}
-  ValidInputArea_Threshold: 0.98
-  ValidInputArea_Delai: 0.5
+  ValidInputArea_Threshold: 0.95
+  ValidInputArea_Delai: 0.28
   InternValidInput: {fileID: 8048570283027572293}
   ExternValidInput: {fileID: 3508600146430166568}
   ValidInputMaterial: {fileID: 2100000, guid: d3a060aae15cb864ea9360fd919cb297, type: 2}
+  InvalidInputMaterial: {fileID: 2100000, guid: 3033ee82d6b1f114abcdeba565dc9707,
+    type: 2}
 --- !u!1001 &3238991050794372483
 PrefabInstance:
   m_ObjectHideFlags: 0

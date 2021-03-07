@@ -15,17 +15,17 @@
 
         public static readonly int MIN_NUMBER_WAVES = 12;
 
-        public static readonly float DEFAULT_SPEED = 8f; // Vitesse par défaut
-        public static readonly float MIN_SPEED = 17f;
-        public static readonly float MAX_SPEED = 24f;
+        public static readonly float DEFAULT_SPEED = 12f; // Vitesse par défaut
+        public static readonly float MIN_SPEED = 20f;
+        public static readonly float MAX_SPEED = 35f;
 
         public static readonly float ALGO_MIN_SENSITIVITY = 0.7f; // en % (gestion de la difficulté) 0 = D / 0.1 = M / 0.2 = F
-        public static readonly float ALGO_MAX_SENSITIVITY = 0.3f;
+        public static readonly float ALGO_MAX_SENSITIVITY = 0.225f;
 
         public static readonly float DISTANCE_BETWEEN_LINE = 4f;
 
-        public static readonly float NBR_LINE = 4; // Nombre de ligne immatérielle composant le jeu.
-        public static readonly float LINE_SLIME_SPAWN = 3f / 4f; // Multiplicateur indiquant à quelle position initialement placé les joueurs par rapport aux nombres de lignes.
+        public static readonly float NBR_LINE = 5; // Nombre de Bonus existant
+        public static readonly float LINE_SLIME_SPAWN = 0; // Multiplicateur indiquant à quelle position initialement placé les joueurs par rapport aux nombres de lignes.
 
         private static readonly float TIME_BETWEEN_IN_GAME_EVENTS = 25;
 
