@@ -63,7 +63,7 @@ public abstract class CharacterPlayer : MonoBehaviour
 
     }
 
-    public virtual void TriggerAttackAir()
+    public virtual void TriggerAttackPower()
     {
 
     }

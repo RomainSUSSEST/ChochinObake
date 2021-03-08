@@ -125,6 +125,15 @@ public class MusicRoundEndEvent : SDD.Events.Event
 
 #endregion
 
+#region Player
+
+public class PowerDeclenchementEvent : SDD.Events.Event
+{
+	public int CmptCombo;
+	public CharacterServer CharacterServer;
+}
+	
+#endregion
 #endregion
 
 #region Network Server

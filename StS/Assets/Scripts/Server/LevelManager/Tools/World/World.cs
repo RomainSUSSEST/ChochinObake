@@ -145,8 +145,8 @@ public class World : MonoBehaviour
         // On initialise l'array player
         int nextValue = 0;
 
-        float slimeSpawn_X = StartWaySpawnPosition_X;
-        float slimeSpawn_Y = transform.position.y;
+        float CharacterSpawn_X = StartWaySpawnPosition_X;
+        float CharacterSpawn_Y = transform.position.y;
 
         IEnumerator<ulong> enumPlayer = Players.Keys.GetEnumerator(); // Enum sur les joueurs
 
@@ -156,15 +156,13 @@ public class World : MonoBehaviour
         {
             if (enumPlayer.MoveNext())
             {
-                // Line index
-                int lineIndex = (int)Mathf.Ceil(ServerLevelManager.NBR_LINE * ServerLevelManager.LINE_SLIME_SPAWN);
 
                 // Slime Array
                 CharacterArray[i] = Instantiate(CharacterServerPrefab,
                     new Vector3(
-                        slimeSpawn_X + (SpiritWaySize.x + DistanceBetweenGround) * i,
-                        slimeSpawn_Y,
-                        transform.position.z + lineIndex * ServerLevelManager.DISTANCE_BETWEEN_LINE),
+                        CharacterSpawn_X + (SpiritWaySize.x + DistanceBetweenGround) * i,
+                        CharacterSpawn_Y,
+                        transform.position.z - DestroyElementsMargin),
                     Quaternion.identity, transform); // On créer le slime
 
                 CharacterArray[i].AssociedClientID = (ulong)enumPlayer.Current; // On récupére l'ulong du playerCourant
@@ -175,7 +173,6 @@ public class World : MonoBehaviour
                 // On set le body
 
                 CharacterArray[i].SetBody(p.Body);
-                CharacterArray[i].SetLineIndex(lineIndex);
 
             } else
             {
