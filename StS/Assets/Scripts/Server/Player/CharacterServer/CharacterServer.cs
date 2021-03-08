@@ -1,17 +1,39 @@
-﻿using SDD.Events;
+﻿using CommonVisibleManager;
+using SDD.Events;
 using ServerManager;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterServer : CharacterPlayer
 {
-    // Attributs
+    #region Constants
+
+    private static readonly float UPDATE_POSITION_TIME = 1.5f; // En seconde
+    private static readonly float FIRST_UPDATE_POSITION_TIME = 3f; // en s
+
+    #endregion
+
+    #region Attributes
 
     public ulong AssociedClientID { get; set; }
+    public bool IsSafe { get; set; }
 
     private Queue<Obstacle> QueueObstacle; // Queue des obstacles suivant associé à ce slime
 
-    private int LineIndex; // Index de la ligne ou se trouve le joueur
+    private int CmptSuccess;
+    private int CmptObstacle;
+    private int CmptCombo;
+
+    private Coroutine LastUpdatePositionCoroutine;
+
+    #region Malus
+
+    private bool IsSleeping;
+
+    #endregion
+
+    #endregion
 
     #region Life Cycle
 
@@ -21,6 +43,8 @@ public class CharacterServer : CharacterPlayer
         QueueObstacle = new Queue<Obstacle>();
 
         GetCharacterBody().IsRunning(true); // On lance l'animation de course
+
+        UpdatePosition(FIRST_UPDATE_POSITION_TIME);
     }
 
     private void Update()
@@ -38,13 +62,14 @@ public class CharacterServer : CharacterPlayer
                     DeregisterObstacle(); // On désenregistre l'obstacle.
 
                     ObstacleMiss();
+
+                    UpdatePosition(UPDATE_POSITION_TIME);
                 }
             }
         }
     }
 
     #endregion
-
 
     #region Methods
 
@@ -55,7 +80,7 @@ public class CharacterServer : CharacterPlayer
         EventManager.Instance.AddListener<FireEvent>(Fire);
         EventManager.Instance.AddListener<EarthEvent>(Earth);
         EventManager.Instance.AddListener<WaterEvent>(Water);
-        EventManager.Instance.AddListener<AirEvent>(Air);
+        EventManager.Instance.AddListener<PowerEvent>(Power);
 
         EventManager.Instance.AddListener<ServerDisconnectionSuccessEvent>(OnClientDisconnected);
     }
@@ -66,75 +91,20 @@ public class CharacterServer : CharacterPlayer
         EventManager.Instance.RemoveListener<FireEvent>(Fire);
         EventManager.Instance.RemoveListener<EarthEvent>(Earth);
         EventManager.Instance.RemoveListener<WaterEvent>(Water);
-        EventManager.Instance.RemoveListener<AirEvent>(Air);
+        EventManager.Instance.RemoveListener<PowerEvent>(Power);
 
         EventManager.Instance.RemoveListener<ServerDisconnectionSuccessEvent>(OnClientDisconnected);
     }
     #endregion
 
     /// <summary>
-    /// Permet d'enregistrer un obstacle aupres du slime
+    /// Permet d'enregistrer un obstacle aupres du joueur
     /// </summary>
     /// <param name="obs"> l'obstacle à enregistrer </param>
     public void RegisterObstacle(Obstacle obs)
     {
         QueueObstacle.Enqueue(obs);
     }
-
-    #region Line Index
-    /// <summary>
-    /// Indique au slime à quelle ligne il appartient, aucun effet de bord
-    /// </summary>
-    /// <param name="index"></param>
-    public void SetLineIndex(int index)
-    {
-        LineIndex = index;
-    }
-
-    /// <summary>
-    /// Si possible, le slime descend d'une ligne, lui et ses obstacles associé s'adapteront
-    /// </summary>
-    //public void DecreaseLineIndex()
-    //{
-    //    if (LineIndex > 0) // On vérifie que le minimum n'est pas déjà atteint.
-    //    {
-    //        --LineIndex;
-    //        Vector3 add = new Vector3(0, 0, -ServerLevelManager.DISTANCE_BETWEEN_LINE);
-    //        transform.Translate(add);
-
-    //        // On resynchronise les obstacles existant
-
-    //        Queue<Obstacle>.Enumerator i = QueueObstacle.GetEnumerator();
-    //        while (i.MoveNext())
-    //        {
-    //            Obstacle obs = (Obstacle)i.Current;
-    //            obs.transform.Translate(add);
-    //        }
-    //    }
-    //}
-
-    /// <summary>
-    /// Si possible, le slime monte d'une ligne, lui et ses obstacles associé s'adappteront.
-    /// </summary>
-    public void IncreaseLineIndex()
-    {
-        if (LineIndex < ServerLevelManager.NBR_LINE) // On vérifie que le maximum n'est pas déjà atteint.
-        {
-            ++LineIndex;
-            Vector3 add = new Vector3(0, 0, ServerLevelManager.DISTANCE_BETWEEN_LINE);
-            transform.Translate(add);
-
-            // On resynchronise les obstacles existant
-
-            Queue<Obstacle>.Enumerator i = QueueObstacle.GetEnumerator();
-            while (i.MoveNext())
-            {
-                Obstacle obs = (Obstacle)i.Current;
-                obs.transform.Translate(add);
-            }
-        }
-    }
-    #endregion
 
     #region Override Triggered Attack
 
@@ -145,11 +115,15 @@ public class CharacterServer : CharacterPlayer
         TriggeredAttack(Obstacle.Elements.FIRE);
     }
 
-    public override void TriggerAttackAir()
+    public override void TriggerAttackPower()
     {
-        base.TriggerAttackAir();
+        base.TriggerAttackPower();
 
-        TriggeredAttack(Obstacle.Elements.AIR);
+        EventManager.Instance.Raise(new PowerDeclenchementEvent()
+        {
+            CharacterServer = this,
+            CmptCombo = CmptCombo
+        });
     }
 
     public override void TriggerAttackWater()
@@ -168,6 +142,103 @@ public class CharacterServer : CharacterPlayer
 
     #endregion
 
+    #region Combo
+
+    //public void SubstractCombo(int n)
+    //{
+    //    CmptCombo -= n;
+    //    MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+    //}
+
+    public void ResetCombo()
+    {
+        CmptCombo = 0;
+        // Mise à jours des combo auprès du joueur.
+        MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+    }
+
+    #endregion
+
+    #region Malus
+
+    public void Sleep(float delai)
+    {
+        StartCoroutine("Sleeping", delai);
+    }
+
+    private IEnumerator Sleeping(float delai)
+    {
+        IsSleeping = true;
+
+        yield return new WaitForSeconds(delai);
+
+        IsSleeping = false;
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Couroutines
+
+    private IEnumerator UpdateZPosition(float delai)
+    {
+        // On détruit l'ancienne coroutine
+        if (LastUpdatePositionCoroutine != null)
+            StopCoroutine(LastUpdatePositionCoroutine);
+
+        // On calcul les positions
+        float ZStart = transform.localPosition.z;
+        float ZEnd;
+
+        if (CmptObstacle == 0)
+        {
+            ZEnd = Mathf.Lerp(0, ServerLevelManager.MAXIMUM_ADVANCE_DISTANCE, 1);
+        } else
+        {
+            ZEnd = Mathf.Lerp(0, ServerLevelManager.MAXIMUM_ADVANCE_DISTANCE, (float)CmptSuccess / CmptObstacle);
+            Debug.Log(CmptSuccess + " " + CmptObstacle);
+            Debug.Log((float)CmptSuccess / CmptObstacle);
+        }   
+
+        float time = 0;
+        float distance;
+        while (time < delai)
+        {
+            float newZPos = Mathf.Lerp(ZStart, ZEnd, time / delai);
+            distance = newZPos - transform.localPosition.z;
+
+            // Mise à jours de la position du joueur
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, newZPos);
+
+            // Mise à jours de la position de ces obstacles
+            foreach (Obstacle obs in QueueObstacle)
+            {
+                obs.transform.position = new Vector3(
+                    obs.transform.localPosition.x,
+                    obs.transform.localPosition.y,
+                    obs.transform.localPosition.z + distance);
+            }
+
+            yield return new CoroutineTools.WaitForFrames(1);
+            time += Time.deltaTime;
+        }
+
+        distance = ZEnd - transform.localPosition.z;
+
+        // Position final du joueur
+        transform.position = new Vector3(transform.position.x, transform.localPosition.y, ZEnd);
+
+        // Position final des obstacles
+        foreach (Obstacle obs in QueueObstacle)
+        {
+            obs.transform.position = new Vector3(
+                obs.transform.localPosition.x,
+                obs.transform.localPosition.y,
+                obs.transform.localPosition.z + distance);
+        }
+    }
+
     #endregion
 
     #region Tools
@@ -183,7 +254,7 @@ public class CharacterServer : CharacterPlayer
 
     private void Fire(FireEvent e)
     {
-        if (e.DoesThisConcernMe(AssociedClientID))
+        if (e.DoesThisConcernMe(AssociedClientID) && !IsSleeping)
         {
             GetCharacterBody().StartAttackFire();
         }
@@ -191,7 +262,7 @@ public class CharacterServer : CharacterPlayer
 
     private void Earth(EarthEvent e)
     {
-        if (e.DoesThisConcernMe(AssociedClientID))
+        if (e.DoesThisConcernMe(AssociedClientID) && !IsSleeping)
         {
             GetCharacterBody().StartAttackEarth();
         }
@@ -199,17 +270,17 @@ public class CharacterServer : CharacterPlayer
 
     private void Water(WaterEvent e)
     {
-        if (e.DoesThisConcernMe(AssociedClientID))
+        if (e.DoesThisConcernMe(AssociedClientID) && !IsSleeping)
         {
             GetCharacterBody().StartAttackWater();
         }
     }
 
-    private void Air(AirEvent e)
+    private void Power(PowerEvent e)
     {
-        if (e.DoesThisConcernMe(AssociedClientID))
+        if (e.DoesThisConcernMe(AssociedClientID) && !IsSleeping)
         {
-            GetCharacterBody().StartAttackAir();
+            GetCharacterBody().StartAttackPower();
         }
     }
 
@@ -248,6 +319,16 @@ public class CharacterServer : CharacterPlayer
 
                 break;
         }
+
+        UpdatePosition(UPDATE_POSITION_TIME);
+    }
+
+    /// <summary>
+    /// Actualise la position du joueur sur le plateau
+    /// </summary>
+    private void UpdatePosition(float delai)
+    {
+        LastUpdatePositionCoroutine = StartCoroutine("UpdateZPosition", delai);
     }
 
     /// <summary>
@@ -267,19 +348,46 @@ public class CharacterServer : CharacterPlayer
 
     private void ObstacleMiss()
     {
-        Debug.Log("Raté !");
+        if (CmptCombo > 0)
+            CmptCombo = 0;
+        else
+            --CmptCombo;
+
+        ++CmptObstacle;
+
+        MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
     }
 
     private void ObstacleFail()
     {
         GetCharacterBody().Animation_AttackFailure();
-        Debug.Log("Mauvaise Touche !");
+
+        if (CmptCombo > 0)
+            CmptCombo = 0;
+        else
+            --CmptCombo;
+
+        ++CmptObstacle;
+
+        MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
     }
 
     private void ObstacleSuccess()
     {
         GetCharacterBody().Animation_AttackSuccess();
-        Debug.Log("Réussite !");
+
+        if (CmptCombo <= 0)
+        {
+            CmptCombo = 1;
+        } else
+        {
+            ++CmptCombo;
+        }
+
+        ++CmptSuccess;
+        ++CmptObstacle;
+
+        MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
     }
 
     private void ObstacleToEarly()

@@ -33,7 +33,6 @@ public class Obstacle : MonoBehaviour
     private CharacterServer AssociatedCharacter;
 
     private float PositionStart; // Position du début
-    private float PositionEnd; // Position d'arrivé prévu.
 
     private Statut m_Statut;
 
@@ -46,7 +45,6 @@ public class Obstacle : MonoBehaviour
     private void Start()
     {
         PositionStart = transform.position.z;
-        PositionEnd = AssociatedCharacter.GetCharacterBody().GetValidArea().transform.position.z;
 
         m_IndicatorManagement = StartCoroutine("IndicatorManagement");
     }
@@ -111,7 +109,10 @@ public class Obstacle : MonoBehaviour
         do
         {
             // Gestion du curseur indiquant le timing pour appuyer.
-            tampon = Mathf.InverseLerp(PositionStart, PositionEnd, transform.position.z);
+            tampon = Mathf.InverseLerp(
+                PositionStart,
+                AssociatedCharacter.GetCharacterBody().GetValidArea().transform.position.z,
+                transform.position.z);
 
             ExternValidInput.transform.localScale = Vector3.one * (3 - tampon * tampon * 2);
 
@@ -137,7 +138,10 @@ public class Obstacle : MonoBehaviour
         // On continue de retrecir le cercle
         do
         {
-            tampon = Mathf.InverseLerp(PositionStart, PositionEnd, transform.position.z);
+            tampon = Mathf.InverseLerp(
+                PositionStart,
+                AssociatedCharacter.GetCharacterBody().GetValidArea().transform.position.z, 
+                transform.position.z);
 
             ExternValidInput.transform.localScale = Vector3.one * (3 - tampon * tampon * 2);
 

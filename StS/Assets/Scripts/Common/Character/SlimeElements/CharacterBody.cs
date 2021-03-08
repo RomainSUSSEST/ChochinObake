@@ -92,9 +92,9 @@ public class CharacterBody : MonoBehaviour
         Animator.SetTrigger("StartAttackWater");
     }
 
-    public void StartAttackAir()
+    public void StartAttackPower()
     {
-        Animator.SetTrigger("StartAttackAir");
+        Animator.SetTrigger("StartAttackPower");
     }
 
     #endregion
@@ -116,9 +116,9 @@ public class CharacterBody : MonoBehaviour
         AssociatedCharacterPlayer.TriggeredAttackEarth();
     }
 
-    public void TriggerAttackAir()
+    public void TriggerAttackPower()
     {
-        AssociatedCharacterPlayer.TriggerAttackAir();
+        AssociatedCharacterPlayer.TriggerAttackPower();
     }
 
     #endregion

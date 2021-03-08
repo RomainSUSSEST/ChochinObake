@@ -212,6 +212,35 @@ public class DifficultyVoteAcceptedEvent : NetworkedEvent
 
 #endregion
 
+#region ServerState
+public class GameStartedEvent : NetworkedEvent
+{
+}
+
+public class ServerEnterInGameMusicSelectionEvent : NetworkedEvent
+{
+}
+
+public class ServerEnterInGameMusicResultEvent : NetworkedEvent
+{
+}
+
+#endregion
+
+#region InRound
+
+public class UpdateSuccessiveSuccessEvent : NetworkedEvent
+{
+	public int Value;
+
+	public UpdateSuccessiveSuccessEvent(ulong PlayerID, int NewValue) :
+		base(PlayerID, new Argument() { Arg = NewValue, Type = typeof(int) })
+	{
+		Value = NewValue;
+	}
+}
+
+
 #region MobileInputs
 public class FireEvent : NetworkedEvent
 {
@@ -234,9 +263,9 @@ public class WaterEvent : NetworkedEvent
 	}
 }
 
-public class AirEvent : NetworkedEvent
+public class PowerEvent : NetworkedEvent
 {
-	public AirEvent(ulong playerID) : base(playerID)
+	public PowerEvent(ulong playerID) : base(playerID)
 	{
 	}
 }
@@ -252,9 +281,9 @@ public class InputListenRequestEvent : NetworkedEvent
 	public float During;
 	public float RefreshDelai;
 
-    #endregion
+	#endregion
 
-    public InputListenRequestEvent(ulong PlayerID, Input input, float during, float refreshDelai) : base(PlayerID,
+	public InputListenRequestEvent(ulong PlayerID, Input input, float during, float refreshDelai) : base(PlayerID,
 		new Argument() { Arg = input, Type = input.GetType() },
 		new Argument() { Arg = during, Type = typeof(float) },
 		new Argument() { Arg = refreshDelai, Type = typeof(float) })
@@ -270,27 +299,14 @@ public class InputListenAnswerEvent : NetworkedEvent
 {
 	public bool Value;
 
-	public InputListenAnswerEvent(ulong PlayerID, bool value) : 
-		base(PlayerID, new Argument() { Arg = value, Type = typeof(bool)})
+	public InputListenAnswerEvent(ulong PlayerID, bool value) :
+		base(PlayerID, new Argument() { Arg = value, Type = typeof(bool) })
 	{
 		Value = value;
 	}
 }
 
 #endregion
-
-#region ServerState
-public class GameStartedEvent : NetworkedEvent
-{
-}
-
-public class ServerEnterInGameMusicSelectionEvent : NetworkedEvent
-{
-}
-
-public class ServerEnterInGameMusicResultEvent : NetworkedEvent
-{
-}
 
 #endregion
 #endregion
