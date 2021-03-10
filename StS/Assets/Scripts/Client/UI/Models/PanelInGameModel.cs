@@ -10,7 +10,7 @@ public class PanelInGameModel : MonoBehaviour
 {
     #region Attributes
 
-    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private TextMeshProUGUI bonusStreak;
 
     #endregion
 
@@ -91,7 +91,7 @@ public class PanelInGameModel : MonoBehaviour
 
     private void UpdateSuccessiveSuccess(UpdateSuccessiveSuccessEvent e)
     {
-        text.text = e.Value.ToString();
+        bonusStreak.text = e.Value.ToString();
     }
 
     #endregion
