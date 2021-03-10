@@ -227,8 +227,18 @@ public class CharacterSelectionMenuModel : MonoBehaviour
         EnableReadyButton();
     }
 
+    /// <summary>
+    /// Refus de la demande de validation dû au pseudo.
+    /// </summary>
+    /// <param name="e"></param>
     private void InvalidPseudo(InvalidPseudoEvent e)
     {
+        // On active la personalisation
+        ActivatePersonnalisation(true);
+
+        // On réactive le button enable
+        EnableReadyButton();
+
         Pseudo.StartInvalidAnimation();
     }
 
