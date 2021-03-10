@@ -125,9 +125,10 @@ public class CharacterServer : CharacterPlayer
 
         if (m_IsSafe)
             CurrentShield = Instantiate(ShieldPrefab, this.transform);
-        else
-            // if (CurrentShield != null) Normalement Shield ne vaut pas null
+        else if (CurrentShield != null)
+        {
             Destroy(CurrentShield.gameObject);
+        }
     }
 
     #region Override Triggered Attack

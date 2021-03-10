@@ -224,8 +224,7 @@
                 return false;
             } else
             {
-                AddSafePlayer(target);
-                return true;
+                return AddSafePlayer(target);
             }
         }
 
@@ -257,16 +256,25 @@
         /// Ajoute le joueur "Target" à la liste des joueurs safe
         /// Si le nombre min de joueur safe est atteint,
         /// replace tout le monde en non safe.
+        /// 
+        /// Ne marche que si nmbr de joueurs > MIN_SAFE_PLAYER
+        /// 
+        /// Renvoie true en cas de succès, false en cas d'échec
         /// </summary>
-        private void AddSafePlayer(CharacterServer Target)
+        private bool AddSafePlayer(CharacterServer Target)
         {
-            // On calcul le nombre de joeuur effectif en jeu
+            // On calcul le nombre de joueur effectif en jeu ----
             int cmpt = 0;
 
             foreach (CharacterServer c in RoundPlayers)
                 if (c != null)
                     ++cmpt;
 
+            // Si le nombre de joueurs dans la partie est insuffisant au système de safe, on annule. ----
+            if (cmpt <= MIN_SAFE_PLAYER + 1) 
+                return false;
+
+            // Systeme de safe
             if (++SafePlayerCount >= cmpt - MIN_SAFE_PLAYER)
             {
                 foreach (CharacterServer c in RoundPlayers)
@@ -278,6 +286,8 @@
             {
                 Target.SetSafeStatus(true);
             }
+
+            return true;
         }
 
         #endregion
