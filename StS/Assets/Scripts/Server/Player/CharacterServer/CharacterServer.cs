@@ -17,13 +17,17 @@ public class CharacterServer : CharacterPlayer
     #region Attributes
 
     public ulong AssociedClientID { get; set; }
-    public bool IsSafe { get; set; }
 
-    private Queue<Obstacle> QueueObstacle; // Queue des obstacles suivant associé à ce slime
+    private Queue<Obstacle> QueueObstacle; // Queue des obstacles suivant associé à ce character
 
-    private int CmptSuccess;
-    private int CmptObstacle;
-    private int CmptCombo;
+    private int CmptSuccess; // Nombre de succès
+    private int CmptObstacle; // Obstacle passé
+    private int CmptCombo; // Nombre courant de combos
+
+    private bool m_IsSafe; // Si le joueur est safe aux pouvoirs des autres joueurs
+
+    [SerializeField] private Shield ShieldPrefab;
+    private Shield CurrentShield; // Eventuel shield actuel
 
     private Coroutine LastUpdatePositionCoroutine;
 
@@ -71,6 +75,15 @@ public class CharacterServer : CharacterPlayer
 
     #endregion
 
+    #region Request
+
+    public bool IsSafe()
+    {
+        return m_IsSafe;
+    }
+
+    #endregion
+
     #region Methods
 
     #region Event subscription
@@ -104,6 +117,17 @@ public class CharacterServer : CharacterPlayer
     public void RegisterObstacle(Obstacle obs)
     {
         QueueObstacle.Enqueue(obs);
+    }
+
+    public void SetSafeStatus(bool b)
+    {
+        m_IsSafe = b;
+
+        if (m_IsSafe)
+            CurrentShield = Instantiate(ShieldPrefab, this.transform);
+        else
+            // if (CurrentShield != null) Normalement Shield ne vaut pas null
+            Destroy(CurrentShield.gameObject);
     }
 
     #region Override Triggered Attack
@@ -197,8 +221,6 @@ public class CharacterServer : CharacterPlayer
         } else
         {
             ZEnd = Mathf.Lerp(0, ServerLevelManager.MAXIMUM_ADVANCE_DISTANCE, (float)CmptSuccess / CmptObstacle);
-            Debug.Log(CmptSuccess + " " + CmptObstacle);
-            Debug.Log((float)CmptSuccess / CmptObstacle);
         }   
 
         float time = 0;

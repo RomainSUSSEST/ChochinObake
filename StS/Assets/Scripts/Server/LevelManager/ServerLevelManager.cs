@@ -78,7 +78,7 @@
 
         private bool GenerateInGameEvents;
 
-        private IReadOnlyCollection<CharacterPlayer> RoundPlayers;
+        private IReadOnlyCollection<CharacterPlayer> RoundPlayers; // Contient le charactere à la wave i ou null (si deconnexion par exemple)
         private int SafePlayerCount;
 
         #endregion
@@ -204,7 +204,10 @@
         {
             foreach (CharacterServer c in RoundPlayers)
             {
-                c.ResetCombo();
+                if (c != null)
+                {
+                    c.ResetCombo();
+                }
             }
         }
 
@@ -216,7 +219,7 @@
         /// <returns></returns>
         private bool Shield(CharacterServer target)
         {
-            if (target.IsSafe)
+            if (target.IsSafe())
             {
                 return false;
             } else
@@ -238,7 +241,7 @@
         {
             foreach (CharacterServer c in RoundPlayers)
             {
-                if (c.AssociedClientID != Exception.AssociedClientID)
+                if (c != null && c.AssociedClientID != Exception.AssociedClientID)
                 {
                     c.Sleep(SLEEP_DELAI);
                 }
@@ -257,16 +260,23 @@
         /// </summary>
         private void AddSafePlayer(CharacterServer Target)
         {
-            
-            if (++SafePlayerCount >= RoundPlayers.Count - MIN_SAFE_PLAYER)
+            // On calcul le nombre de joeuur effectif en jeu
+            int cmpt = 0;
+
+            foreach (CharacterServer c in RoundPlayers)
+                if (c != null)
+                    ++cmpt;
+
+            if (++SafePlayerCount >= cmpt - MIN_SAFE_PLAYER)
             {
                 foreach (CharacterServer c in RoundPlayers)
                 {
-                    c.IsSafe = false;
+                    if (c != null)
+                        c.SetSafeStatus(false);
                 }
             } else
             {
-                Target.IsSafe = true;
+                Target.SetSafeStatus(true);
             }
         }
 
