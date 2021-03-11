@@ -15,7 +15,7 @@
 
         public enum Bonus : int
         {
-            SubstractCombo = -12,
+            ResetAllCombo = -12,
             Shield = -6
         }
 
@@ -57,6 +57,9 @@
         #region Malus
 
         private static readonly float SLEEP_DELAI = 3;
+        private static readonly float INVERT_KANJI_DELAI = 6;
+        private static readonly float FLASH_KANJI_DELAI = 5;
+        private static readonly float DELAI_INTER_FLASH = 0.4f;
 
         #endregion
 
@@ -152,9 +155,9 @@
         /// <returns></returns>
         private bool UseBonus(CharacterServer Player, int CmptCombo)
         {
-            if (CmptCombo <= (int) Bonus.SubstractCombo)
+            if (CmptCombo <= (int) Bonus.ResetAllCombo)
             {
-                ResetCombo();
+                ResetAllCombo();
                 return true;
 
             } else if (CmptCombo <= (int) Bonus.Shield)
@@ -171,24 +174,20 @@
         {
             if (CmptCombo >= (int) Malus.DisableOtherPlayers)
             {
-                DisableOtherPlayers(Player);
+                DisableOtherPlayers(Player); // A changer
                 return true;
             } else if (CmptCombo >= (int) Malus.InvertInput)
             {
-                //InvertInput(Player);
-                return true;
+                return InvertInput(Player);
             } else if (CmptCombo >= (int) Malus.FlashKanji)
             {
-                //FlashKanji(Player);
-                return true;
+                return FlashKanji(Player);
             } else if (CmptCombo >= (int) Malus.UncolorKanji)
             {
-                //UncolorKanji(Player);
-                return true;
+                return UncolorKanji(Player);
             } else if (CmptCombo >= (int) Malus.InvertKanji)
             {
-                //InvertKanji(Player);
-                return true;
+                return InvertKanji(Player);
             } else
             {
                 return false;
@@ -200,7 +199,7 @@
         #region Powers
 
         #region Bonus
-        private void ResetCombo()
+        private void ResetAllCombo()
         {
             foreach (CharacterServer c in RoundPlayers)
             {
@@ -214,6 +213,7 @@
         /// <summary>
         /// Essai de mettre un shield sur le joueur appelant, renvois false
         /// si le joueur est déjà safe.
+        /// Sinon retourne AddSafePlayer
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
@@ -246,7 +246,165 @@
                 }
             }
         }
+
+        /// <summary>
+        /// Inverse les touches de jusqu'à 2 joueurs
+        /// Renvoie true en cas de succès, false en cas d'échec
+        /// </summary>
+        /// <param name="Exception"></param>
+        /// <returns></returns>
+        private bool InvertInput(CharacterServer Exception)
+        {
+            // On repere les victimes potentiel
+            List<CharacterServer> PotentialTargets = new List<CharacterServer>();
+
+            foreach (CharacterServer c in RoundPlayers)
+            {
+                if (c != null && c.AssociedClientID != Exception.AssociedClientID && !c.IsSafe())
+                {
+                    PotentialTargets.Add(c);
+                }
+            }
+
+            // Si il n'y a aucune potentiel victime
+            if (PotentialTargets.Count == 0)
+                return false;
+
+            // On recherche une victime
+            CharacterServer target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
+            target.InvertInput(INVERT_KANJI_DELAI);
+            AddSafePlayer(target);
+
+            PotentialTargets.Remove(target);
+
+            if (PotentialTargets.Count == 0)
+            {
+                return true;
+            }
+
+            // On recherche une 2ème victime
+            target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
+            target.InvertInput(INVERT_KANJI_DELAI);
+            AddSafePlayer(target);
+
+            return true;
+        }
         
+        /// <summary>
+        /// Fait clignoter les kanji de jusqu'à 2 joueurs
+        /// Les mets ensuite en safe
+        /// Renvoie true en cas de succès, false en cas d'échec.
+        /// </summary>
+        /// <returns></returns>
+        private bool FlashKanji(CharacterServer Exception)
+        {
+            // On repère les victimes potentiel
+            List<CharacterServer> PotentialTargets = new List<CharacterServer>();
+
+            foreach (CharacterServer c in RoundPlayers)
+            {
+                if (c!= null && c.AssociedClientID != Exception.AssociedClientID && !c.IsSafe())
+                {
+                    PotentialTargets.Add(c);
+                }
+            }
+
+            // Si il n'y a aucune potentiel victime
+            if (PotentialTargets.Count == 0)
+            {
+                return false;
+            }
+
+            // On recherche une victime
+            CharacterServer target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
+            target.FlashKanji(FLASH_KANJI_DELAI, DELAI_INTER_FLASH);
+            AddSafePlayer(target);
+
+            PotentialTargets.Remove(target);
+
+            if (PotentialTargets.Count == 0)
+            {
+                return true;
+            }
+
+            // On recherche une 2ème victime
+            target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
+            target.FlashKanji(FLASH_KANJI_DELAI, DELAI_INTER_FLASH);
+            AddSafePlayer(target);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Les kanjis d'un joueur deviennent gris.
+        /// Place ensuite le joueur en safe.
+        /// Renvoie true en cas de succès, false en cas d'echec.
+        /// </summary>
+        /// <returns></returns>
+        private bool UncolorKanji(CharacterServer Exception)
+        {
+            // On repère les victimes potentiel
+            List<CharacterServer> PotentialTargets = new List<CharacterServer>();
+
+            foreach (CharacterServer c in RoundPlayers)
+            {
+                if (c != null && c.AssociedClientID != Exception.AssociedClientID && !c.IsSafe())
+                {
+                    PotentialTargets.Add(c);
+                }
+            }
+
+            // Si il n'y a aucune potentiel victime
+            if (PotentialTargets.Count == 0)
+            {
+                return false;
+            }
+
+            // On recherche une victime
+            CharacterServer target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
+            target.UncolorKanji();
+            AddSafePlayer(target);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Les kanji d'un joueur s'inverse.
+        /// Place ensuite le joueur en safe.
+        /// Renvoie true en cas de succès, false en cas d'échec.
+        /// </summary>
+        /// <param name="Exception"></param>
+        private bool InvertKanji(CharacterServer Exception)
+        {
+            // On repère les victimes potentiel
+            List<CharacterServer> PotentialTargets = new List<CharacterServer>();
+
+            foreach (CharacterServer c in RoundPlayers)
+            {
+                if (c != null && c.AssociedClientID != Exception.AssociedClientID && !c.IsSafe())
+                {
+                    PotentialTargets.Add(c);
+                }
+            }
+
+            // Si il n'y a aucune potentiel victime
+            if (PotentialTargets.Count == 0)
+            {
+                return false;
+            }
+
+            // On recherche une victime
+            CharacterServer target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
+
+            if (target.InvertKanji())
+            {
+                AddSafePlayer(target);
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
 
         #endregion
 

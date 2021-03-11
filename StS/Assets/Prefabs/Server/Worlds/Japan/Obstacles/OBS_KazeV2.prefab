@@ -154,6 +154,9 @@ MonoBehaviour:
   ValidInputMaterial: {fileID: 2100000, guid: d3a060aae15cb864ea9360fd919cb297, type: 2}
   InvalidInputMaterial: {fileID: 2100000, guid: 3033ee82d6b1f114abcdeba565dc9707,
     type: 2}
+  KanjiRenderer: {fileID: 0}
+  OutlinerMaterial: {fileID: 2100000, guid: 1e71e2b84afba964980fc68ae97e7f77, type: 2}
+  UncolorMaterial: {fileID: 2100000, guid: 1d217c5f7bba48d418ca09a819794aa9, type: 2}
 --- !u!1001 &1095000448758886162
 PrefabInstance:
   m_ObjectHideFlags: 0

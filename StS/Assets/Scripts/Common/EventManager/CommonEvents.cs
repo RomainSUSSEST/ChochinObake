@@ -240,6 +240,18 @@ public class UpdateSuccessiveSuccessEvent : NetworkedEvent
 	}
 }
 
+#region Malus
+
+public class InvertInputEvent : NetworkedEvent
+{
+	public float Delai;
+	public InvertInputEvent(ulong PlayerID, float delai) : base (PlayerID, new Argument { Arg = delai, Type = typeof(float) })
+	{
+		Delai = delai;
+	}
+}
+
+#endregion
 
 #region MobileInputs
 public class FireEvent : NetworkedEvent

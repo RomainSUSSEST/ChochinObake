@@ -12,12 +12,26 @@ public class PanelInGameModel : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI bonusStreak;
 
+    #region Malus
+
+    [SerializeField] private GameObject DefaultPanel;
+    [SerializeField] private GameObject InvertPanel;
+
+    private Coroutine InvertInput_Coroutine;
+
+    #endregion
+
+
     #endregion
 
     #region Life Cycle
 
     private void OnEnable()
     {
+        // Initialisation
+        DefaultPanel.SetActive(true);
+        InvertPanel.SetActive(false);
+
         SubscribeEvents();
     }
 
@@ -58,12 +72,18 @@ public class PanelInGameModel : MonoBehaviour
     {
         EventManager.Instance.AddListener<InputListenRequestEvent>(InputListenRequest);
         EventManager.Instance.AddListener<UpdateSuccessiveSuccessEvent>(UpdateSuccessiveSuccess);
+
+        // Malus
+        EventManager.Instance.AddListener<InvertInputEvent>(InvertInput);
     }
 
     private void UnsubscribeEvents()
     {
         EventManager.Instance.RemoveListener<InputListenRequestEvent>(InputListenRequest);
         EventManager.Instance.RemoveListener<UpdateSuccessiveSuccessEvent>(UpdateSuccessiveSuccess);
+
+        // Malus
+        EventManager.Instance.RemoveListener<InvertInputEvent>(InvertInput);
     }
 
     #endregion
@@ -93,6 +113,37 @@ public class PanelInGameModel : MonoBehaviour
     {
         bonusStreak.text = e.Value.ToString();
     }
+
+    #region Malus
+
+    private void InvertInput(InvertInputEvent e)
+    {
+        // Si une coroutine fait déjà cet effet, on la supprime
+        if (InvertInput_Coroutine != null)
+        {
+            StopCoroutine(InvertInput_Coroutine);
+        }
+
+        DefaultPanel.SetActive(false);
+        InvertPanel.SetActive(true);
+        InvertInput_Coroutine = StartCoroutine("_InvertKanji", e.Delai);
+    }
+
+    /// <summary>
+    /// Replace la configuration par défaut après un certain délai
+    /// concernant les inputs.
+    /// </summary>
+    /// <param name="delai"></param>
+    /// <returns></returns>
+    private IEnumerator _InvertKanji(float delai)
+    {
+        yield return new WaitForSeconds(delai);
+
+        DefaultPanel.SetActive(true);
+        InvertPanel.SetActive(false);
+    }
+
+    #endregion
 
     #endregion
 

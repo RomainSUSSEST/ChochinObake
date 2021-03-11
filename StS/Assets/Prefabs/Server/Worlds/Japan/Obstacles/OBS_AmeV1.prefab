@@ -153,6 +153,9 @@ MonoBehaviour:
   ValidInputMaterial: {fileID: 2100000, guid: d3a060aae15cb864ea9360fd919cb297, type: 2}
   InvalidInputMaterial: {fileID: 2100000, guid: 3033ee82d6b1f114abcdeba565dc9707,
     type: 2}
+  KanjiRenderer: {fileID: 8402313194284475260}
+  OutlinerMaterial: {fileID: 2100000, guid: 1e71e2b84afba964980fc68ae97e7f77, type: 2}
+  UncolorMaterial: {fileID: 2100000, guid: 1d217c5f7bba48d418ca09a819794aa9, type: 2}
 --- !u!1001 &1093535866017198418
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -393,6 +396,12 @@ GameObject:
 --- !u!4 &7264358466972063763 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c1049dba9d9345e45a5b1b85587c9e68,
+    type: 3}
+  m_PrefabInstance: {fileID: 7159200536238358520}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8402313194284475260 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: c1049dba9d9345e45a5b1b85587c9e68,
     type: 3}
   m_PrefabInstance: {fileID: 7159200536238358520}
   m_PrefabAsset: {fileID: 0}

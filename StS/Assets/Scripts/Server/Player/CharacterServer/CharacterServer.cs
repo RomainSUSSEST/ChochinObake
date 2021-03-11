@@ -34,6 +34,9 @@ public class CharacterServer : CharacterPlayer
     #region Malus
 
     private bool IsSleeping;
+    private Coroutine Sleeping_Couroutine;
+
+    private Coroutine FlashKanji_Coroutine;
 
     #endregion
 
@@ -170,12 +173,6 @@ public class CharacterServer : CharacterPlayer
 
     #region Combo
 
-    //public void SubstractCombo(int n)
-    //{
-    //    CmptCombo -= n;
-    //    MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
-    //}
-
     public void ResetCombo()
     {
         CmptCombo = 0;
@@ -189,7 +186,12 @@ public class CharacterServer : CharacterPlayer
 
     public void Sleep(float delai)
     {
-        StartCoroutine("Sleeping", delai);
+        if (Sleeping_Couroutine != null)
+        {
+            StopCoroutine(Sleeping_Couroutine);
+        }
+
+        Sleeping_Couroutine = StartCoroutine("Sleeping", delai);
     }
 
     private IEnumerator Sleeping(float delai)
@@ -199,6 +201,88 @@ public class CharacterServer : CharacterPlayer
         yield return new WaitForSeconds(delai);
 
         IsSleeping = false;
+    }
+
+    public void InvertInput(float delai)
+    {
+        MessagingManager.Instance.RaiseNetworkedEventOnClient(new InvertInputEvent(AssociedClientID, delai));
+    }
+
+    public void FlashKanji(float delai, float delaiInterFlash)
+    {
+        if (FlashKanji_Coroutine != null)
+        {
+            StopCoroutine(FlashKanji_Coroutine);
+        }
+
+        FlashKanji_Coroutine = StartCoroutine(_FlashKanji(delai, delaiInterFlash));
+    }
+
+    private IEnumerator _FlashKanji(float delai, float delaiInterFlash)
+    {
+        float time = 0;
+        bool status = false;
+        while (time < delai)
+        {
+            foreach (Obstacle o in QueueObstacle)
+            {
+                o.SetKanjiRendererStatus(status);
+            }
+
+            yield return new WaitForSeconds(delaiInterFlash);
+
+            time += delaiInterFlash;
+            status = !status;
+        }
+
+        // On s'assure que l'on fini par réactiver les kanjis
+        foreach (Obstacle o in QueueObstacle)
+        {
+            o.SetKanjiRendererStatus(true);
+        }
+    }
+
+    public void UncolorKanji()
+    {
+        foreach (Obstacle o in QueueObstacle)
+        {
+            o.UncolorKanji();
+        }
+    }
+
+    /// <summary>
+    /// Essai d'inverser les kanaji du joueur
+    /// Renvoie true en cas de succès, false en cas d'échec
+    /// </summary>
+    public bool InvertKanji()
+    {
+        if (QueueObstacle.Count > 3)
+        {
+            Obstacle[] currentObstacle = QueueObstacle.ToArray();
+
+            Obstacle tampon = currentObstacle[1];
+            Vector3 tampon2 = currentObstacle[1].transform.position;
+
+            currentObstacle[1].transform.position = currentObstacle[2].transform.position;
+            currentObstacle[1] = currentObstacle[2];
+
+            currentObstacle[2].transform.position = tampon2;
+            currentObstacle[2] = tampon;
+            
+
+            // On reforme la queue
+            QueueObstacle = new Queue<Obstacle>();
+
+            foreach (Obstacle o in currentObstacle)
+            {
+                Debug.Log(o.name);
+                QueueObstacle.Enqueue(o);
+            }
+            return true;
+        } else
+        {
+            return false;
+        }
     }
 
     #endregion

@@ -21,6 +21,7 @@ public class Obstacle : MonoBehaviour
     [SerializeField] private Elements Type;
 
     [SerializeField] private GameObject Kanji;
+
     [SerializeField] private float ValidInputArea_Threshold;
     // Temps en plus après le perfect match
     [SerializeField] private float ValidInputArea_Delai; // min 0
@@ -29,6 +30,11 @@ public class Obstacle : MonoBehaviour
 
     [SerializeField] private Material ValidInputMaterial;
     [SerializeField] private Material InvalidInputMaterial;
+
+    [Header("Malus")]
+    [SerializeField] private Renderer KanjiRenderer;
+    [SerializeField] private Material OutlinerMaterial;
+    [SerializeField] private Material UncolorMaterial;
 
     private CharacterServer AssociatedCharacter;
 
@@ -95,6 +101,18 @@ public class Obstacle : MonoBehaviour
     {
         Destroy(Kanji.gameObject);
         StopCoroutine(m_IndicatorManagement);
+    }
+
+    public void SetKanjiRendererStatus(bool b)
+    {
+        KanjiRenderer.enabled = b;
+    }
+
+    public void UncolorKanji()
+    {
+        KanjiRenderer.materials = new Material[2];
+        KanjiRenderer.materials[0] = OutlinerMaterial;
+        KanjiRenderer.materials[1] = UncolorMaterial;
     }
 
     #endregion
