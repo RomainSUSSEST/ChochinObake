@@ -908,7 +908,7 @@ PrefabInstance:
     - target: {fileID: 1343288258749584720, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1485194726490918154, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}
@@ -933,7 +933,7 @@ PrefabInstance:
     - target: {fileID: 2398205335997665774, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2462076398461735174, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}
@@ -1094,6 +1094,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: RoomLeaveButtonHasBeenClicked
+      objectReference: {fileID: 0}
+    - target: {fileID: 4827712257252407372, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 4578320737267200691}
+    - target: {fileID: 4827712257252407372, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CancelButtonHasBeenClicked
       objectReference: {fileID: 0}
     - target: {fileID: 5258599741736768518, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}

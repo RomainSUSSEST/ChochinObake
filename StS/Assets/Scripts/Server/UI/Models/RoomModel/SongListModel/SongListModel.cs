@@ -79,13 +79,13 @@ public class SongListModel : MonoBehaviour
         float currentMarginHeight = MARGIN_HEIGHT;
 
         // On tient compte du rescale de la vue
-        buttonHeight *= ViewPanel.localScale.y;
-        currentMarginHeight *= ViewPanel.localScale.y;
+        buttonHeight *= ViewPanel.lossyScale.y;
+        currentMarginHeight *= ViewPanel.lossyScale.y;
 
         // On estime la hauteur à allouer
         float height = (songs.Length + 1) * currentMarginHeight
             + songs.Length * buttonHeight;
-        height /= ViewPanel.localScale.y;
+        height /= ViewPanel.lossyScale.y;
 
         // On redimenssione le content
         RectTransform contentRectTransform = ContentNode.GetComponent<RectTransform>();
@@ -101,7 +101,7 @@ public class SongListModel : MonoBehaviour
             (
                 contentRectTransform.position.x,
                 (contentRectTransform.position.y
-                    + height * ViewPanel.localScale.y / 2 - currentMarginHeight - buttonHeight / 2),
+                    + height * ViewPanel.lossyScale.y / 2 - currentMarginHeight - buttonHeight / 2),
                 contentRectTransform.position.z
             );
 

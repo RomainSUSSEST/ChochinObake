@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class MusicSelectionClientModel : MonoBehaviour
 {
+    // Constants
+
+    private static readonly float MARGIN = 5; // px
+
     // Attributs
 
     [Header("SongListPanel")]
@@ -14,12 +18,10 @@ public class MusicSelectionClientModel : MonoBehaviour
     [Header("Song List Text Content")]
 
     [SerializeField] private MusicSelectionClient_Song SongPrefab; // La prefab de l'objet son à spawn
-    [SerializeField] private Transform SongSpawnTransform;
     [SerializeField] private Transform ContentNode;
 
     private string[] MusicList; // La liste des musiques renvoyé par le serveur
     private List<MusicSelectionClient_Song> SongList; // La liste des objets UI affichant les musiques
-    private Vector3 CurrentSpawnerPosition;
 
 
     #region Life cycle
@@ -80,16 +82,40 @@ public class MusicSelectionClientModel : MonoBehaviour
     /// </summary>
     private void PrintPanelMusicList()
     {
+        float buttonHeight = SongPrefab.GetComponent<RectTransform>().rect.height * transform.lossyScale.y;
+        float margin = MARGIN * transform.lossyScale.y;
+
+        // On estime la hauteur à allouer
+        float height = (MusicList.Length + 1) * margin
+            + MusicList.Length * buttonHeight;
+        
+        height /= transform.lossyScale.y;
+
+        // On redimenssione le content
+        RectTransform contentRectTransform = ContentNode.GetComponent<RectTransform>();
+        contentRectTransform.sizeDelta = new Vector2
+            (
+                contentRectTransform.rect.width,
+                height
+            );
+
+        // On défini la position de départ
+        Vector3 currentPositionButtonSpawn = new Vector3
+            (
+                contentRectTransform.position.x,
+                (contentRectTransform.position.y
+                    + height * transform.lossyScale.y / 2 - margin - buttonHeight / 2),
+                contentRectTransform.position.z
+            );
+
         // On parcourt les chansons
         MusicSelectionClient_Song currentSong;
         for (int i = 0; i < MusicList.Length; ++i)
         {
-            currentSong = Instantiate(SongPrefab, CurrentSpawnerPosition, Quaternion.identity, ContentNode);
+            currentSong = Instantiate(SongPrefab, currentPositionButtonSpawn, Quaternion.identity, ContentNode);
             currentSong.SetTitle(MusicList[i]);
 
-            CurrentSpawnerPosition = new Vector3(CurrentSpawnerPosition.x,
-                CurrentSpawnerPosition.y - currentSong.GetComponent<RectTransform>().rect.height / 2,
-                CurrentSpawnerPosition.z);
+            currentPositionButtonSpawn -= new Vector3(0, buttonHeight + margin, 0);
 
             // On ajoute le son à la liste.
             SongList.Add(currentSong);
@@ -114,9 +140,6 @@ public class MusicSelectionClientModel : MonoBehaviour
 
         // On initialise la liste des sons
         SongList = new List<MusicSelectionClient_Song>();
-
-        // On initialise la position du spawner.
-        CurrentSpawnerPosition = SongSpawnTransform.position;
     }
 
 

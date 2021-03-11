@@ -49,6 +49,7 @@ public class CharacterServer : CharacterPlayer
         GetCharacterBody().IsRunning(true); // On lance l'animation de course
 
         UpdatePosition(FIRST_UPDATE_POSITION_TIME);
+        ResetCombo();
     }
 
     private void Update()

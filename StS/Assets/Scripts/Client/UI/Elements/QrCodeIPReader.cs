@@ -16,6 +16,8 @@ public class QrCodeIPReader : MonoBehaviour
     private RawImage display;
     private WebCamTexture camTexture;
 
+    private bool StopRead;
+
 
     #region Life Cycle
 
@@ -32,75 +34,22 @@ public class QrCodeIPReader : MonoBehaviour
             && !Permission.HasUserAuthorizedPermission(Permission.Camera)) // Si on est sur android et que l'on a pas les autorisations
         {
             Permission.RequestUserPermission(Permission.Camera); // On les demande
+
+            // On prepare le recepteur de texture
+            display.transform.localScale = new Vector3(-1 * display.transform.localScale.x, display.transform.localScale.y * -1, display.transform.localScale.z);
+
+        } else if (SystemInfo.deviceType == DeviceType.Desktop)
+        {
+            // On prépare le recepteur de texture
+            display.transform.localScale = new Vector3(-1 * display.transform.localScale.x, display.transform.localScale.y, display.transform.localScale.z);
         }
     }
 
     private void OnEnable()
     {
-        // Si on n'a pas les autorisations
-        if (Application.platform == RuntimePlatform.Android
-            && !Permission.HasUserAuthorizedPermission(Permission.Camera))
-        {
-            return;
-        }
-
-        #region On identifie les caméras.
-
-        WebCamDevice[] devices = WebCamTexture.devices;
-
-        if (devices.Length == 0)
-        {
-            Debug.LogError("No camera detected");
-            return;
-        }
-
-        #endregion
-
-        #region On initialise les components pour s'adapter à la platforme.
-        if (SystemInfo.deviceType == DeviceType.Desktop)
-        {
-            display.transform.localScale = new Vector3(-1 * display.transform.localScale.x, display.transform.localScale.y, display.transform.localScale.z);
-
-            // On recherche la front camera
-            for (int i = 0; i < devices.Length; ++i)
-            {
-                if (devices[i].isFrontFacing)
-                {
-                    // On prend en dimension, la taille de l'écran.
-                    camTexture = new WebCamTexture(devices[i].name, Screen.width, Screen.height);
-                    break;
-                }
-            }
-        }
-        else
-            if (Application.platform == RuntimePlatform.Android)
-        {
-            display.transform.localScale = new Vector3(-1 * display.transform.localScale.x, -1 * display.transform.localScale.y, display.transform.localScale.z);
-            Screen.sleepTimeout = SleepTimeout.NeverSleep;
-
-            // On recherche la back camera
-            for (int i = 0; i < devices.Length; ++i)
-            {
-                if (!devices[i].isFrontFacing)
-                {
-                    // On prend en dimension, la taille de l'écran.
-                    camTexture = new WebCamTexture(devices[i].name, Screen.width, Screen.height);
-                    break;
-                }
-            }
-        }
-        #endregion
-
-        #region Si aucune caméra n'est trouvé
-        if (camTexture == null)
-        {
-            Debug.LogError("No back camera");
-            return;
-        }
-        #endregion
-
         #region On lance la lecture
 
+        StopRead = false;
         StartCoroutine("SearchQRCode");
 
         #endregion
@@ -113,8 +62,7 @@ public class QrCodeIPReader : MonoBehaviour
         {
             camTexture.Stop();
         }
-        // Et que la coroutine est fini
-        StopCoroutine("SearchQRCode");
+        StopRead = true;
     }
 
     #endregion
@@ -123,42 +71,65 @@ public class QrCodeIPReader : MonoBehaviour
 
     private IEnumerator SearchQRCode()
     {
-        #region Initialisation des composants & lancement de la caméra
-        errorMessage.text = ""; // initialisation du message d'erreur.
-        display.texture = camTexture;
-        camTexture.Play();
-
-        Result result = null;
-        IBarcodeReader barcodeReader = new BarcodeReader();
-        #endregion
-
-        while (result == null)
+        // Si on est sur android
+        if (Application.platform == RuntimePlatform.Android)
         {
-            // Decode the current frame
-            Texture2D texture = TextureToTexture2D(display.texture); // On récupére la texture
-            result = barcodeReader.Decode(texture.GetPixels32(),
-                texture.width, texture.height); // On écode l'image
-
-            #region Invalid IP
-            if (result != null && !IPManager.ValidateIPv4(result.Text))
+            // On attend les permissions
+            while (!StopRead && !Permission.HasUserAuthorizedPermission(Permission.Camera))
             {
-                errorMessage.text = "Invalid IP : " + result.Text;
-                result = null;
+                yield return new WaitForSeconds(0.5f);
             }
-            #endregion
 
-            yield return new WaitForSeconds(1);
+            // Si la lecture est terminé, on arrete
+            if (StopRead)
+            {
+                yield break;
+            }
         }
 
-        camTexture.Stop(); // On stop la caméra
-            
-        // Renvoie du résultat.
-        if (result != null)
+        // Nous avons les permissions et la lecture continue...
+
+        if (!InitializeCamera()) // Si l'initialisation se passe mal
         {
-            EventManager.Instance.Raise(new ServerConnectionEvent()
+            yield break;
+        }
+        else
+        {
+            #region Initialisation des composants & lancement de la caméra
+            errorMessage.text = ""; // initialisation du message d'erreur.
+            display.texture = camTexture;
+            camTexture.Play();
+
+            Result result = null;
+            IBarcodeReader barcodeReader = new BarcodeReader();
+            #endregion
+
+            while (!StopRead && result == null)
             {
-                Adress = result.Text
-            });
+                // Decode the current frame
+                Texture2D texture = TextureToTexture2D(display.texture); // On récupére la texture
+                result = barcodeReader.Decode(texture.GetPixels32(),
+                    texture.width, texture.height); // On écode l'image
+
+                #region Invalid IP
+                if (result != null && !IPManager.ValidateIPv4(result.Text))
+                {
+                    errorMessage.text = "Invalid IP : " + result.Text;
+                    result = null;
+                }
+                #endregion
+
+                yield return new WaitForSeconds(1f);
+            }
+
+            // Renvoie du résultat.
+            if (result != null)
+            {
+                EventManager.Instance.Raise(new ServerConnectionEvent()
+                {
+                    Adress = result.Text
+                });
+            }
         }
     }
 
@@ -181,5 +152,69 @@ public class QrCodeIPReader : MonoBehaviour
         RenderTexture.active = currentRT;
         RenderTexture.ReleaseTemporary(renderTexture);
         return texture2D;
+    }
+
+    /// <summary>
+    /// Renvoie true si l'initialisation c'est bien passé
+    /// False sinon
+    /// </summary>
+    /// <returns></returns>
+    private bool InitializeCamera()
+    {
+        #region On identifie les caméras.
+
+        WebCamDevice[] devices = WebCamTexture.devices;
+
+        if (devices.Length == 0)
+        {
+            Debug.LogError("No camera detected");
+            return false;
+        }
+
+        #endregion
+
+        #region On initialise les components pour s'adapter à la platforme.
+        if (SystemInfo.deviceType == DeviceType.Desktop)
+        {
+            // On recherche la front camera
+            for (int i = 0; i < devices.Length; ++i)
+            {
+                if (devices[i].isFrontFacing)
+                {
+                    // On prend en dimension, la taille de l'écran.
+                    camTexture = new WebCamTexture(devices[i].name, Screen.width, Screen.height);
+                    break;
+                }
+            }
+        }
+        else
+            if (Application.platform == RuntimePlatform.Android)
+            {            
+                Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
+                // On recherche la back camera
+                for (int i = 0; i < devices.Length; ++i)
+                {
+                    if (!devices[i].isFrontFacing)
+                    {
+                        // On prend en dimension, la taille de l'écran.
+                        camTexture = new WebCamTexture(devices[i].name, Screen.width, Screen.height);
+                        break;
+                    }
+                }
+            }
+        #endregion
+
+        // Si aucune caméra n'est trouvé
+        if (camTexture == null)
+        {
+            Debug.LogError("No back camera");
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+            
     }
 }
