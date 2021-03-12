@@ -47,15 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BodyType: 4
-  m_BodyStory: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tristique
-    rhoncus ipsum ut tincidunt. Phasellus maximus congue euismod. \n\nCras mollis
-    nec diam in lobortis. Nunc varius nibh nec euismod rhoncus. Ut faucibus nisi
-    quam, in aliquet purus fermentum in. Sed sed dolor ut nibh dapibus eleifend id
-    non est. Cras vitae dui sed urna posuere imperdiet sit amet non elit. Proin suscipit
-    tortor leo, ut rutrum velit pharetra pharetra. Ut leo nisl, cursus eget convallis
-    sit amet, egestas rutrum tellus. Aliquam ut placerat purus, at suscipit est.
-    Maecenas vitae neque at neque sollicitudin suscipit in et dui. Vivamus ornare
-    felis."
+  m_BodyStory: "Like many other oil-related y\u014Dkai, Ginga are said to originate
+    from oil thieves. While the particular circumstances of these oil thieves are
+    lost to time, they mirror so many other y\u014Dkai that we can infer that these
+    thieves died and\u2014instead of passing on to the next life\u2014turned into
+    y\u014Dkai as a penalty for their sins."
   ValidArea: {fileID: 1732671473335108733}
   m_AttackSuccess: {fileID: 8047168045642033373}
   m_AttackFailure: {fileID: 8128025500325258960}

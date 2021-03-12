@@ -47,15 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BodyType: 10
-  m_BodyStory: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tristique
-    rhoncus ipsum ut tincidunt. Phasellus maximus congue euismod. \n\nCras mollis
-    nec diam in lobortis. Nunc varius nibh nec euismod rhoncus. Ut faucibus nisi
-    quam, in aliquet purus fermentum in. Sed sed dolor ut nibh dapibus eleifend id
-    non est. Cras vitae dui sed urna posuere imperdiet sit amet non elit. Proin suscipit
-    tortor leo, ut rutrum velit pharetra pharetra. Ut leo nisl, cursus eget convallis
-    sit amet, egestas rutrum tellus. Aliquam ut placerat purus, at suscipit est.
-    Maecenas vitae neque at neque sollicitudin suscipit in et dui. Vivamus ornare
-    felis."
+  m_BodyStory: Waruga as an element of construction evolved from shibi, large, ornamental
+    roof end tiles. Shibi originated in China during the Jin dynasty and were popularized
+    in Japan during the Nara and Heian periods. During the Sengoku period, when castles
+    rapidly began appearing all over Japan, shibi were reimagined as large fish,
+    and the image of the shachihoko was popularized.
   ValidArea: {fileID: 5252885561223219467}
   m_AttackSuccess: {fileID: 7230433227244195348}
   m_AttackFailure: {fileID: 7889598752036219896}

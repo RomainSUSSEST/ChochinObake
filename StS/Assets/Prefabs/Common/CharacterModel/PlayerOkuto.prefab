@@ -47,15 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BodyType: 6
-  m_BodyStory: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tristique
-    rhoncus ipsum ut tincidunt. Phasellus maximus congue euismod. \n\nCras mollis
-    nec diam in lobortis. Nunc varius nibh nec euismod rhoncus. Ut faucibus nisi
-    quam, in aliquet purus fermentum in. Sed sed dolor ut nibh dapibus eleifend id
-    non est. Cras vitae dui sed urna posuere imperdiet sit amet non elit. Proin suscipit
-    tortor leo, ut rutrum velit pharetra pharetra. Ut leo nisl, cursus eget convallis
-    sit amet, egestas rutrum tellus. Aliquam ut placerat purus, at suscipit est.
-    Maecenas vitae neque at neque sollicitudin suscipit in et dui. Vivamus ornare
-    felis."
+  m_BodyStory: "The sun has always been a central part of Japanese religion. Amaterasu,
+    the sun goddess, is the most important deity in Shinto and is worshipped across
+    Japan. The importance of the sun in Japanese culture can be seen in Japan\u2019s
+    nickname\u2014the land of the rising sun\u2014on the Japanese flag, and in the
+    native word for Japan itself: Nihon, \u201Cthe origin of the sun.\u201D"
   ValidArea: {fileID: 8781135600690465465}
   m_AttackSuccess: {fileID: 6076840423237043722}
   m_AttackFailure: {fileID: 3301168219351238839}

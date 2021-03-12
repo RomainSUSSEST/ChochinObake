@@ -298,7 +298,7 @@ public class RoomModel : MonoBehaviour
             case PlayerState.Connection :
                 return "Connexion";
             case PlayerState.Selection :
-                return "Selection Slime";
+                return "Character Selection";
             case PlayerState.Ready :
                 return "Ready";
             default :

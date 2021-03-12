@@ -47,15 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BodyType: 3
-  m_BodyStory: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tristique
-    rhoncus ipsum ut tincidunt. Phasellus maximus congue euismod. \n\nCras mollis
-    nec diam in lobortis. Nunc varius nibh nec euismod rhoncus. Ut faucibus nisi
-    quam, in aliquet purus fermentum in. Sed sed dolor ut nibh dapibus eleifend id
-    non est. Cras vitae dui sed urna posuere imperdiet sit amet non elit. Proin suscipit
-    tortor leo, ut rutrum velit pharetra pharetra. Ut leo nisl, cursus eget convallis
-    sit amet, egestas rutrum tellus. Aliquam ut placerat purus, at suscipit est.
-    Maecenas vitae neque at neque sollicitudin suscipit in et dui. Vivamus ornare
-    felis."
+  m_BodyStory: Gento was first documented in the Edo period. Woodblock prints of
+    it were popular gifts. Almost no explanation about the creature was included
+    in these prints, other than that it was said to come from India, it could understand
+    human speech, and was called kotobuki. Merely possessing an image of him was
+    thought to be enough to protect a person from sickness and disease.
   ValidArea: {fileID: 7163579117401922423}
   m_AttackSuccess: {fileID: 987962462307861888}
   m_AttackFailure: {fileID: 7294558349478176932}

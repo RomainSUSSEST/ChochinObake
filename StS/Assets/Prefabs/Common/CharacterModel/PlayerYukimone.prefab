@@ -47,15 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BodyType: 11
-  m_BodyStory: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tristique
-    rhoncus ipsum ut tincidunt. Phasellus maximus congue euismod. \n\nCras mollis
-    nec diam in lobortis. Nunc varius nibh nec euismod rhoncus. Ut faucibus nisi
-    quam, in aliquet purus fermentum in. Sed sed dolor ut nibh dapibus eleifend id
-    non est. Cras vitae dui sed urna posuere imperdiet sit amet non elit. Proin suscipit
-    tortor leo, ut rutrum velit pharetra pharetra. Ut leo nisl, cursus eget convallis
-    sit amet, egestas rutrum tellus. Aliquam ut placerat purus, at suscipit est.
-    Maecenas vitae neque at neque sollicitudin suscipit in et dui. Vivamus ornare
-    felis."
+  m_BodyStory: One rainy night long ago, some fishers living on the Shimane peninsula
+    witnessed an enormous white shape off the coast in the Sea of Japan. Squinting
+    their eyes, it appeared to them to be a whale swimming offshore. Excited for
+    the catch, they rallied the townspeople, who grabbed their spears and harpoons
+    and took to their boats to hunt down and catch their quarry.
   ValidArea: {fileID: 2313624090031490467}
   m_AttackSuccess: {fileID: 2692392034795947939}
   m_AttackFailure: {fileID: 4398077541432549254}

@@ -47,15 +47,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BodyType: 9
-  m_BodyStory: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tristique
-    rhoncus ipsum ut tincidunt. Phasellus maximus congue euismod. \n\nCras mollis
-    nec diam in lobortis. Nunc varius nibh nec euismod rhoncus. Ut faucibus nisi
-    quam, in aliquet purus fermentum in. Sed sed dolor ut nibh dapibus eleifend id
-    non est. Cras vitae dui sed urna posuere imperdiet sit amet non elit. Proin suscipit
-    tortor leo, ut rutrum velit pharetra pharetra. Ut leo nisl, cursus eget convallis
-    sit amet, egestas rutrum tellus. Aliquam ut placerat purus, at suscipit est.
-    Maecenas vitae neque at neque sollicitudin suscipit in et dui. Vivamus ornare
-    felis."
+  m_BodyStory: Ryuko originated in southern China, and come from a goddess. Their
+    origin is recorded in some of the oldest ancient Chinese records. When the legendary
+    Yellow Emperor of China fought the warlord Chi You, he summon a powerful goddess
+    named Batsu to aid him in battle.
   ValidArea: {fileID: 5564089524305079548}
   m_AttackSuccess: {fileID: 6630517395360040952}
   m_AttackFailure: {fileID: 4674532154668133163}

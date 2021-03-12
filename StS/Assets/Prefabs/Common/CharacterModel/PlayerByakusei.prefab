@@ -47,15 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BodyType: 1
-  m_BodyStory: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tristique
-    rhoncus ipsum ut tincidunt. Phasellus maximus congue euismod. \n\nCras mollis
-    nec diam in lobortis. Nunc varius nibh nec euismod rhoncus. Ut faucibus nisi
-    quam, in aliquet purus fermentum in. Sed sed dolor ut nibh dapibus eleifend id
-    non est. Cras vitae dui sed urna posuere imperdiet sit amet non elit. Proin suscipit
-    tortor leo, ut rutrum velit pharetra pharetra. Ut leo nisl, cursus eget convallis
-    sit amet, egestas rutrum tellus. Aliquam ut placerat purus, at suscipit est.
-    Maecenas vitae neque at neque sollicitudin suscipit in et dui. Vivamus ornare
-    felis."
+  m_BodyStory: Byakusei was formed when the evil nine-tailed kitsune Tamamo no Mae
+    was slain. Her hunters returned triumphantly, bearing her body to the capital.
+    Her spirit, however, attached itself to a large boulder near where she fell.
+    It continued to kill long after her death. Any living thing that wandered close
+    enough to the stone died instantly.
   ValidArea: {fileID: 1016989742600176295}
   m_AttackSuccess: {fileID: 2805001714600520385}
   m_AttackFailure: {fileID: 2491766476991220474}
