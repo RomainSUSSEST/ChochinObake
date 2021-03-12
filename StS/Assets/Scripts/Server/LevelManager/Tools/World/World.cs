@@ -262,7 +262,7 @@ public class World : MonoBehaviour
         // des joueurs.
         EventManager.Instance.Raise(new RoundStartEvent()
         {
-            RoundPlayers = new System.Collections.ObjectModel.ReadOnlyCollection<CharacterPlayer>(CharacterArray)
+            RoundPlayers = new System.Collections.ObjectModel.ReadOnlyCollection<CharacterServer>(CharacterArray)
         });
     }
 
@@ -311,7 +311,7 @@ public class World : MonoBehaviour
             {
                 if (CurrentMap[cpt].prunedSpectralFlux > CurrentThresholdSensitivity)
                 {
-                    SfxManager.Instance.PlaySfx2D("Balloon");
+                    SfxManager.Instance.PlaySfx(SfxManager.Instance.Balloon);
                 }
 
                 ++cpt;
@@ -320,32 +320,6 @@ public class World : MonoBehaviour
             yield return new CoroutineTools.WaitForFrames(1);
             time += Time.deltaTime; // On ajoute le temps passé
         }
-    }
-
-    private IEnumerator SpeedUpMapElements()
-    {
-        float time = 0;
-
-        float StartGroundSpeed = Ground.MOVE_SPEED;
-        float StartBackgroundSpeed = Background.MOVE_SPEED;
-
-        float EndGroundSpeed = StartGroundSpeed * RoundEnd_SpeedUpCoefficient;
-        float EndBackgroundSpeed = StartBackgroundSpeed * RoundEnd_SpeedUpCoefficient;
-
-        float percent;
-        while (time < RoundEnd_SpeedUpDelai)
-        {
-            percent = time / RoundEnd_SpeedUpDelai;
-            
-            Ground.MOVE_SPEED = Mathf.Lerp(StartGroundSpeed, EndGroundSpeed, percent);
-            Background.MOVE_SPEED = Mathf.Lerp(StartBackgroundSpeed, EndBackgroundSpeed, percent);
-
-            yield return new CoroutineTools.WaitForFrames(1);
-            time += Time.deltaTime;
-        }
-
-        Ground.MOVE_SPEED = EndGroundSpeed;
-        Background.MOVE_SPEED = EndBackgroundSpeed;
     }
 
     #endregion
@@ -467,7 +441,7 @@ public class World : MonoBehaviour
                     curObstacle = Instantiate(ListObstacle[index], new Vector3(
                         pos.x,
                         pos.y,
-                        pos.z + ObstacleDistanceToCharacterSpawn),
+                        ss.GetCharacterBody().GetValidArea().transform.position.z + ObstacleDistanceToCharacterSpawn),
                         Quaternion.identity,
                         transform);
 
@@ -486,7 +460,7 @@ public class World : MonoBehaviour
     {
         // On génère l'arrivée
         Vector3 pos = transform.position;
-        Instantiate(EndMapPrefab,
+        GameObject arrival = Instantiate(EndMapPrefab,
             new Vector3(pos.x, pos.y, pos.z + ArrivalDistanceToCharacterSpawn),
             Quaternion.identity,
             transform);
@@ -494,11 +468,11 @@ public class World : MonoBehaviour
         // Désactivation du background
         Background.LOOP = false;
 
-        // On accèlère le défilement
-        StartCoroutine("SpeedUpMapElements");
-
         // On averti de la fin de la chanson
-        EventManager.Instance.Raise(new MusicRoundEndEvent());
+        EventManager.Instance.Raise(new MusicRoundEndEvent()
+        {
+            TransformArrival = arrival.transform
+        });
     }
 
     #endregion

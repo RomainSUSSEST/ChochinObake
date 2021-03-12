@@ -55,6 +55,7 @@
             EventManager.Instance.AddListener<ServerEnterInGameMusicSelectionEvent>(ServerEnterInGameMusicSelection);
             EventManager.Instance.AddListener<ServerEnterInGameMusicResultEvent>(ServerEnterInGameMusicResult);
             EventManager.Instance.AddListener<GameStartedEvent>(GameStarted);
+            EventManager.Instance.AddListener<ServerEnterInLobbyEvent>(ServerEnterInLobby);
         }
 
         public override void UnsubscribeEvents()
@@ -76,6 +77,7 @@
             EventManager.Instance.RemoveListener<ServerEnterInGameMusicSelectionEvent>(ServerEnterInGameMusicSelection);
             EventManager.Instance.RemoveListener<ServerEnterInGameMusicResultEvent>(ServerEnterInGameMusicResult);
             EventManager.Instance.RemoveListener<GameStartedEvent>(GameStarted);
+            EventManager.Instance.RemoveListener<ServerEnterInLobbyEvent>(ServerEnterInLobby);
         }
         #endregion
 
@@ -100,7 +102,7 @@
         }
         #endregion
 
-        #region Callbacks to Events issued by MenuManage
+        #region Callbacks to Events issued by MenuManager
 
         private void JoinButtonClicked(JoinButtonClickedEvent e)
         {
@@ -160,14 +162,19 @@
             EventManager.Instance.Raise(new MobileGamePlayEvent());
         }
 
+        private void CharacterSelection()
+        {
+            SetTimeScale(1);
+            m_GameState = GameState.gameMenu;
+            EventManager.Instance.Raise(new MobileCharacterSelectionEvent());
+        }
+
         #endregion
 
         #region Callbacks to Event issued by NetworksManager
         private void ServerConnectionSuccess(ServerConnectionSuccessEvent e)
         {
-            SetTimeScale(1);
-            m_GameState = GameState.gameMenu;
-            EventManager.Instance.Raise(new MobileCharacterSelectionEvent());
+            CharacterSelection();
         }
         #endregion
 
@@ -191,6 +198,12 @@
         {
             Play();
         }
+
+        private void ServerEnterInLobby(ServerEnterInLobbyEvent e)
+        {
+            CharacterSelection();
+        }
+
         #endregion
 
         #region EventCallbackCharacterSelectionMenu

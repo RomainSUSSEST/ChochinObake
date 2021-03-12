@@ -6,4 +6,11 @@ public class Player
     public string Pseudo { get; set; }
     public PlayerState PlayerState { get; set; }
     public CharacterBody Body { get; set; }
+
+    public int Score;
+}
+
+public class AI_Player
+{
+    public string Name;
 }

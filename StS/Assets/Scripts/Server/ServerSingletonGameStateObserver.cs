@@ -14,8 +14,6 @@ public abstract class ServerSingletonGameStateObserver<T> :  Singleton<T>,IEvent
 		EventManager.Instance.AddListener<GameMusicResultMenuEvent>(GameMusicResultMenu);
 
 		EventManager.Instance.AddListener<GamePlayEvent>(GamePlay);
-		EventManager.Instance.AddListener<GamePauseEvent>(GamePause);
-		EventManager.Instance.AddListener<GameResumeEvent>(GameResume);
 		EventManager.Instance.AddListener<GameEndEvent>(GameEnd);
 		EventManager.Instance.AddListener <GameResultEvent>(GameResult);
 	}
@@ -30,8 +28,6 @@ public abstract class ServerSingletonGameStateObserver<T> :  Singleton<T>,IEvent
 		EventManager.Instance.RemoveListener<GameMusicResultMenuEvent>(GameMusicResultMenu);
 
 		EventManager.Instance.RemoveListener<GamePlayEvent>(GamePlay);
-		EventManager.Instance.RemoveListener<GamePauseEvent>(GamePause);
-		EventManager.Instance.RemoveListener<GameResumeEvent>(GameResume);
 		EventManager.Instance.RemoveListener<GameEndEvent>(GameEnd);
 		EventManager.Instance.RemoveListener<GameResultEvent>(GameResult);
 	}
@@ -78,14 +74,6 @@ public abstract class ServerSingletonGameStateObserver<T> :  Singleton<T>,IEvent
 	}
 
 	protected virtual void GamePlay(GamePlayEvent e)
-	{
-	}
-
-	protected virtual void GamePause(GamePauseEvent e)
-	{
-	}
-
-	protected virtual void GameResume(GameResumeEvent e)
 	{
 	}
 

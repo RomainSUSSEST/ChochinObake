@@ -24,12 +24,6 @@ public class GameMusicResultMenuEvent : SDD.Events.Event
 public class GamePlayEvent : SDD.Events.Event
 {
 }
-public class GamePauseEvent : SDD.Events.Event
-{
-}
-public class GameResumeEvent : SDD.Events.Event
-{
-}
 public class GameEndEvent : SDD.Events.Event
 {
 }
@@ -40,9 +34,6 @@ public class GameResultEvent : SDD.Events.Event
 
 #region MenuManager Events
 // Server
-public class EscapeButtonClickedEvent : SDD.Events.Event
-{
-}
 
 public class PlayButtonClickedEvent : SDD.Events.Event
 {
@@ -67,6 +58,7 @@ public class RoomLeaveButtonClickedEvent : SDD.Events.Event
 public class RoomNextButtonClickedEvent : SDD.Events.Event
 {
 	public Dictionary<ulong, Player> PlayerList;
+	public List<AI_Player> AI;
 }
 
 public class MusicSelectionLeaveButtonClickedEvent : SDD.Events.Event
@@ -84,6 +76,11 @@ public class MusicResultGameReadyEvent : SDD.Events.Event
 	public List<SpectralFluxInfo> map;
 	public float difficulty; // En % de 0 à 1
 }
+
+public class ViewResultEndEvent : SDD.Events.Event
+{
+}
+
 #endregion
 
 #region UI Panel
@@ -116,10 +113,15 @@ public class BackgroundEndMapEvent : SDD.Events.Event
 
 public class RoundStartEvent : SDD.Events.Event
 {
-	public IReadOnlyCollection<CharacterPlayer> RoundPlayers;
+	public IReadOnlyCollection<CharacterServer> RoundPlayers;
 }
 
 public class MusicRoundEndEvent : SDD.Events.Event
+{
+	public Transform TransformArrival;
+}
+
+public class RoundEndEvent : SDD.Events.Event
 {
 }
 
@@ -134,6 +136,11 @@ public class PowerDeclenchementEvent : SDD.Events.Event
 }
 	
 #endregion
+
+public class ScoreUpdatedEvent : SDD.Events.Event
+{
+}
+
 #endregion
 
 #region Network Server

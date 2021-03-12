@@ -10,7 +10,7 @@ namespace ServerManager
     {
         // Constante
 
-        public static readonly int MAX_PLAYER_CONNECTED = 16;
+        public static readonly int MAX_PLAYER_CONNECTED = 12;
 
 
         // Attributs
@@ -65,7 +65,14 @@ namespace ServerManager
         {
             base.GameRoomMenu(e);
 
-            StartCoroutine("LaunchServer");
+            if (NetworkingManager.Singleton.IsServer)
+            {
+                // Si on est déjà un serveur, on ramène les joueurs au lobby
+                MessagingManager.Instance.RaiseNetworkedEventOnAllClient(new ServerEnterInLobbyEvent());
+            } else
+            {
+                StartCoroutine("LaunchServer");
+            }
         }
 
         protected override void GameOptionsMenu(GameOptionsMenuEvent e)
@@ -154,14 +161,9 @@ namespace ServerManager
 
         private IEnumerator LaunchServer()
         {
-            if (IsStoppingServer)
+            if (IsStoppingServer || NetworkingManager.Singleton.IsServer)
             {
                 yield break;
-            }
-
-            if (NetworkingManager.Singleton.IsServer)
-            {
-                throw new System.Exception("Serveur déjà créé");
             }
 
             TransportSystem.Address = IPManager.GetIP(ADDRESSFAM.IPv4);

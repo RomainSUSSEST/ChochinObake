@@ -12,6 +12,7 @@
 		// Attributs
 
 		private Dictionary<ulong, Player> CurrentPlayers; // Les joueurs
+		private List<AI_Player> CurrentAI;
 		private string CurrentMusicPath; // Le path de la musique
 		private AudioClip CurrentAudio; // La musique courante
 		private List<SpectralFluxInfo> CurrentMapData; // Les données de carte
@@ -87,7 +88,6 @@
 			base.SubscribeEvents();
 			
 			//MainMenuManager
-			EventManager.Instance.AddListener<EscapeButtonClickedEvent>(EscapeButtonClicked);
 			EventManager.Instance.AddListener<PlayButtonClickedEvent>(PlayButtonClicked);
 			EventManager.Instance.AddListener<OptionsButtonClickedEvent>(OptionsButtonClicked);
 			EventManager.Instance.AddListener<CreditsButtonClickedEvent>(CreditsButtonClicked);
@@ -101,6 +101,12 @@
 
 			EventManager.Instance.AddListener<MusicResultGameReadyEvent>(MusicResultGameReady);
 
+			EventManager.Instance.AddListener<ViewResultEndEvent>(ViewResultEnd);
+
+			// ServerLevelManager
+
+			EventManager.Instance.AddListener<ScoreUpdatedEvent>(ScoreUpdated);
+
 			// Network Event
 			EventManager.Instance.AddListener<ServerDisconnectionSuccessEvent>(ClientDisconnected);
 		}
@@ -110,7 +116,6 @@
 			base.UnsubscribeEvents();
 
 			//MainMenuManager
-			EventManager.Instance.RemoveListener<EscapeButtonClickedEvent>(EscapeButtonClicked);
 			EventManager.Instance.RemoveListener<PlayButtonClickedEvent>(PlayButtonClicked);
 			EventManager.Instance.RemoveListener<OptionsButtonClickedEvent>(OptionsButtonClicked);
 			EventManager.Instance.RemoveListener<CreditsButtonClickedEvent>(CreditsButtonClicked);
@@ -123,6 +128,12 @@
 			EventManager.Instance.RemoveListener<MusicSelectionTimerEndEvent>(MusicSelectionTimerEnd);
 
 			EventManager.Instance.RemoveListener<MusicResultGameReadyEvent>(MusicResultGameReady);
+
+			EventManager.Instance.RemoveListener<ViewResultEndEvent>(ViewResultEnd);
+
+			// ServerLevelManager
+
+			EventManager.Instance.RemoveListener<ScoreUpdatedEvent>(ScoreUpdated);
 
 			// Network Event
 			EventManager.Instance.RemoveListener<ServerDisconnectionSuccessEvent>(ClientDisconnected);
@@ -175,7 +186,9 @@
 
 		private void RoomNextButtonClicked(RoomNextButtonClickedEvent e)
 		{
+
 			CurrentPlayers = e.PlayerList;
+			CurrentAI = e.AI;
 			MusicSelection();
 		}
 
@@ -201,15 +214,24 @@
 			Play();
 		}
 
-		private void EscapeButtonClicked(EscapeButtonClickedEvent e)
+		private void ViewResultEnd(ViewResultEndEvent e)
 		{
-			if (GetGameState == GameState.gamePlay) Pause();
+			RoomMenu();
 		}
 
 		private void QuitButtonClicked(QuitButtonClickedEvent e)
 		{
 			Application.Quit();
 		}
+        #endregion
+
+        #region Callbacks to Event issued by ServerLevelManager
+
+		private void ScoreUpdated(ScoreUpdatedEvent e)
+		{
+			ResultMenu();
+		}
+
         #endregion
 
         #region Callbacks to Network Event
@@ -273,22 +295,11 @@
 			EventManager.Instance.Raise(new GamePlayEvent());
 		}
 
-		private void Pause()
+		private void ResultMenu()
 		{
-			if (GetGameState != GameState.gamePlay) return;
-
-			SetTimeScale(0);
-			m_GameState = GameState.gamePause;
-			EventManager.Instance.Raise(new GamePauseEvent());
-		}
-
-		private void Resume()
-		{
-			if (GetGameState == GameState.gamePlay) return;
-
 			SetTimeScale(1);
-			m_GameState = GameState.gamePlay;
-			EventManager.Instance.Raise(new GameResumeEvent());
+			m_GameState = GameState.gameMenu;
+			EventManager.Instance.Raise(new GameResultEvent());
 		}
 
 		#endregion

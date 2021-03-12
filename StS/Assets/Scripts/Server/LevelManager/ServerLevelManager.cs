@@ -47,6 +47,8 @@
 
         #region GamePlay
 
+        private static readonly float MAX_SCORE = 1000;
+        private static readonly float MIN_SCORE = 0;
         private static readonly float TIME_BETWEEN_IN_GAME_EVENTS = 25;
 
         #region Bonus
@@ -81,7 +83,7 @@
 
         private bool GenerateInGameEvents;
 
-        private IReadOnlyCollection<CharacterPlayer> RoundPlayers; // Contient le charactere à la wave i ou null (si deconnexion par exemple)
+        private IReadOnlyCollection<CharacterServer> RoundPlayers; // Contient le charactere à la wave i ou null (si deconnexion par exemple)
         private int SafePlayerCount;
 
         #endregion
@@ -103,6 +105,7 @@
 
             EventManager.Instance.AddListener<RoundStartEvent>(RoundStart);
             EventManager.Instance.AddListener<MusicRoundEndEvent>(MusicRoundEnd);
+            EventManager.Instance.AddListener<RoundEndEvent>(RoundEnd);
 
             // Player
 
@@ -115,6 +118,7 @@
 
             EventManager.Instance.RemoveListener<RoundStartEvent>(RoundStart);
             EventManager.Instance.RemoveListener<MusicRoundEndEvent>(MusicRoundEnd);
+            EventManager.Instance.RemoveListener<RoundEndEvent>(RoundEnd);
 
             // Player
 
@@ -502,6 +506,16 @@
             }
         }
 
+        protected override void GameResult(GameResultEvent e)
+        {
+            base.GameResult(e);
+
+            if (CurrentMenuBackground == null)
+            {
+                CurrentMenuBackground = Instantiate(DepartureWorldJapan, DepartureSpawn);
+            }
+        }
+
         #endregion
 
         #region Tools
@@ -519,6 +533,27 @@
         private void MusicRoundEnd(MusicRoundEndEvent e)
         {
             GenerateInGameEvents = false;
+        }
+
+        private void RoundEnd(RoundEndEvent e)
+        {
+            IReadOnlyDictionary<ulong, Player> Players = ServerGameManager.Instance.GetPlayers();
+
+            foreach (CharacterServer p in RoundPlayers)
+            {
+                if (p != null)
+                {
+                    Players[p.AssociedClientID].Score +=
+                            (int) Mathf.Lerp(
+                            MIN_SCORE,
+                            MAX_SCORE,
+                            p.GetTotalObstacle() == 0 ? 1 : p.GetTotalSuccess() / p.GetTotalObstacle());
+                }
+            }
+
+            Destroy(CurrentWorld.gameObject);
+
+            EventManager.Instance.Raise(new ScoreUpdatedEvent());
         }
 
         #endregion

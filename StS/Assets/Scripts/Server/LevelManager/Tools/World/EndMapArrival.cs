@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SDD.Events;
+using UnityEngine;
 
 public class EndMapArrival : MonoBehaviour
 {
@@ -11,8 +12,12 @@ public class EndMapArrival : MonoBehaviour
 
         if (transform.localPosition.z <= 0) // Car enfant du world
         {
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, 0);
+            // On arrete les déplacements
             Ground.MOVE_SPEED = 0;
             Background.MOVE_SPEED = 0;
+
+            EventManager.Instance.Raise(new RoundEndEvent());
         }
     }
 

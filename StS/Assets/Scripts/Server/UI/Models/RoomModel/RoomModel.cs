@@ -26,6 +26,8 @@ public class RoomModel : MonoBehaviour
 
     private List<CharacterBody.BodyType> InvalidBody; // Enregistre la liste des body déjà pris
 
+    private List<AI_Player> AI_Players;
+
     [Header("Panel Add Song")]
 
     [SerializeField] private GameObject PanelSongList;
@@ -39,10 +41,26 @@ public class RoomModel : MonoBehaviour
         // Initialisation
 
         SubscribeEvents();
+
         Players = new Dictionary<ulong, Player>();
+        if (ServerGameManager.Instance.GetPlayers() != null) // On conserve les joueurs
+        {
+            IEnumerator<KeyValuePair<ulong, Player>> Enumerator = ServerGameManager.Instance.GetPlayers().GetEnumerator();
+
+            while (Enumerator.MoveNext())
+            {
+                Player p = Enumerator.Current.Value;
+                p.Body = null;
+                p.PlayerState = PlayerState.Selection;
+                Players.Add(Enumerator.Current.Key, p);
+            }
+        }
+
+        AI_Players = new List<AI_Player>();
         InvalidBody = new List<CharacterBody.BodyType>();
         PanelSongList.SetActive(false); // On s'assure que le panel de gestion des sons est désactivé.
 
+        RefreshListPlayer();
         ActualiseNextButton();
     }
 
@@ -94,10 +112,30 @@ public class RoomModel : MonoBehaviour
 
     public void RoomNextButtonHasBeenClicked()
     {
+
         EventManager.Instance.Raise(new RoomNextButtonClickedEvent()
         {
-            PlayerList = Players
+            PlayerList = Players,
+            AI = AI_Players
         });
+    }
+
+    public void AddAI()
+    {
+        if (Players.Count + AI_Players.Count < ServerNetworkManager.MAX_PLAYER_CONNECTED)
+        {
+            AI_Players.Add(new AI_Player());
+            RefreshListPlayer();
+        }
+    }
+
+    public void RemoveAI()
+    {
+        if (AI_Players.Count > 0)
+        {
+            AI_Players.RemoveAt(AI_Players.Count - 1);
+            RefreshListPlayer();
+        }
     }
 
     #endregion
@@ -106,6 +144,11 @@ public class RoomModel : MonoBehaviour
 
     private void AddPlayer(ServerConnectionSuccessEvent e)
     {
+        if (Players.Count + AI_Players.Count >= ServerNetworkManager.MAX_PLAYER_CONNECTED)
+        {
+            RemoveAI();
+        }
+
         Players.Add(e.ClientID, new Player()
         {
             PlayerState = PlayerState.Connection,
@@ -240,6 +283,11 @@ public class RoomModel : MonoBehaviour
             }
         }
 
+        for (int i = 0; i < AI_Players.Count; ++i)
+        {
+            text += "AI " + i + "\n";
+        }
+
         TextPrinter.text = text;
     }
 
@@ -284,6 +332,11 @@ public class RoomModel : MonoBehaviour
             }
 
             NextButton.interactable = true;
+            EventManager.Instance.Raise(new RoomNextButtonClickedEvent()
+            {
+                PlayerList = Players,
+                AI = AI_Players
+            });
         }
     }
 

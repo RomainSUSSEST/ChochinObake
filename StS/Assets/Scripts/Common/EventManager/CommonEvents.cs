@@ -225,6 +225,10 @@ public class ServerEnterInGameMusicResultEvent : NetworkedEvent
 {
 }
 
+public class ServerEnterInLobbyEvent : NetworkedEvent
+{
+}
+
 #endregion
 
 #region InRound

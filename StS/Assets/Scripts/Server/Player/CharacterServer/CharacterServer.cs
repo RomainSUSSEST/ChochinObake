@@ -86,6 +86,16 @@ public class CharacterServer : CharacterPlayer
         return m_IsSafe;
     }
 
+    public int GetTotalSuccess()
+    {
+        return CmptSuccess;
+    }
+
+    public int GetTotalObstacle()
+    {
+        return CmptObstacle;
+    }
+
     #endregion
 
     #region Methods
@@ -99,6 +109,8 @@ public class CharacterServer : CharacterPlayer
         EventManager.Instance.AddListener<WaterEvent>(Water);
         EventManager.Instance.AddListener<PowerEvent>(Power);
 
+        EventManager.Instance.AddListener<MusicRoundEndEvent>(MusicRoundEnd);
+
         EventManager.Instance.AddListener<ServerDisconnectionSuccessEvent>(OnClientDisconnected);
     }
 
@@ -109,6 +121,8 @@ public class CharacterServer : CharacterPlayer
         EventManager.Instance.RemoveListener<EarthEvent>(Earth);
         EventManager.Instance.RemoveListener<WaterEvent>(Water);
         EventManager.Instance.RemoveListener<PowerEvent>(Power);
+
+        EventManager.Instance.RemoveListener<MusicRoundEndEvent>(MusicRoundEnd);
 
         EventManager.Instance.RemoveListener<ServerDisconnectionSuccessEvent>(OnClientDisconnected);
     }
@@ -347,6 +361,19 @@ public class CharacterServer : CharacterPlayer
         }
     }
 
+    /// <summary>
+    /// Fixe le parent de this à newParent après delai seconde
+    /// </summary>
+    /// <param name="t"></param>
+    /// <param name="delai"></param>
+    /// <returns></returns>
+    private IEnumerator SetParent(Transform newParent, float delai)
+    {
+        yield return new WaitForSeconds(delai);
+
+        transform.parent = newParent;
+    }
+
     #endregion
 
     #region Tools
@@ -390,6 +417,12 @@ public class CharacterServer : CharacterPlayer
         {
             GetCharacterBody().StartAttackPower();
         }
+    }
+
+    private void MusicRoundEnd(MusicRoundEndEvent e)
+    {
+        float delai = (e.TransformArrival.position.z - transform.position.z) / Ground.MOVE_SPEED;
+        StartCoroutine(SetParent(e.TransformArrival, delai));
     }
 
     #endregion

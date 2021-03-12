@@ -80,13 +80,13 @@ MonoBehaviour:
   CustomFog: {fileID: 2100000, guid: 37be7088ba90ff845b67168a2ae58a8f, type: 2}
   DistanceBetweenGround: 5
   ObstacleDistanceToCharacterSpawn: 125
-  ArrivalDistanceToCharacterSpawn: 800
+  ArrivalDistanceToCharacterSpawn: 150
   DistanceToBackgroundY: -80
   DestroyElementsMargin: 10
   FogSpeed_X: 2
   FogSpeed_Y: 1
   FogRatio_Z: 1
-  RoundEnd_SpeedUpCoefficient: 2
+  RoundEnd_SpeedUpCoefficient: 1.5
   RoundEnd_SpeedUpDelai: 2
   CharacterServerPrefab: {fileID: -3312898644491709661, guid: 6047c66e9e3fafe4e88df5fa1f3aaae1,
     type: 3}

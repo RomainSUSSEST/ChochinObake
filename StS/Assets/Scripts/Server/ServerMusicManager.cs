@@ -183,20 +183,6 @@ namespace ServerManager
 			PlayMusic(MenuMusic);
 		}
 
-		protected override void GamePause(GamePauseEvent e)
-		{
-			base.GamePause(e);
-
-			PauseCurrentMusic();
-		}
-
-		protected override void GameResume(GameResumeEvent e)
-		{
-			base.GameResume(e);
-
-			ReplayCurrentMusic();
-		}
-
 		protected override void GameEnd(GameEndEvent e)
 		{
 			base.GameEnd(e);

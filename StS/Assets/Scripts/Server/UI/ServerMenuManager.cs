@@ -16,7 +16,6 @@ namespace ServerManager
 		[SerializeField] private GameObject m_PanelMusicResult;
 		[SerializeField] private GameObject m_PanelCredits;
 		[SerializeField] private GameObject m_PanelOptions;
-		[SerializeField] private GameObject m_PanelInGameMenu;
 		[SerializeField] private GameObject m_PanelResult;
 
 		private List<GameObject> m_AllPanels;
@@ -35,14 +34,6 @@ namespace ServerManager
 			base.Awake();
 			RegisterPanels();
 		}
-
-		private void Update()
-		{
-			if (Input.GetButtonDown("Cancel"))
-			{
-				EscapeButtonHasBeenClicked();
-			}
-		}
 		#endregion
 
 		#region Panel Methods
@@ -56,7 +47,6 @@ namespace ServerManager
 			m_AllPanels.Add(m_PanelMusicResult);
 			m_AllPanels.Add(m_PanelCredits);
 			m_AllPanels.Add(m_PanelOptions);
-			m_AllPanels.Add(m_PanelInGameMenu);
 			m_AllPanels.Add(m_PanelResult);
 	}
 
@@ -81,10 +71,6 @@ namespace ServerManager
         #endregion
 
         #region UI OnClick Events
-        private void EscapeButtonHasBeenClicked()
-		{
-			EventManager.Instance.Raise(new EscapeButtonClickedEvent());
-		}
 
 		public void PlayButtonHasBeenClicked()
 		{
@@ -167,6 +153,13 @@ namespace ServerManager
 			base.GamePlay(e);
 
 			CloseAllPanel();
+		}
+
+		protected override void GameResult(GameResultEvent e)
+		{
+			base.GameResult(e);
+
+			OpenPanel(m_PanelResult);
 		}
 		#endregion
 	}
