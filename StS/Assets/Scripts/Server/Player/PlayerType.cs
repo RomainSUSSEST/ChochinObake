@@ -13,4 +13,10 @@ public class Player
 public class AI_Player
 {
     public string Name;
+
+    public CharacterBody Body;
+
+    public int ID;
+
+    public int Score;
 }

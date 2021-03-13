@@ -31,6 +31,16 @@
 			return new System.Collections.ObjectModel.ReadOnlyDictionary<ulong, Player>(CurrentPlayers);
 		}
 
+		public IReadOnlyList<AI_Player> GetAIList()
+		{
+			if (CurrentAI == null)
+			{
+				return null;
+			}
+
+			return new System.Collections.ObjectModel.ReadOnlyCollection<AI_Player>(CurrentAI);
+		}
+
 		/// <summary>
 		/// Renvoie le chemin de la musique courante
 		/// </summary>
@@ -166,6 +176,9 @@
 
 		private void PlayButtonClicked(PlayButtonClickedEvent e)
 		{
+			// On s'assure que les joueurs sont reset
+			CurrentAI = null;
+			CurrentPlayers = null;
 			RoomMenu();
 		}
 

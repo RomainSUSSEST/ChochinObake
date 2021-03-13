@@ -12,7 +12,6 @@ public class RoomModel : MonoBehaviour
 
     public static readonly string DEFAULT_NAME = "No Name";
 
-
     #region Attributs
 
     [Header("RoomModel")]
@@ -43,20 +42,36 @@ public class RoomModel : MonoBehaviour
         SubscribeEvents();
 
         Players = new Dictionary<ulong, Player>();
-        if (ServerGameManager.Instance.GetPlayers() != null) // On conserve les joueurs
+        if (ServerGameManager.Instance.GetPlayers() != null) // On conserve les joueurs toujours présents
         {
             IEnumerator<KeyValuePair<ulong, Player>> Enumerator = ServerGameManager.Instance.GetPlayers().GetEnumerator();
 
             while (Enumerator.MoveNext())
             {
                 Player p = Enumerator.Current.Value;
-                p.Body = null;
-                p.PlayerState = PlayerState.Selection;
-                Players.Add(Enumerator.Current.Key, p);
+
+                if (p.PlayerState != PlayerState.Disconnected)
+                {
+                    p.Body = null;
+                    p.Pseudo = "";
+                    p.PlayerState = PlayerState.Selection;
+                    Players.Add(Enumerator.Current.Key, p);
+                }
             }
         }
 
         AI_Players = new List<AI_Player>();
+        IReadOnlyList<AI_Player> ai = ServerGameManager.Instance.GetAIList();
+        if (ai != null) // On conserve les AI
+        {
+            for (int i = 0; i < ai.Count; ++i) 
+            {
+                ai[i].ID = AI_Players.Count;
+
+                AI_Players.Add(ai[i]);
+            }
+        }
+
         InvalidBody = new List<CharacterBody.BodyType>();
         PanelSongList.SetActive(false); // On s'assure que le panel de gestion des sons est désactivé.
 
@@ -112,6 +127,7 @@ public class RoomModel : MonoBehaviour
 
     public void RoomNextButtonHasBeenClicked()
     {
+        SetAIBodys();
 
         EventManager.Instance.Raise(new RoomNextButtonClickedEvent()
         {
@@ -124,7 +140,10 @@ public class RoomModel : MonoBehaviour
     {
         if (Players.Count + AI_Players.Count < ServerNetworkManager.MAX_PLAYER_CONNECTED)
         {
-            AI_Players.Add(new AI_Player());
+            AI_Players.Add(new AI_Player()
+            {
+                ID = AI_Players.Count // On lui attribut un id.
+            });
             RefreshListPlayer();
         }
     }
@@ -291,6 +310,24 @@ public class RoomModel : MonoBehaviour
         TextPrinter.text = text;
     }
 
+    private void SetAIBodys()
+    {
+        int i = 0;
+        foreach (AI_Player ai in AI_Players)
+        {
+            while (i < ListBody.Count)
+            {
+                if (!InvalidBody.Contains(ListBody[i].GetBodyType())) { // Si le body est disponible
+
+                    ai.Body = ListBody[i];
+                    ++i;
+                    break;
+                }
+                ++i;
+            }
+        }
+    }
+
     private string GetTextFrom(PlayerState p)
     {
         switch (p)
@@ -332,11 +369,6 @@ public class RoomModel : MonoBehaviour
             }
 
             NextButton.interactable = true;
-            EventManager.Instance.Raise(new RoomNextButtonClickedEvent()
-            {
-                PlayerList = Players,
-                AI = AI_Players
-            });
         }
     }
 
