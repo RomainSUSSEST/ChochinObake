@@ -114,6 +114,8 @@ public class World : MonoBehaviour
 
         // On récupére la liste des joueurs
         IReadOnlyDictionary<ulong, Player> Players = ServerGameManager.Instance.GetPlayers();
+        // On récupére la liste des IA
+        IReadOnlyCollection<AI_Player> AI = ServerGameManager.Instance.GetAIList();
 
         // On vérifie les données
         if (CurrentMap == null || clip == null || Players == null)
@@ -149,6 +151,7 @@ public class World : MonoBehaviour
         float CharacterSpawn_Y = transform.position.y;
 
         IEnumerator<ulong> enumPlayer = Players.Keys.GetEnumerator(); // Enum sur les joueurs
+        IEnumerator<AI_Player> enumAI = AI.GetEnumerator(); // Enum sur les AI
 
         int index = NbrWays % 2 == 0 ? (NbrWays / 2) - 1 : (int)Mathf.Floor(NbrWays / 2f);
 
@@ -174,6 +177,21 @@ public class World : MonoBehaviour
 
                 CharacterArray[i].SetBody(p.Body);
 
+            } else if (enumAI.MoveNext())
+            {
+                // Slime Array
+                CharacterArray[i] = Instantiate(CharacterServerPrefab,
+                    new Vector3(
+                        CharacterSpawn_X + (SpiritWaySize.x + DistanceBetweenGround) * i,
+                        CharacterSpawn_Y,
+                        transform.position.z - DestroyElementsMargin),
+                    Quaternion.identity, transform); // On crée le slime
+
+                CharacterArray[i].IsAI = true; // On indique que c'est une AI.
+                CharacterArray[i].AssociatedAIID = enumAI.Current.ID;
+
+                // On set le body
+                CharacterArray[i].SetBody(enumAI.Current.Body);
             } else
             {
                 CharacterArray[i] = null;
@@ -193,7 +211,7 @@ public class World : MonoBehaviour
         // Initialisation des constantes pour les élements
         Ground.MOVE_SPEED = Mathf.Min(Mathf.Max(((CurrentMap.Count / clip.length) * ServerLevelManager.DEFAULT_SPEED), ServerLevelManager.MIN_SPEED), ServerLevelManager.MAX_SPEED);
         Ground.DESTROY_Z_POSITION = transform.position.z - SpiritWaySize.z - DestroyElementsMargin;
-        Debug.Log("Speed : " + Ground.MOVE_SPEED + " Obstacle : " + CurrentMap.Count + " Length : " + clip.length);
+
         Obstacle.DESTROY_Z_POSITION = transform.position.z - DestroyElementsMargin;
 
         Background.MOVE_SPEED = Ground.MOVE_SPEED / 1.4f;

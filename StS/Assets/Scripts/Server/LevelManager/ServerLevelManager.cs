@@ -538,16 +538,27 @@
         private void RoundEnd(RoundEndEvent e)
         {
             IReadOnlyDictionary<ulong, Player> Players = ServerGameManager.Instance.GetPlayers();
+            IReadOnlyList<AI_Player> AI = ServerGameManager.Instance.GetAIList();
 
             foreach (CharacterServer p in RoundPlayers)
             {
                 if (p != null)
                 {
-                    Players[p.AssociedClientID].Score +=
-                            (int) Mathf.Lerp(
+                    if (p.IsAI)
+                    {
+                        AI[p.AssociatedAIID].Score +=
+                            (int)Mathf.Lerp(
                             MIN_SCORE,
                             MAX_SCORE,
                             p.GetTotalObstacle() == 0 ? 1 : p.GetTotalSuccess() / p.GetTotalObstacle());
+                    } else
+                    {
+                        Players[p.AssociedClientID].Score +=
+                            (int)Mathf.Lerp(
+                            MIN_SCORE,
+                            MAX_SCORE,
+                            p.GetTotalObstacle() == 0 ? 1 : p.GetTotalSuccess() / p.GetTotalObstacle());
+                    }
                 }
             }
 
@@ -562,24 +573,24 @@
 
         private IEnumerator InGameEventsManager()
         {
-            while (GenerateInGameEvents)
-            {
-                yield return new WaitForSeconds(TIME_BETWEEN_IN_GAME_EVENTS);
+            //while (GenerateInGameEvents)
+            //{
+            //    yield return new WaitForSeconds(TIME_BETWEEN_IN_GAME_EVENTS);
 
-                // On choisi un event
-                int index = Random.Range(0, AllInGameEventsList.Count);
+            //    // On choisi un event
+            //    int index = Random.Range(0, AllInGameEventsList.Count);
 
-                foreach (CharacterServer c in RoundPlayers)
-                {
-                    if (c != null)
-                    {
-                        InGameEvents e = Instantiate(AllInGameEventsList[index], c.transform);
-                        e.SetAssociatedCharacter(c);
-                    }
-                }
+            //    foreach (CharacterServer c in RoundPlayers)
+            //    {
+            //        if (c != null)
+            //        {
+            //            InGameEvents e = Instantiate(AllInGameEventsList[index], c.transform);
+            //            e.SetAssociatedCharacter(c);
+            //        }
+            //    }
 
                 yield return new WaitForSeconds(InGameEvents.EVENT_TIME);
-            }
+            //}
         }
 
         #endregion

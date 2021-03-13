@@ -16,7 +16,10 @@ public class CharacterServer : CharacterPlayer
 
     #region Attributes
 
+    public bool IsAI { get; set; }
     public ulong AssociedClientID { get; set; }
+    public int AssociatedAIID { get; set; }
+
 
     private Queue<Obstacle> QueueObstacle; // Queue des obstacles suivant associé à ce character
 
@@ -103,28 +106,34 @@ public class CharacterServer : CharacterPlayer
     #region Event subscription
     protected override void SubscribeEvents()
     {
-        // ClientInputsManager
-        EventManager.Instance.AddListener<FireEvent>(Fire);
-        EventManager.Instance.AddListener<EarthEvent>(Earth);
-        EventManager.Instance.AddListener<WaterEvent>(Water);
-        EventManager.Instance.AddListener<PowerEvent>(Power);
-
         EventManager.Instance.AddListener<MusicRoundEndEvent>(MusicRoundEnd);
+        
+        if (!IsAI)
+        {
+            // ClientInputsManager
+            EventManager.Instance.AddListener<FireEvent>(Fire);
+            EventManager.Instance.AddListener<EarthEvent>(Earth);
+            EventManager.Instance.AddListener<WaterEvent>(Water);
+            EventManager.Instance.AddListener<PowerEvent>(Power);
 
-        EventManager.Instance.AddListener<ServerDisconnectionSuccessEvent>(OnClientDisconnected);
+            EventManager.Instance.AddListener<ServerDisconnectionSuccessEvent>(OnClientDisconnected);
+        }
     }
 
     protected override void UnsubscribeEvents()
     {
-        // ClientInputsManager
-        EventManager.Instance.RemoveListener<FireEvent>(Fire);
-        EventManager.Instance.RemoveListener<EarthEvent>(Earth);
-        EventManager.Instance.RemoveListener<WaterEvent>(Water);
-        EventManager.Instance.RemoveListener<PowerEvent>(Power);
-
         EventManager.Instance.RemoveListener<MusicRoundEndEvent>(MusicRoundEnd);
 
-        EventManager.Instance.RemoveListener<ServerDisconnectionSuccessEvent>(OnClientDisconnected);
+        if (!IsAI)
+        {
+            // ClientInputsManager
+            EventManager.Instance.RemoveListener<FireEvent>(Fire);
+            EventManager.Instance.RemoveListener<EarthEvent>(Earth);
+            EventManager.Instance.RemoveListener<WaterEvent>(Water);
+            EventManager.Instance.RemoveListener<PowerEvent>(Power);
+
+            EventManager.Instance.RemoveListener<ServerDisconnectionSuccessEvent>(OnClientDisconnected);
+        }
     }
     #endregion
 
@@ -190,8 +199,12 @@ public class CharacterServer : CharacterPlayer
     public void ResetCombo()
     {
         CmptCombo = 0;
-        // Mise à jours des combo auprès du joueur.
-        MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+
+        if (!IsAI) // Si ce n'est pas une AI
+        {
+            // Mise à jours des combo auprès du joueur.
+            MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+        }
     }
 
     #endregion
@@ -219,7 +232,10 @@ public class CharacterServer : CharacterPlayer
 
     public void InvertInput(float delai)
     {
-        MessagingManager.Instance.RaiseNetworkedEventOnClient(new InvertInputEvent(AssociedClientID, delai));
+        if (!IsAI)
+        {
+            MessagingManager.Instance.RaiseNetworkedEventOnClient(new InvertInputEvent(AssociedClientID, delai));
+        }
     }
 
     public void FlashKanji(float delai, float delaiInterFlash)
@@ -297,6 +313,30 @@ public class CharacterServer : CharacterPlayer
         {
             return false;
         }
+    }
+
+    #endregion
+
+    #region AI
+
+    public void AIFire()
+    {
+        GetCharacterBody().StartAttackFire();
+    }
+
+    public void AIEarth()
+    {
+        GetCharacterBody().StartAttackEarth();
+    }
+
+    public void AIWater()
+    {
+        GetCharacterBody().StartAttackWater();
+    }
+
+    public void AIPower()
+    {
+       GetCharacterBody().StartAttackPower();
     }
 
     #endregion
@@ -496,7 +536,13 @@ public class CharacterServer : CharacterPlayer
 
         ++CmptObstacle;
 
-        MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+        if (IsAI)
+        {
+
+        } else
+        {
+            MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+        }
     }
 
     private void ObstacleFail()
@@ -510,7 +556,13 @@ public class CharacterServer : CharacterPlayer
 
         ++CmptObstacle;
 
-        MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+        if (IsAI)
+        {
+
+        } else
+        {
+            MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+        }
     }
 
     private void ObstacleSuccess()
@@ -528,7 +580,14 @@ public class CharacterServer : CharacterPlayer
         ++CmptSuccess;
         ++CmptObstacle;
 
-        MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+        if (IsAI)
+        {
+
+        }
+        else
+        {
+            MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+        }
     }
 
     private void ObstacleToEarly()
