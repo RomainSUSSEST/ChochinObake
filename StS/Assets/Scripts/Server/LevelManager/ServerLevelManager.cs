@@ -19,7 +19,7 @@
             Shield = -6
         }
 
-        private enum Malus : int
+        public enum Malus : int
         {
             InvertKanji = 8,
             UncolorKanji = 16,

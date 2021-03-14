@@ -235,12 +235,22 @@ public class ServerEnterInLobbyEvent : NetworkedEvent
 
 public class UpdateSuccessiveSuccessEvent : NetworkedEvent
 {
-	public int Value;
+	public BonusStreak Value;
+	public enum BonusStreak {
+		InvertKanji,
+		UncolorKanji,
+		FlashKanji,
+		InvertInput,
+		DisableOtherPlayers,
+		ResetAllCombo,
+		Shield,
+		Default
+	}
 
-	public UpdateSuccessiveSuccessEvent(ulong PlayerID, int NewValue) :
-		base(PlayerID, new Argument() { Arg = NewValue, Type = typeof(int) })
+	public UpdateSuccessiveSuccessEvent(ulong PlayerID, BonusStreak bonus) :
+		base(PlayerID, new Argument() { Arg = bonus, Type = typeof(BonusStreak) })
 	{
-		Value = NewValue;
+		Value = bonus;
 	}
 }
 

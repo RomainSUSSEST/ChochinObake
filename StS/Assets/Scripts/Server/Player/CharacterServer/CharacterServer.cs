@@ -143,7 +143,7 @@ public class CharacterServer : CharacterPlayer
         }
         else
         {
-            MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+            UpdateStreakStatus(CmptCombo);
         }
 
         UpdatePosition(UPDATE_POSITION_TIME);
@@ -214,7 +214,7 @@ public class CharacterServer : CharacterPlayer
         if (!IsAI) // Si ce n'est pas une AI
         {
             // Mise à jours des combo auprès du joueur.
-            MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+            UpdateStreakStatus(CmptCombo);
         } else
         {
             AssociatedAIManager.SetCmptCombo(CmptCombo);
@@ -547,6 +547,46 @@ public class CharacterServer : CharacterPlayer
         return QueueObstacle.Dequeue();
     }
 
+    private void UpdateStreakStatus(int cmptCombo)
+    {
+        UpdateSuccessiveSuccessEvent.BonusStreak bonusValue;
+
+        if (cmptCombo <= (int) ServerLevelManager.Bonus.ResetAllCombo) 
+        {
+            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.ResetAllCombo;
+        } 
+        else if (cmptCombo <= (int) ServerLevelManager.Bonus.Shield) 
+        {
+            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.Shield;
+        }
+        else if (cmptCombo >= (int)ServerLevelManager.Malus.DisableOtherPlayers)
+        {
+            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.DisableOtherPlayers;
+        }
+        else if (cmptCombo >= (int)ServerLevelManager.Malus.InvertInput)
+        {
+            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.InvertInput;
+        }
+        else if (cmptCombo >= (int)ServerLevelManager.Malus.FlashKanji)
+        {
+            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.FlashKanji;
+        }
+        else if (cmptCombo >= (int)ServerLevelManager.Malus.UncolorKanji)
+        {
+            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.UncolorKanji;
+        }
+        else if (cmptCombo >= (int)ServerLevelManager.Malus.InvertKanji)
+        {
+            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.InvertKanji;
+        }
+        else
+        {
+            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.Default;
+        }
+
+        MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, bonusValue));
+    }
+
     #region ObstacleStatus
 
     private void NoObstacles()
@@ -570,7 +610,7 @@ public class CharacterServer : CharacterPlayer
             AssociatedAIManager.SetCmptCombo(CmptCombo);
         } else
         {
-            MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+            UpdateStreakStatus(CmptCombo);
         }
     }
 
@@ -595,7 +635,7 @@ public class CharacterServer : CharacterPlayer
         }
         else
         {
-            MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+            UpdateStreakStatus(CmptCombo);
         }
     }
 

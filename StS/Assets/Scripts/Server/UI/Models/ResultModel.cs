@@ -1,12 +1,17 @@
 ﻿using SDD.Events;
-using System.Collections;
+using ServerManager;
+using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ResultModel : MonoBehaviour
 {
     #region Constants
 
     private static readonly float BACK_DELAI = 10;
+    private Dictionary<ulong, Player> Players;
+
+    [SerializeField] TextMeshProUGUI TextPrinter;
 
     #endregion
 
@@ -14,19 +19,41 @@ public class ResultModel : MonoBehaviour
 
     private void OnEnable()
     {
-        StartCoroutine("BackToLobby");
+        RefreshListPlayer();
     }
 
     #endregion
 
-    #region Coroutine
+    #region UI OnClick Button
 
-    private IEnumerator BackToLobby()
+    public void ButtonNextHasBeenPressed()
     {
-        yield return new WaitForSeconds(BACK_DELAI);
-
         EventManager.Instance.Raise(new ViewResultEndEvent());
     }
 
+    #endregion
+
+    #region Tools
+    private void RefreshListPlayer()
+    {
+        string text = "";
+
+        IReadOnlyDictionary<ulong, Player> players = ServerGameManager.Instance.GetPlayers();
+        IEnumerator<Player> enumPlayer = players.Values.GetEnumerator();
+
+        while (enumPlayer.MoveNext())
+        {
+            text += enumPlayer.Current.Pseudo + " : " + enumPlayer.Current.Score + "\n";
+        }
+
+        IReadOnlyList<AI_Player> AI_Players = ServerGameManager.Instance.GetAIList();
+
+        for (int i = 0; i < AI_Players.Count; ++i)
+        {
+            text +=  AI_Players[i].Name + " : " + AI_Players[i].Score + "\n";
+        }
+
+        TextPrinter.text = text;
+    }
     #endregion
 }

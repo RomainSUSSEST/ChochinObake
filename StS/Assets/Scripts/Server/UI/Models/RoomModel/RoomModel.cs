@@ -8,9 +8,11 @@ using ServerManager;
 
 public class RoomModel : MonoBehaviour
 {
-    // Constante
+    #region Constants
 
     public static readonly string DEFAULT_NAME = "No Name";
+
+    #endregion
 
     #region Attributs
 

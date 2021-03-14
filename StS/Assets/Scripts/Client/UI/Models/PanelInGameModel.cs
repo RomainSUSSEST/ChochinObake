@@ -5,15 +5,26 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PanelInGameModel : MonoBehaviour
 {
     #region Attributes
 
-    [SerializeField] private TextMeshProUGUI bonusStreak;
+    [Header("Bonus Icons")]
+    [SerializeField] private Image bonusImage;
+    // Bonus icons
+    [SerializeField] Sprite ResetAllCombo;
+    [SerializeField] Sprite Shield;
+    [SerializeField] Sprite InvertKanji;
+    [SerializeField] Sprite UncolorKanji;
+    [SerializeField] Sprite FlashKanji;
+    [SerializeField] Sprite InvertInputKanji;
+    [SerializeField] Sprite DisableOtherPlayers;
+    [SerializeField] Sprite Default;
 
     #region Malus
-
+    [Header("Gameplay Panels")]
     [SerializeField] private GameObject DefaultPanel;
     [SerializeField] private GameObject InvertPanel;
 
@@ -111,7 +122,33 @@ public class PanelInGameModel : MonoBehaviour
 
     private void UpdateSuccessiveSuccess(UpdateSuccessiveSuccessEvent e)
     {
-        bonusStreak.text = e.Value.ToString();
+        switch (e.Value)
+        {
+            case UpdateSuccessiveSuccessEvent.BonusStreak.ResetAllCombo:
+                bonusImage.sprite = ResetAllCombo;
+                break;
+            case UpdateSuccessiveSuccessEvent.BonusStreak.Shield:
+                bonusImage.sprite = Shield;
+                break;
+            case UpdateSuccessiveSuccessEvent.BonusStreak.InvertKanji:
+                bonusImage.sprite = InvertKanji;
+                break;
+            case UpdateSuccessiveSuccessEvent.BonusStreak.UncolorKanji:
+                bonusImage.sprite = UncolorKanji;
+                break;
+            case UpdateSuccessiveSuccessEvent.BonusStreak.FlashKanji:
+                bonusImage.sprite = FlashKanji;
+                break;
+            case UpdateSuccessiveSuccessEvent.BonusStreak.InvertInput:
+                bonusImage.sprite = InvertInputKanji;
+                break;
+            case UpdateSuccessiveSuccessEvent.BonusStreak.DisableOtherPlayers:
+                bonusImage.sprite = DisableOtherPlayers;
+                break;
+            default:
+                bonusImage.sprite = Default;
+                break;
+        }
     }
 
     #region Malus
