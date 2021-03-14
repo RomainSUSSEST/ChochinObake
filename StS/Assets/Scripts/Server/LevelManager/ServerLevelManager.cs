@@ -546,7 +546,7 @@
                 {
                     if (p.IsAI)
                     {
-                        AI[p.AssociatedAIID].Score +=
+                        AI[p.AssociatedAIManager.GetAssociatedAIID()].Score +=
                             (int)Mathf.Lerp(
                             MIN_SCORE,
                             MAX_SCORE,

@@ -18,7 +18,7 @@ public class CharacterServer : CharacterPlayer
 
     public bool IsAI { get; set; }
     public ulong AssociedClientID { get; set; }
-    public int AssociatedAIID { get; set; }
+    public AIPlayer AssociatedAIManager { get; set; }
 
 
     private Queue<Obstacle> QueueObstacle; // Queue des obstacles suivant associé à ce character
@@ -56,28 +56,6 @@ public class CharacterServer : CharacterPlayer
 
         UpdatePosition(FIRST_UPDATE_POSITION_TIME);
         ResetCombo();
-    }
-
-    private void Update()
-    {
-        if (QueueObstacle.Count > 0) // Si il y a un obstacle
-        {
-            Obstacle obs = QueueObstacle.Peek();
-            if (obs == null) // Si celui-ci est null
-            {
-                DeregisterObstacle();
-            } else
-            {
-                if (obs.GetStatut() == Obstacle.Statut.MISS)
-                {
-                    DeregisterObstacle(); // On désenregistre l'obstacle.
-
-                    ObstacleMiss();
-
-                    UpdatePosition(UPDATE_POSITION_TIME);
-                }
-            }
-        }
     }
 
     #endregion
@@ -137,6 +115,8 @@ public class CharacterServer : CharacterPlayer
     }
     #endregion
 
+    #region Obstacles
+
     /// <summary>
     /// Permet d'enregistrer un obstacle aupres du joueur
     /// </summary>
@@ -145,6 +125,37 @@ public class CharacterServer : CharacterPlayer
     {
         QueueObstacle.Enqueue(obs);
     }
+
+    public void ObstacleSendMissTime()
+    {
+        DeregisterObstacle(); // On désenregistre l'obstacle.
+
+        if (CmptCombo > 0)
+            CmptCombo = 0;
+        else
+            --CmptCombo;
+
+        ++CmptObstacle;
+
+        if (IsAI)
+        {
+            AssociatedAIManager.SetCmptCombo(CmptCombo);
+        }
+        else
+        {
+            MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+        }
+
+        UpdatePosition(UPDATE_POSITION_TIME);
+    }
+
+    public void ObstacleSendSuccessTime()
+    {
+        if (IsAI)
+            AssociatedAIManager.SuccessTime();
+    }
+
+    #endregion
 
     public void SetSafeStatus(bool b)
     {
@@ -204,6 +215,9 @@ public class CharacterServer : CharacterPlayer
         {
             // Mise à jours des combo auprès du joueur.
             MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
+        } else
+        {
+            AssociatedAIManager.SetCmptCombo(CmptCombo);
         }
     }
 
@@ -235,6 +249,9 @@ public class CharacterServer : CharacterPlayer
         if (!IsAI)
         {
             MessagingManager.Instance.RaiseNetworkedEventOnClient(new InvertInputEvent(AssociedClientID, delai));
+        } else
+        {
+            AssociatedAIManager.InvertInput(delai);
         }
     }
 
@@ -246,6 +263,11 @@ public class CharacterServer : CharacterPlayer
         }
 
         FlashKanji_Coroutine = StartCoroutine(_FlashKanji(delai, delaiInterFlash));
+
+        if (IsAI)
+        {
+            AssociatedAIManager.FlashKanji(delai);
+        }
     }
 
     private IEnumerator _FlashKanji(float delai, float delaiInterFlash)
@@ -277,6 +299,11 @@ public class CharacterServer : CharacterPlayer
         foreach (Obstacle o in QueueObstacle)
         {
             o.UncolorKanji();
+        }
+
+        if (IsAI)
+        {
+            AssociatedAIManager.UncolorKanji(QueueObstacle.Count);
         }
     }
 
@@ -527,24 +554,6 @@ public class CharacterServer : CharacterPlayer
 
     }
 
-    private void ObstacleMiss()
-    {
-        if (CmptCombo > 0)
-            CmptCombo = 0;
-        else
-            --CmptCombo;
-
-        ++CmptObstacle;
-
-        if (IsAI)
-        {
-
-        } else
-        {
-            MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
-        }
-    }
-
     private void ObstacleFail()
     {
         GetCharacterBody().Animation_AttackFailure();
@@ -558,7 +567,7 @@ public class CharacterServer : CharacterPlayer
 
         if (IsAI)
         {
-
+            AssociatedAIManager.SetCmptCombo(CmptCombo);
         } else
         {
             MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, CmptCombo));
@@ -582,7 +591,7 @@ public class CharacterServer : CharacterPlayer
 
         if (IsAI)
         {
-
+            AssociatedAIManager.SetCmptCombo(CmptCombo);
         }
         else
         {

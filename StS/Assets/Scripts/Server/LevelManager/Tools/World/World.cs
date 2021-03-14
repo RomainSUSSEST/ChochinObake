@@ -188,7 +188,12 @@ public class World : MonoBehaviour
                     Quaternion.identity, transform); // On crée le slime
 
                 CharacterArray[i].IsAI = true; // On indique que c'est une AI.
-                CharacterArray[i].AssociatedAIID = enumAI.Current.ID;
+
+                // On créer l'AI Player
+                AIPlayer ai = new AIPlayer();
+                ai.SetAssociatedCharacterServer(CharacterArray[i], enumAI.Current.ID); // On associe l'ai au personnage et on renseigne son ID
+
+                CharacterArray[i].AssociatedAIManager = ai; // On défini l'ai pour l'objet joueur, afin d'envoyer les évenements.
 
                 // On set le body
                 CharacterArray[i].SetBody(enumAI.Current.Body);

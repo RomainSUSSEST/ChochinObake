@@ -152,6 +152,7 @@ public class Obstacle : MonoBehaviour
         Extern.material = ValidInputMaterial;
 
         m_Statut = Statut.SUCCESS;
+        AssociatedCharacter.ObstacleSendSuccessTime();
 
         // On continue de retrecir le cercle
         do
@@ -173,6 +174,7 @@ public class Obstacle : MonoBehaviour
         Extern.material = InvalidInputMaterial;
 
         m_Statut = Statut.MISS;
+        AssociatedCharacter.ObstacleSendMissTime();
     }
 
     #endregion
