@@ -11,16 +11,26 @@
     /// </summary>
     public class ServerLevelManager : ServerManager<ServerLevelManager>
     {
-        #region Enum
+        #region Power
 
-        public enum Bonus : int
+        #region Attributes
+
+        [SerializeField] private Sprite ResetAllCombo_Sprite;
+        [SerializeField] private Sprite Shield_Sprite;
+        [SerializeField] private Sprite InvertKanji_Sprite;
+        [SerializeField] private Sprite UncolorKanji_Sprite;
+        [SerializeField] private Sprite FlashKanji_Sprite;
+        [SerializeField] private Sprite InvertInput_Sprite;
+        [SerializeField] private Sprite DisableOtherPlayers_Sprite;
+        [SerializeField] private Sprite NoPower_Sprite;
+
+        #endregion
+
+        public enum Power : int
         {
             ResetAllCombo = -12,
-            Shield = -6
-        }
-
-        public enum Malus : int
-        {
+            Shield = -6,
+            NoPower = 0,
             InvertKanji = 8,
             UncolorKanji = 16,
             FlashKanji = 24,
@@ -28,7 +38,40 @@
             DisableOtherPlayers = 40
         }
 
+        #region Tools
+
+        /// <summary>
+        /// Renvoie le sprite correspondant au pouvoir p
+        /// null si default.
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public Sprite GetAssociatedSprite(Power p)
+        {
+            switch (p)
+            {
+                case Power.ResetAllCombo:
+                    return ResetAllCombo_Sprite;
+                case Power.Shield:
+                    return Shield_Sprite;
+                case Power.InvertKanji:
+                    return InvertKanji_Sprite;
+                case Power.UncolorKanji:
+                    return UncolorKanji_Sprite;
+                case Power.FlashKanji:
+                    return FlashKanji_Sprite;
+                case Power.InvertInput:
+                    return InvertInput_Sprite;
+                case Power.DisableOtherPlayers:
+                    return DisableOtherPlayers_Sprite;
+                default:
+                    return NoPower_Sprite;
+            }
+        }
+
         #endregion
+
+#endregion
 
         #region Constants
 
@@ -134,19 +177,9 @@
 
         private void PowerDeclenchement(PowerDeclenchementEvent e)
         {
-            if (e.CmptCombo < 0)
+            if (UsePower(e.CharacterServer, e.CmptCombo)) // Si un bonus est utilisé
             {
-                if (UseBonus(e.CharacterServer, e.CmptCombo)) // Si un bonus est utilisé
-                {
-                    e.CharacterServer.ResetCombo(); // On reset les combos du joueur
-                }
-                    
-            } else 
-            {
-                if (UseMalus(e.CharacterServer, e.CmptCombo)) // Si un malus est utilisé
-                {
-                    e.CharacterServer.ResetCombo(); // On reset les combos du joueur
-                }
+                e.CharacterServer.ResetCombo(); // On reset les combos du joueur
             }
         }
 
@@ -157,42 +190,38 @@
         /// <param name="Player"></param>
         /// <param name="CmptCombo"></param>
         /// <returns></returns>
-        private bool UseBonus(CharacterServer Player, int CmptCombo)
+        private bool UsePower(CharacterServer Player, int CmptCombo)
         {
-            if (CmptCombo <= (int) Bonus.ResetAllCombo)
+            if (CmptCombo <= (int) Power.ResetAllCombo)
             {
                 ResetAllCombo();
                 return true;
 
-            } else if (CmptCombo <= (int) Bonus.Shield)
+            } else if (CmptCombo <= (int) Power.Shield)
             {
                 return Shield(Player);
-            } else
-            {
-                return false;
-            }
-
-        }
-
-        private bool UseMalus(CharacterServer Player, int CmptCombo)
-        {
-            if (CmptCombo >= (int) Malus.DisableOtherPlayers)
+            } else if (CmptCombo >= (int)Power.DisableOtherPlayers)
             {
                 DisableOtherPlayers(Player); // A changer
                 return true;
-            } else if (CmptCombo >= (int) Malus.InvertInput)
+            }
+            else if (CmptCombo >= (int)Power.InvertInput)
             {
                 return InvertInput(Player);
-            } else if (CmptCombo >= (int) Malus.FlashKanji)
+            }
+            else if (CmptCombo >= (int)Power.FlashKanji)
             {
                 return FlashKanji(Player);
-            } else if (CmptCombo >= (int) Malus.UncolorKanji)
+            }
+            else if (CmptCombo >= (int)Power.UncolorKanji)
             {
                 return UncolorKanji(Player);
-            } else if (CmptCombo >= (int) Malus.InvertKanji)
+            }
+            else if (CmptCombo >= (int)Power.InvertKanji)
             {
                 return InvertKanji(Player);
-            } else
+            }
+            else
             {
                 return false;
             }

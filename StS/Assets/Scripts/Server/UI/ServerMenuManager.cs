@@ -14,7 +14,6 @@ namespace ServerManager
 		[SerializeField] private GameObject m_PanelRoom;
 		[SerializeField] private GameObject m_PanelMusicSelection;
 		[SerializeField] private GameObject m_PanelMusicResult;
-		[SerializeField] private GameObject m_PanelCredits;
 		[SerializeField] private GameObject m_PanelOptions;
 		[SerializeField] private GameObject m_PanelResult;
 
@@ -45,7 +44,6 @@ namespace ServerManager
 			m_AllPanels.Add(m_PanelRoom);
 			m_AllPanels.Add(m_PanelMusicSelection);
 			m_AllPanels.Add(m_PanelMusicResult);
-			m_AllPanels.Add(m_PanelCredits);
 			m_AllPanels.Add(m_PanelOptions);
 			m_AllPanels.Add(m_PanelResult);
 	}
@@ -80,11 +78,6 @@ namespace ServerManager
 		public void OptionsButtonHasBeenClicked()
 		{
 			EventManager.Instance.Raise(new OptionsButtonClickedEvent());
-		}
-
-		public void CreditsButtonHasBeenClicked()
-		{
-			EventManager.Instance.Raise(new CreditsButtonClickedEvent());
 		}
 
 		public void QuitButtonHasBeenClicked()
@@ -125,13 +118,6 @@ namespace ServerManager
 			base.GameOptionsMenu(e);
 
 			OpenPanel(m_PanelOptions);
-		}
-
-		protected override void GameCreditsMenu(GameCreditsMenuEvent e)
-		{
-			base.GameCreditsMenu(e);
-
-			OpenPanel(m_PanelCredits);
 		}
 
 		protected override void GameMusicSelectionMenu(GameMusicSelectionMenuEvent e)

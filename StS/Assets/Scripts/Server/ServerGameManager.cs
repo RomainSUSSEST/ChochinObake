@@ -100,7 +100,6 @@
 			//MainMenuManager
 			EventManager.Instance.AddListener<PlayButtonClickedEvent>(PlayButtonClicked);
 			EventManager.Instance.AddListener<OptionsButtonClickedEvent>(OptionsButtonClicked);
-			EventManager.Instance.AddListener<CreditsButtonClickedEvent>(CreditsButtonClicked);
 			EventManager.Instance.AddListener<QuitButtonClickedEvent>(QuitButtonClicked);
 
 			EventManager.Instance.AddListener<RoomLeaveButtonClickedEvent>(RoomLeaveButtonClicked);
@@ -128,7 +127,6 @@
 			//MainMenuManager
 			EventManager.Instance.RemoveListener<PlayButtonClickedEvent>(PlayButtonClicked);
 			EventManager.Instance.RemoveListener<OptionsButtonClickedEvent>(OptionsButtonClicked);
-			EventManager.Instance.RemoveListener<CreditsButtonClickedEvent>(CreditsButtonClicked);
 			EventManager.Instance.RemoveListener<QuitButtonClickedEvent>(QuitButtonClicked);
 
 			EventManager.Instance.RemoveListener<RoomLeaveButtonClickedEvent>(RoomLeaveButtonClicked);
@@ -191,11 +189,6 @@
 			OptionsMenu();
 		}
 
-		private void CreditsButtonClicked(CreditsButtonClickedEvent e)
-		{
-			CreditsMenu();
-		}
-
 		private void RoomLeaveButtonClicked(RoomLeaveButtonClickedEvent e)
 		{
 			MainMenu();
@@ -228,7 +221,6 @@
 			CurrentMapData = e.map;
 			CurrentDifficulty = e.difficulty;
 
-			Debug.Log(CurrentAudio.length);
 			Play();
 		}
 
@@ -283,13 +275,6 @@
 			SetTimeScale(1);
 			m_GameState = GameState.gameMenu;
 			EventManager.Instance.Raise(new GameOptionsMenuEvent());
-		}
-
-		private void CreditsMenu()
-		{
-			SetTimeScale(1);
-			m_GameState = GameState.gameMenu;
-			EventManager.Instance.Raise(new GameCreditsMenuEvent());
 		}
 
 		private void MusicSelection()

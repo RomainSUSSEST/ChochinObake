@@ -58,8 +58,10 @@ public class CharacterServer : CharacterPlayer
         ResetCombo();
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         // On détruit tous les obstacles associés
         Obstacle o;
         while (QueueObstacle.Count > 0)
@@ -147,14 +149,7 @@ public class CharacterServer : CharacterPlayer
 
         ++CmptObstacle;
 
-        if (IsAI)
-        {
-            AssociatedAIManager.SetCmptCombo(CmptCombo);
-        }
-        else
-        {
-            UpdateStreakStatus(CmptCombo);
-        }
+        UpdateStreakStatus(CmptCombo);
 
         UpdatePosition(UPDATE_POSITION_TIME);
     }
@@ -221,14 +216,7 @@ public class CharacterServer : CharacterPlayer
     {
         CmptCombo = 0;
 
-        if (!IsAI) // Si ce n'est pas une AI
-        {
-            // Mise à jours des combo auprès du joueur.
-            UpdateStreakStatus(CmptCombo);
-        } else
-        {
-            AssociatedAIManager.SetCmptCombo(CmptCombo);
-        }
+        UpdateStreakStatus(CmptCombo);
     }
 
     #endregion
@@ -342,7 +330,6 @@ public class CharacterServer : CharacterPlayer
 
             foreach (Obstacle o in currentObstacle)
             {
-                Debug.Log(o.name);
                 QueueObstacle.Enqueue(o);
             }
             return true;
@@ -504,6 +491,11 @@ public class CharacterServer : CharacterPlayer
 
     #endregion
 
+    private void SetPowerLogo(Sprite logo)
+    {
+        GetCharacterBody().SetPowerLogo(logo);
+    }
+
     /// <summary>
     /// Traite les actions d'attaque du joueur pour identifier les collisions.
     /// </summary>
@@ -562,42 +554,82 @@ public class CharacterServer : CharacterPlayer
 
     private void UpdateStreakStatus(int cmptCombo)
     {
-        UpdateSuccessiveSuccessEvent.BonusStreak bonusValue;
+        // On cherche le pouvoir correspondant
+        ServerLevelManager.Power power;
 
-        if (cmptCombo <= (int) ServerLevelManager.Bonus.ResetAllCombo) 
+        if (cmptCombo <= (int)ServerLevelManager.Power.ResetAllCombo)
         {
-            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.ResetAllCombo;
-        } 
-        else if (cmptCombo <= (int) ServerLevelManager.Bonus.Shield) 
-        {
-            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.Shield;
+            power = ServerLevelManager.Power.ResetAllCombo;
         }
-        else if (cmptCombo >= (int)ServerLevelManager.Malus.DisableOtherPlayers)
+        else if (cmptCombo <= (int)ServerLevelManager.Power.Shield)
         {
-            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.DisableOtherPlayers;
+            power = ServerLevelManager.Power.Shield;
         }
-        else if (cmptCombo >= (int)ServerLevelManager.Malus.InvertInput)
+        else if (cmptCombo >= (int)ServerLevelManager.Power.DisableOtherPlayers)
         {
-            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.InvertInput;
+            power = ServerLevelManager.Power.DisableOtherPlayers;
         }
-        else if (cmptCombo >= (int)ServerLevelManager.Malus.FlashKanji)
+        else if (cmptCombo >= (int)ServerLevelManager.Power.InvertInput)
         {
-            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.FlashKanji;
+            power = ServerLevelManager.Power.InvertInput;
         }
-        else if (cmptCombo >= (int)ServerLevelManager.Malus.UncolorKanji)
+        else if (cmptCombo >= (int)ServerLevelManager.Power.FlashKanji)
         {
-            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.UncolorKanji;
+            power = ServerLevelManager.Power.FlashKanji;
         }
-        else if (cmptCombo >= (int)ServerLevelManager.Malus.InvertKanji)
+        else if (cmptCombo >= (int)ServerLevelManager.Power.UncolorKanji)
         {
-            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.InvertKanji;
+            power = ServerLevelManager.Power.UncolorKanji;
+        }
+        else if (cmptCombo >= (int)ServerLevelManager.Power.InvertKanji)
+        {
+            power = ServerLevelManager.Power.InvertKanji;
         }
         else
         {
-            bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.Default;
+            power = ServerLevelManager.Power.NoPower;
         }
 
-        MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, bonusValue));
+        // On met à jours auprès du joueur
+        if (IsAI)
+        {
+            AssociatedAIManager.SetCmptCombo(cmptCombo);
+        } else
+        {
+            UpdateSuccessiveSuccessEvent.BonusStreak bonusValue;
+
+            switch (power)
+            {
+                case ServerLevelManager.Power.DisableOtherPlayers:
+                    bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.DisableOtherPlayers;
+                    break;
+                case ServerLevelManager.Power.FlashKanji:
+                    bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.FlashKanji;
+                    break;
+                case ServerLevelManager.Power.InvertInput:
+                    bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.InvertInput;
+                    break;
+                case ServerLevelManager.Power.InvertKanji:
+                    bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.InvertKanji;
+                    break;
+                case ServerLevelManager.Power.NoPower:
+                    bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.Default;
+                    break;
+                case ServerLevelManager.Power.ResetAllCombo:
+                    bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.ResetAllCombo;
+                    break;
+                case ServerLevelManager.Power.Shield:
+                    bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.Shield;
+                    break;
+                default:// ServerLevelManager.Power.UncolorKanji:
+                    bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.UncolorKanji;
+                    break;
+            }
+
+            MessagingManager.Instance.RaiseNetworkedEventOnClient(new UpdateSuccessiveSuccessEvent(AssociedClientID, bonusValue));
+        }
+
+        SetPowerLogo(ServerLevelManager.Instance.GetAssociatedSprite(power)); // On met à jours l'icone joueur in game
     }
 
     #region ObstacleStatus
@@ -618,13 +650,7 @@ public class CharacterServer : CharacterPlayer
 
         ++CmptObstacle;
 
-        if (IsAI)
-        {
-            AssociatedAIManager.SetCmptCombo(CmptCombo);
-        } else
-        {
-            UpdateStreakStatus(CmptCombo);
-        }
+        UpdateStreakStatus(CmptCombo);
     }
 
     private void ObstacleSuccess()
@@ -642,14 +668,7 @@ public class CharacterServer : CharacterPlayer
         ++CmptSuccess;
         ++CmptObstacle;
 
-        if (IsAI)
-        {
-            AssociatedAIManager.SetCmptCombo(CmptCombo);
-        }
-        else
-        {
-            UpdateStreakStatus(CmptCombo);
-        }
+        UpdateStreakStatus(CmptCombo);
     }
 
     private void ObstacleToEarly()

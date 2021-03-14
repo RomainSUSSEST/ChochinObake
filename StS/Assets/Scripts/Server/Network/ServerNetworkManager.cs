@@ -82,13 +82,6 @@ namespace ServerManager
             StartCoroutine("StopServer");
         }
 
-        protected override void GameCreditsMenu(GameCreditsMenuEvent e)
-        {
-            base.GameCreditsMenu(e);
-
-            StartCoroutine("StopServer");
-        }
-
         protected override void GameMusicSelectionMenu(GameMusicSelectionMenuEvent e)
         {
             base.GameMusicSelectionMenu(e);

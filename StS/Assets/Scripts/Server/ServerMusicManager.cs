@@ -142,7 +142,6 @@ namespace ServerManager
 		private void RoundStart(RoundStartEvent e)
 		{
 			AudioClip clip = ServerGameManager.Instance.GetCurrentAudioClip();
-			Debug.Log(clip.length);
 			AudioSource.loop = false;
 			PlayMusic(clip);
 		}
@@ -170,14 +169,6 @@ namespace ServerManager
 		protected override void GameOptionsMenu(GameOptionsMenuEvent e)
 		{
 			base.GameOptionsMenu(e);
-
-			AudioSource.loop = true;
-			PlayMusic(MenuMusic);
-		}
-
-		protected override void GameCreditsMenu(GameCreditsMenuEvent e)
-		{
-			base.GameCreditsMenu(e);
 
 			AudioSource.loop = true;
 			PlayMusic(MenuMusic);

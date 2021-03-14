@@ -181,6 +181,7 @@ public class RoomModel : MonoBehaviour
         });
 
         RefreshListPlayer();
+        ActualiseNextButton();
     }
 
     private void RemovePlayer(ServerDisconnectionSuccessEvent e)

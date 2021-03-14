@@ -1,11 +1,14 @@
-﻿using System.Collections;
+﻿using ServerManager;
+using System.Collections;
 using UnityEngine;
 
 public class AIPlayer : MonoBehaviour
 {
     #region Constants
 
-    private static readonly int INVERT_INPUT_MALUS = 35;
+    private static readonly int POWER_PRESS_RATE = 33; // En %
+
+    private static readonly int INVERT_INPUT_MALUS = 35; // En %
     private static readonly int FLASH_KANJI_MALUS = 30;
     private static readonly int UNCOLOR_KANJI_MALUS = 25;
     private static readonly int INVERT_KANJI_MALUS = 20;
@@ -43,7 +46,6 @@ public class AIPlayer : MonoBehaviour
         // Initialisation
 
         CurrentSuccessRate = (int) AssociatedProfil.Difficulty;
-        Debug.Log(CurrentSuccessRate);
     }
 
     #endregion
@@ -118,6 +120,15 @@ public class AIPlayer : MonoBehaviour
             if (--UncoloredKanji == 0)
             {
                 CurrentSuccessRate += UNCOLOR_KANJI_MALUS;
+            }
+        }
+
+        // On regarde si on lance un pouvoir
+        if (CmptCombo <= (int) ServerLevelManager.Power.Shield || CmptCombo >= (int) ServerLevelManager.Power.InvertKanji)
+        {
+            if (Random.Range(0, 100) <= POWER_PRESS_RATE)
+            {
+                AssociatedCharacter.AIPower();
             }
         }
     }

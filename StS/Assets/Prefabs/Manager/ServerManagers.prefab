@@ -187,6 +187,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_DoNotDestroyGameObjectOnLoad: 0
+  ResetAllCombo_Sprite: {fileID: 21300000, guid: 44c2291c5d9e2ef4bab8f886cd10da79,
+    type: 3}
+  Shield_Sprite: {fileID: 21300000, guid: d648c492b9f53474b8d025978515f29e, type: 3}
+  InvertKanji_Sprite: {fileID: 21300000, guid: 91cd99e1e55c5194fa0ab4062d90c5e2, type: 3}
+  UncolorKanji_Sprite: {fileID: 21300000, guid: 5a1390a45bf656f468583975e5d2cca1,
+    type: 3}
+  FlashKanji_Sprite: {fileID: 21300000, guid: 3f16086e84ba46342ab29c89bea0657f, type: 3}
+  InvertInput_Sprite: {fileID: 21300000, guid: 8295d2501a9d9bf47b1d5414dd787c0d, type: 3}
+  DisableOtherPlayers_Sprite: {fileID: 21300000, guid: 28a62837a3e90814e8860e75fa29c529,
+    type: 3}
+  NoPower_Sprite: {fileID: 21300000, guid: 778f2086052a2b244a550064f8b10e03, type: 3}
   WorldJapan: {fileID: 1257938603631738033, guid: c89b6156e0220cb4fba3e17d2ef0e3a8,
     type: 3}
   DepartureWorldJapan: {fileID: 6477189814763935905, guid: c020bc8d943e51f4c8d94ee2254e7a57,
@@ -336,9 +347,7 @@ MonoBehaviour:
   m_PanelRoom: {fileID: 0}
   m_PanelMusicSelection: {fileID: 0}
   m_PanelMusicResult: {fileID: 0}
-  m_PanelCredits: {fileID: 0}
   m_PanelOptions: {fileID: 0}
-  m_PanelInGameMenu: {fileID: 0}
   m_PanelResult: {fileID: 0}
 --- !u!1 &1708910193215040
 GameObject:

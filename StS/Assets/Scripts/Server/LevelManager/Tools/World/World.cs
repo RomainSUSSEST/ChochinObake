@@ -174,7 +174,6 @@ public class World : MonoBehaviour
                 Player p = Players[CharacterArray[i].AssociedClientID];
 
                 // On set le body
-
                 CharacterArray[i].SetBody(p.Body);
 
             } else if (enumAI.MoveNext())

@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
+[RequireComponent(typeof(Animator))]
 public class CharacterBody : MonoBehaviour
 {
     // Classe imbriqué
@@ -32,6 +34,8 @@ public class CharacterBody : MonoBehaviour
     [SerializeField] private ParticleSystem m_AttackSuccess;
     [SerializeField] private ParticleSystem m_AttackFailure;
 
+    [SerializeField] private Image PowerLogo;
+
     private Animator Animator;
 
     private CharacterPlayer AssociatedCharacterPlayer;
@@ -44,6 +48,13 @@ public class CharacterBody : MonoBehaviour
         Animator = GetComponent<Animator>();
     }
 
+    private void Update()
+    {
+        if (Animator == null)
+        {
+            Debug.Log("outch");
+        }
+    }
 
     // Requete
 
@@ -73,6 +84,11 @@ public class CharacterBody : MonoBehaviour
     public void IsRunning(bool b)
     {
         Animator.SetBool("IsRunning", b);
+    }
+
+    public void SetPowerLogo(Sprite logo)
+    {
+        PowerLogo.sprite = logo;
     }
 
     #region Start attack

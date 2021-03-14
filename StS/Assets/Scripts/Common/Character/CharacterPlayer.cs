@@ -10,12 +10,12 @@ public abstract class CharacterPlayer : MonoBehaviour
 
     #region Life Cycle
 
-    private void Awake()
+    protected virtual void Awake()
     {
         SubscribeEvents();
     }
 
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
         UnsubscribeEvents();
     }
@@ -38,17 +38,15 @@ public abstract class CharacterPlayer : MonoBehaviour
     /// </summary>
     /// <param name="body"></param>
     /// <returns></returns>
-    public CharacterBody SetBody(CharacterBody body)
+    public void SetBody(CharacterBody body)
     {
         // On détruit l'ancien corps
         if (Body != null)
             Destroy(Body.gameObject);
 
         // On crée et positionne le nouveau
-        this.Body = Instantiate(body, transform, false);
+        this.Body = Instantiate(body, transform);
         this.Body.SetAssociatedCharacterPlayer(this);
-
-        return Body;
     }
 
     #region Trigger Attack

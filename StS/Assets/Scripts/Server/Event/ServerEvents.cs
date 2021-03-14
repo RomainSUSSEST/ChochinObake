@@ -12,9 +12,6 @@ public class GameRoomMenuEvent : SDD.Events.Event
 public class GameOptionsMenuEvent : SDD.Events.Event
 {
 }
-public class GameCreditsMenuEvent : SDD.Events.Event
-{
-}
 public class GameMusicSelectionMenuEvent : SDD.Events.Event
 {
 }
@@ -40,10 +37,6 @@ public class PlayButtonClickedEvent : SDD.Events.Event
 }
 
 public class OptionsButtonClickedEvent : SDD.Events.Event
-{
-}
-
-public class CreditsButtonClickedEvent : SDD.Events.Event
 {
 }
 

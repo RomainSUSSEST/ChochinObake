@@ -33,9 +33,6 @@ public class CharacterSelectionMenuModel : MonoBehaviour
     [Header("Button Ready")]
 
     [SerializeField] private Button ButtonReady;
-    [SerializeField] private Image ButtonReadyImage;
-    [SerializeField] private Color ReadyButtonColor;
-    [SerializeField] private Color UnreadyButtonColor;
     [SerializeField] private Sprite UnreadyButtonSprite;
     [SerializeField] private Sprite ReadyButtonSprite;
 
@@ -312,7 +309,8 @@ public class CharacterSelectionMenuModel : MonoBehaviour
             DisableInvalidBodyImage();
         }
 
-        YourStory.text = InstanceSlime.SetBody(ListBody[IndexBody]).GetStoryBody();
+        InstanceSlime.SetBody(ListBody[IndexBody]);
+        YourStory.text = InstanceSlime.GetCharacterBody().GetStoryBody();
     }
 
     private bool IsValidBody(CharacterBody.BodyType body)
