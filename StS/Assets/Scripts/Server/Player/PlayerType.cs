@@ -12,11 +12,18 @@ public class Player
 
 public class AI_Player
 {
+    #region Constants
+
+    public static readonly int MIN_SUCCESS_RATE = 20;
+    public static readonly int MAX_SUCCESS_RATE = 90;
+
+    #endregion
+
     public string Name;
 
     public CharacterBody Body;
 
-    public int ID;
-
     public int Score;
+
+    public int Difficulty;
 }

@@ -179,19 +179,20 @@ public class World : MonoBehaviour
 
             } else if (enumAI.MoveNext())
             {
-                // Slime Array
+                // Personnage array
                 CharacterArray[i] = Instantiate(CharacterServerPrefab,
                     new Vector3(
                         CharacterSpawn_X + (SpiritWaySize.x + DistanceBetweenGround) * i,
                         CharacterSpawn_Y,
                         transform.position.z - DestroyElementsMargin),
-                    Quaternion.identity, transform); // On crée le slime
+                    Quaternion.identity, transform); // On crée le personnage
 
                 CharacterArray[i].IsAI = true; // On indique que c'est une AI.
 
                 // On créer l'AI Player
-                AIPlayer ai = new AIPlayer();
-                ai.SetAssociatedCharacterServer(CharacterArray[i], enumAI.Current.ID); // On associe l'ai au personnage et on renseigne son ID
+                AIPlayer ai = CharacterArray[i].gameObject.AddComponent<AIPlayer>();
+                ai.SetAssociatedCharacterServer(CharacterArray[i]); // On associe l'ai au personnage
+                ai.SetAssociatedAIProfil(enumAI.Current); // On associe l'ai au profil d'ai
 
                 CharacterArray[i].AssociatedAIManager = ai; // On défini l'ai pour l'objet joueur, afin d'envoyer les évenements.
 

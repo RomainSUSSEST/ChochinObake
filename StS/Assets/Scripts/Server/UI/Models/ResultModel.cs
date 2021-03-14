@@ -8,9 +8,6 @@ public class ResultModel : MonoBehaviour
 {
     #region Constants
 
-    private static readonly float BACK_DELAI = 10;
-    private Dictionary<ulong, Player> Players;
-
     [SerializeField] TextMeshProUGUI TextPrinter;
 
     #endregion

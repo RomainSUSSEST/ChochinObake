@@ -179,6 +179,10 @@
 			// On s'assure que les joueurs sont reset
 			CurrentAI = null;
 			CurrentPlayers = null;
+			CurrentMusicPath = null;
+			CurrentAudio = null;
+			CurrentMapData = null;
+		
 			RoomMenu();
 		}
 
@@ -224,6 +228,7 @@
 			CurrentMapData = e.map;
 			CurrentDifficulty = e.difficulty;
 
+			Debug.Log(CurrentAudio.length);
 			Play();
 		}
 

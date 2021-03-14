@@ -142,7 +142,7 @@ namespace ServerManager
 		private void RoundStart(RoundStartEvent e)
 		{
 			AudioClip clip = ServerGameManager.Instance.GetCurrentAudioClip();
-
+			Debug.Log(clip.length);
 			AudioSource.loop = false;
 			PlayMusic(clip);
 		}

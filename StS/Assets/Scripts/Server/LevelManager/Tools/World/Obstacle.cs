@@ -5,9 +5,9 @@ public class Obstacle : MonoBehaviour
 {
     // Enum
 
-    public enum Elements : int { WATER, EARTH, AIR, FIRE }
+    public enum Elements { WATER, EARTH, FIRE }
 
-    public enum Statut { EARLY, SUCCESS, MISS }
+    public enum Statut { EARLY, SUCCESS, ECHEC, MISS }
 
     #region Constants
 
@@ -115,6 +115,11 @@ public class Obstacle : MonoBehaviour
         KanjiRenderer.materials[1] = UncolorMaterial;
     }
 
+    public void EchecObstacle()
+    {
+        m_Statut = Statut.ECHEC;
+    }
+
     #endregion
 
     #region Coroutine
@@ -152,7 +157,8 @@ public class Obstacle : MonoBehaviour
         Extern.material = ValidInputMaterial;
 
         m_Statut = Statut.SUCCESS;
-        AssociatedCharacter.ObstacleSendSuccessTime();
+
+        AssociatedCharacter.ObstacleSendSuccessTime(GetElement());
 
         // On continue de retrecir le cercle
         do
@@ -170,11 +176,14 @@ public class Obstacle : MonoBehaviour
 
         yield return new WaitForSeconds(ValidInputArea_Delai); // Temps rajouté en plus après le perfect match
 
-        Intern.material = InvalidInputMaterial;
-        Extern.material = InvalidInputMaterial;
+        if (m_Statut != Statut.ECHEC)
+        {
+            Intern.material = InvalidInputMaterial;
+            Extern.material = InvalidInputMaterial;
 
-        m_Statut = Statut.MISS;
-        AssociatedCharacter.ObstacleSendMissTime();
+            m_Statut = Statut.MISS;
+            AssociatedCharacter.ObstacleSendMissTime();
+        }
     }
 
     #endregion

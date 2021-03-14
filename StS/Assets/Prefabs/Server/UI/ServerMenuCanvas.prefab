@@ -13421,7 +13421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07e4b411d1ae1b040a15e98ce1d1e14f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextPrinter: {fileID: 0}
+  TextPrinter: {fileID: 7469671613076273245}
 --- !u!1 &8875957101917741911
 GameObject:
   m_ObjectHideFlags: 0

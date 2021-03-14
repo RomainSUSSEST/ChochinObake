@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b346666d9e2ad4fad8132434fd50e4cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 3
+  Type: 2
   Kanji: {fileID: 9197469113144655933}
   ValidInputArea_Threshold: 0.95
   ValidInputArea_Delai: 0.28

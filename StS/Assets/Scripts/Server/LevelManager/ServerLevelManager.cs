@@ -538,7 +538,6 @@
         private void RoundEnd(RoundEndEvent e)
         {
             IReadOnlyDictionary<ulong, Player> Players = ServerGameManager.Instance.GetPlayers();
-            IReadOnlyList<AI_Player> AI = ServerGameManager.Instance.GetAIList();
 
             foreach (CharacterServer p in RoundPlayers)
             {
@@ -546,18 +545,18 @@
                 {
                     if (p.IsAI)
                     {
-                        AI[p.AssociatedAIManager.GetAssociatedAIID()].Score +=
+                        p.AssociatedAIManager.GetAssociatedProfil().Score +=
                             (int)Mathf.Lerp(
                             MIN_SCORE,
                             MAX_SCORE,
-                            p.GetTotalObstacle() == 0 ? 1 : p.GetTotalSuccess() / p.GetTotalObstacle());
+                            p.GetTotalObstacle() == 0 ? 1 : (float) p.GetTotalSuccess() / p.GetTotalObstacle());
                     } else
                     {
                         Players[p.AssociedClientID].Score +=
                             (int)Mathf.Lerp(
                             MIN_SCORE,
                             MAX_SCORE,
-                            p.GetTotalObstacle() == 0 ? 1 : p.GetTotalSuccess() / p.GetTotalObstacle());
+                            p.GetTotalObstacle() == 0 ? 1 : (float) p.GetTotalSuccess() / p.GetTotalObstacle());
                     }
                 }
             }

@@ -68,8 +68,6 @@ public class RoomModel : MonoBehaviour
         {
             for (int i = 0; i < ai.Count; ++i) 
             {
-                ai[i].ID = AI_Players.Count;
-
                 AI_Players.Add(ai[i]);
             }
         }
@@ -142,11 +140,15 @@ public class RoomModel : MonoBehaviour
     {
         if (Players.Count + AI_Players.Count < ServerNetworkManager.MAX_PLAYER_CONNECTED)
         {
-            AI_Players.Add(new AI_Player()
-            {
-                ID = AI_Players.Count // On lui attribut un id.
-            });
+            AI_Player currentAI = new AI_Player();
+            currentAI.Name = "AI." + AI_Players.Count;
+
+            currentAI.Difficulty = Random.Range(AI_Player.MIN_SUCCESS_RATE, AI_Player.MAX_SUCCESS_RATE);
+
+            AI_Players.Add(currentAI);
+
             RefreshListPlayer();
+            ActualiseNextButton();
         }
     }
 
@@ -156,6 +158,7 @@ public class RoomModel : MonoBehaviour
         {
             AI_Players.RemoveAt(AI_Players.Count - 1);
             RefreshListPlayer();
+            ActualiseNextButton();
         }
     }
 
@@ -346,18 +349,19 @@ public class RoomModel : MonoBehaviour
     }
 
     /**
-     * NextButton.interactable == Players.Count > 0 && foreach player, playerState == ready
+     * NextButton.interactable == (Players.Count > 0 || AI.Count > 0) && foreach player, playerState == ready
      * && Il y a au moin 1 chanson d'enregistré.
      */
     private void ActualiseNextButton()
     {
-        bool IsValid = Players != null && Players.Count > 0 && ServerAccountManager.Instance.GetSongList().Length > 0;
+        // au moins 1 joueur ou 1 AI, et une chanson
+        bool IsValid = (Players.Count > 0 || AI_Players.Count > 0) && ServerAccountManager.Instance.GetSongList().Length > 0;
 
         if (!IsValid)
         {
             NextButton.interactable = IsValid;
             return;
-        } else
+        } else // Est ce que chaque joueurs est pret ?
         {
             Dictionary<ulong, Player>.ValueCollection values = Players.Values;
 

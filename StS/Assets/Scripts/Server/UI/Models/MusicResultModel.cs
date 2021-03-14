@@ -121,6 +121,7 @@ public class MusicResultModel : MonoBehaviour
 
         if (GameReady())
         {
+
             EventManager.Instance.Raise(new MusicResultGameReadyEvent()
             {
                 audio = CurrentAudioClip,

@@ -58,6 +58,16 @@ public class CharacterServer : CharacterPlayer
         ResetCombo();
     }
 
+    private void OnDestroy()
+    {
+        // On détruit tous les obstacles associés
+        Obstacle o;
+        while (QueueObstacle.Count > 0)
+        {
+            Destroy(QueueObstacle.Dequeue().gameObject);
+        }
+    }
+
     #endregion
 
     #region Request
@@ -149,10 +159,10 @@ public class CharacterServer : CharacterPlayer
         UpdatePosition(UPDATE_POSITION_TIME);
     }
 
-    public void ObstacleSendSuccessTime()
+    public void ObstacleSendSuccessTime(Obstacle.Elements element)
     {
         if (IsAI)
-            AssociatedAIManager.SuccessTime();
+            AssociatedAIManager.SuccessTime(element);
     }
 
     #endregion
@@ -509,7 +519,7 @@ public class CharacterServer : CharacterPlayer
 
         Obstacle obs = QueueObstacle.Peek();
 
-        switch (obs.GetStatut())
+        switch (obs.GetStatut()) // On regarde le status de l'obstacle
         {
             case Obstacle.Statut.EARLY:
                 ObstacleToEarly();
@@ -523,7 +533,10 @@ public class CharacterServer : CharacterPlayer
                     ObstacleSuccess();
                 }
                 else
+                {
+                    obs.EchecObstacle();
                     ObstacleFail();
+                }
 
                 break;
         }
