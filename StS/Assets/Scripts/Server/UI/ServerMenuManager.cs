@@ -90,6 +90,11 @@ namespace ServerManager
 			EventManager.Instance.Raise(new RoomLeaveButtonClickedEvent());
 		}
 
+		public void OptionsLeaveButtonHasBeenClicked()
+		{
+			EventManager.Instance.Raise(new RoomLeaveButtonClickedEvent());
+		}
+
 		public void MusicSelectionLeaveButtonClicked()
 		{
 			EventManager.Instance.Raise(new MusicSelectionLeaveButtonClickedEvent());
@@ -119,7 +124,7 @@ namespace ServerManager
 
 			OpenPanel(m_PanelOptions);
 		}
-
+		
 		protected override void GameMusicSelectionMenu(GameMusicSelectionMenuEvent e)
 		{
 			base.GameMusicSelectionMenu(e);
