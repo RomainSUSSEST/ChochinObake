@@ -254,6 +254,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_DoNotDestroyGameObjectOnLoad: 0
   Balloon: {fileID: 0}
+  CharacterHappy: {fileID: 0}
+  CharacterHappy2: {fileID: 0}
+  CharacterHit: {fileID: 0}
+  CharacterHit2: {fileID: 0}
+  UI_Sound1: {fileID: 0}
+  UI_Sound2: {fileID: 0}
+  UI_Sound3: {fileID: 0}
   Source: {fileID: 0}
 --- !u!1 &1680404950657250
 GameObject:
