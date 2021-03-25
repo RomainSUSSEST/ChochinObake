@@ -69,41 +69,39 @@ public class MusicResultModel : MonoBehaviour
     
     private void OnEnable()
     {
-        if (ServerGameManager.Instance.GetCurrentMusicPath() != null)
-        {
-            SubscribeEvents();
+        SubscribeEvents();
 
-            Players = ServerGameManager.Instance.GetPlayers();
+        CurrentAudioClip = null;
+        CurrentMapData = null;
+        Players = ServerGameManager.Instance.GetPlayers();
 
-            InitializePlayersDefaultStates();
-
-            // On initialise le timer
-            TimerCurrentValue = TimerStartValue;
-            TimerIsEnd = false;
+        // On initialise le timer
+        TimerCurrentValue = TimerStartValue;
+        TimerIsEnd = false;
 
 
-            // On intialise les données de chargement de carte
-            ProgressBar_State.color = PROGRESS_BAR_DEFAULT_COLOR;
-            MapIsLoaded = false;
+        // On intialise les données de chargement de carte
+        ProgressBar_State.color = PROGRESS_BAR_DEFAULT_COLOR;
+        MapIsLoaded = false;
 
 
-            // On initialise la musique gagnante
-            SongTitle.text = Path.GetFileName(ServerGameManager.Instance.GetCurrentMusicPath());
+        // On initialise la musique gagnante
+        SongTitle.text = Path.GetFileName(ServerGameManager.Instance.GetCurrentMusicPath());
 
 
-            // On initialise la difficulté
-            DifficultyBar.value = 0.5f;
-            DifficultyBarImage.color = MediumColor;
+        // On initialise la difficulté
+        DifficultyBar.value = 0.5f;
+        DifficultyBarImage.color = MediumColor;
 
-            CurrentDifficulty = 0;
-            NbrVoteDifficulty = 0;
+        CurrentDifficulty = 0;
+        NbrVoteDifficulty = 0;
 
 
-            // Initialisation de la page
+        // Initialisation de la page
 
-            RefreshTimerUI(); // Affichage du timer
-            LoadMapAsync(); // On charge la carte
-        }
+        InitializePlayersDefaultStates();
+        RefreshTimerUI(); // Affichage du timer
+        LoadMapAsync(); // On charge la carte
     }
 
     private void Update()

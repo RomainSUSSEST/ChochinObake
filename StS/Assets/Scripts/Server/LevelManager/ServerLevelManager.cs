@@ -473,6 +473,7 @@
                     if (c != null)
                         c.SetSafeStatus(false);
                 }
+                SafePlayerCount = 0;
             } else
             {
                 Target.SetSafeStatus(true);

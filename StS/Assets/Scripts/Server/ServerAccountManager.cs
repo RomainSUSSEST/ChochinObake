@@ -185,6 +185,7 @@ namespace ServerManager
         /// <returns> L'audioClip associé au .Wav pointé par Path. </returns>
         private async Task<AudioClip> GetAudioClipOfWavSongAsync(string path)
         {
+            DownloadedSongAtAudioClip = null;
             StartCoroutine("_GetAudioClipOfWavSongAsync", path);
             await Task.Run(() =>
             {

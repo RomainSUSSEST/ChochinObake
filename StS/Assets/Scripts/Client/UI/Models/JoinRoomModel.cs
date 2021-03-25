@@ -18,6 +18,7 @@ public class JoinRoomModel : MonoBehaviour
     private void OnEnable()
     {
         ip_Address.text = "";
+        errorMessage.text = "";
     }
 
     #endregion

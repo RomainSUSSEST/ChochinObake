@@ -64,6 +64,7 @@ public class AddSongModel : MonoBehaviour
         }
 
         AddSong(URLInputField.text);
+        URLInputField.text = "";
     }
 
     public void CancelButtonHasBeenClicked()
@@ -76,6 +77,11 @@ public class AddSongModel : MonoBehaviour
         ProgressBar_Content.SetActive(false);
         AddButton.interactable = true;
         URLInputField.text = "";
+    }
+
+    public void PasteButtonHasBeenPressed()
+    {
+        URLInputField.text = GUIUtility.systemCopyBuffer;
     }
 
 

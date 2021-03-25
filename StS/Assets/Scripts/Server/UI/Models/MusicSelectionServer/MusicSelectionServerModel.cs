@@ -139,28 +139,28 @@ public class MusicSelectionServerModel : MonoBehaviour
     private void ChooseAndSendWinnerSong()
     {
         int cmptVote = GetMaxVote();
-        List<string> PathMusicGagnante = new List<string>();
 
-        // On récupére les musiques gagnante
-        foreach (MusicSelectionServer_Song song in SongListGameObject)
+        if (cmptVote > 0)
         {
-            if (song.getNbrVote() == cmptVote) // Si c'est une musique gagnante
+            List<string> PathMusicGagnante = new List<string>();
+
+            // On récupére les musiques gagnante
+            foreach (MusicSelectionServer_Song song in SongListGameObject)
             {
-                // On récupére le path de la chanson
-                foreach (string s in SongListPath)
+                if (song.getNbrVote() == cmptVote) // Si c'est une musique gagnante
                 {
-                    if (Path.GetFileName(s).Equals(song.GetTitle()))
-                    { // C'est une gagnante, on l'ajoute
-                        PathMusicGagnante.Add(s);
-                        break;
+                    // On récupére le path de la chanson
+                    foreach (string s in SongListPath)
+                    {
+                        if (Path.GetFileName(s).Equals(song.GetTitle()))
+                        { // C'est une gagnante, on l'ajoute
+                            PathMusicGagnante.Add(s);
+                            break;
+                        }
                     }
                 }
             }
-        }
 
-        // Si des personnes on voté
-        if (PathMusicGagnante.Count > 0)
-        {
             // On choisi une chanson parmi les gagnantes et on envoie son path du directory
             EventManager.Instance.Raise(new MusicSelectionTimerEndEvent()
             {

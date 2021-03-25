@@ -254,8 +254,15 @@ public class World : MonoBehaviour
 
         Array.Sort(tampon); // On trie
 
-        CurrentMaxPrunedSpectralFlux = tampon[tampon.Length - 1]; // On récupére le maximum
-        CurrentThresholdSensitivity = tampon[(int) Math.Floor(tampon.Length * CurrentSensitivity)]; // On calcul la valeur de seuil minimal de la sensitivité de l'algo
+        if (tampon.Length == 0)
+        {
+            CurrentMaxPrunedSpectralFlux = 0;
+            CurrentThresholdSensitivity = 0;
+        } else
+        {
+            CurrentMaxPrunedSpectralFlux = tampon[tampon.Length - 1]; // On récupére le maximum
+            CurrentThresholdSensitivity = tampon[(int)Math.Floor(tampon.Length * CurrentSensitivity)]; // On calcul la valeur de seuil minimal de la sensitivité de l'algo
+        }
 
         #region Variable (AHeadTimeToSpawn)
 
@@ -315,6 +322,12 @@ public class World : MonoBehaviour
 
             yield return new CoroutineTools.WaitForFrames(1);
             time += Time.deltaTime; // On ajoute le temps passé
+        }
+
+        // On attend que la musique commence, si on atteint cette étape trop rapidement
+        while (!ServerMusicManager.Instance.IsPlayingMusic())
+        {
+            yield return new CoroutineTools.WaitForFrames(1);
         }
 
         // on attend la Fin

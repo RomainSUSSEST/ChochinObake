@@ -53,6 +53,11 @@ namespace ServerManager
 			return AudioSource.time;
 		}
 
+		public bool IsPlayingMusic()
+		{
+			return AudioSource.isPlaying;
+		}
+
 		#endregion
 
 		#region Subs methods
@@ -142,6 +147,7 @@ namespace ServerManager
 		private void RoundStart(RoundStartEvent e)
 		{
 			AudioClip clip = ServerGameManager.Instance.GetCurrentAudioClip();
+			Debug.Log(clip.length);
 			AudioSource.loop = false;
 			PlayMusic(clip);
 		}
