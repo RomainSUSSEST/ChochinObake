@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class PanelOptionsModel : MonoBehaviour
@@ -36,49 +35,36 @@ public class PanelOptionsModel : MonoBehaviour
 		m_AllPanels.Add(m_PanelTutorials);
 	}
 
+	/// <summary>
+	/// Ouvre le panel "panel" et ferme ceux qui ne sont pas la cible.
+	/// </summary>
+	/// <param name="panel"></param>
 	private void OpenPanel(GameObject panel)
 	{
 		foreach (var item in m_AllPanels)
 			if (item) item.SetActive(item == panel);
 	}
-
-	private void OpenAllPanel()
-	{
-		foreach (var item in m_AllPanels)
-		{
-			item.SetActive(true);
-		}
-	}
-
-	private void CloseAllPanel()
-	{
-		OpenPanel(null);
-	}
     #endregion
 
-    #region
+    #region OnClickButtons
 
 	public void OnClickGraphicsButton()
     {
-		CloseAllPanel();
 		OpenPanel(m_PanelGraphics);
 	}
 
 	public void OnClickSoundsButton()
 	{
-		CloseAllPanel();
 		OpenPanel(m_PanelSounds);
 	}
 
 	public void OnClickCreditsButton()
 	{
-		CloseAllPanel();
 		OpenPanel(m_PanelCredits);
 	}
 
 	public void OnClickTutorialButton()
 	{
-		CloseAllPanel();
 		OpenPanel(m_PanelTutorials);
 	}
 
