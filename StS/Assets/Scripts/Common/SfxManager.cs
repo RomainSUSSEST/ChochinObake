@@ -1,7 +1,6 @@
 namespace ServerManager
 {
 	using UnityEngine;
-	using System.Collections.Generic;
 
 	/// <summary>
 	/// Sfx manager.
@@ -26,6 +25,15 @@ namespace ServerManager
 
 		[SerializeField] private AudioSource Source;
 
+        #region Request
+
+		public float GetVolume()
+		{
+			return Source.volume;
+		}
+
+        #endregion
+
         #region Methods
 
         public void PlaySfx(AudioClip clip)
@@ -33,6 +41,11 @@ namespace ServerManager
 			Source.Stop();
 			Source.clip = clip;
 			Source.Play();
+		}
+
+		public void SetVolume(float v)
+		{
+			Source.volume = v;
 		}
 
         #endregion

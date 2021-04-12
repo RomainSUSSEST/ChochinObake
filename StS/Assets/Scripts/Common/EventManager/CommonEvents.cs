@@ -254,6 +254,17 @@ public class UpdateSuccessiveSuccessEvent : NetworkedEvent
 	}
 }
 
+public class VibrateEvent : NetworkedEvent
+{
+	public float milliseconds;
+
+	public VibrateEvent(ulong PlayerID, float milliseconds) : base(PlayerID, new Argument() {
+		Arg = milliseconds, Type = typeof(float) })
+	{
+		this.milliseconds = milliseconds;
+	}
+}
+
 #region Malus
 
 public class InvertInputEvent : NetworkedEvent

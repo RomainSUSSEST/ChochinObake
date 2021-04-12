@@ -510,6 +510,11 @@
         {
             base.GameRoomMenu(e);
 
+            if (CurrentWorld != null)
+            {
+                Destroy(CurrentWorld);
+            }
+
             if (CurrentMenuBackground == null)
             {
                 CurrentMenuBackground = Instantiate(DepartureWorldJapan, DepartureSpawn);

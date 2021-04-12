@@ -15,6 +15,9 @@ public abstract class ServerSimpleGameStateObserver : MonoBehaviour, IEventHandl
 		EventManager.Instance.AddListener<GamePlayEvent>(GamePlay);
 		EventManager.Instance.AddListener<GameEndEvent>(GameEnd);
 		EventManager.Instance.AddListener<GameResultEvent>(GameResult);
+
+		EventManager.Instance.AddListener<GamePauseEvent>(GamePause);
+		EventManager.Instance.AddListener<GameContinueEvent>(GameContinue);
 	}
 
 	public virtual void UnsubscribeEvents()
@@ -28,6 +31,9 @@ public abstract class ServerSimpleGameStateObserver : MonoBehaviour, IEventHandl
 		EventManager.Instance.RemoveListener<GamePlayEvent>(GamePlay);
 		EventManager.Instance.RemoveListener<GameEndEvent>(GameEnd);
 		EventManager.Instance.RemoveListener<GameResultEvent>(GameResult);
+
+		EventManager.Instance.RemoveListener<GamePauseEvent>(GamePause);
+		EventManager.Instance.RemoveListener<GameContinueEvent>(GameContinue);
 	}
 
 
@@ -75,6 +81,14 @@ public abstract class ServerSimpleGameStateObserver : MonoBehaviour, IEventHandl
 	}
 
 	protected virtual void GameResult(GameResultEvent e)
+	{
+	}
+
+	protected virtual void GamePause(GamePauseEvent e)
+	{
+	}
+
+	protected virtual void GameContinue(GameContinueEvent e)
 	{
 	}
 }

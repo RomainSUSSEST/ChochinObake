@@ -4,6 +4,7 @@ using ZXing;
 using SDD.Events;
 using System.Collections;
 using UnityEngine.Android;
+using System.Threading.Tasks;
 
 public class QrCodeIPReader : MonoBehaviour
 {
@@ -15,8 +16,9 @@ public class QrCodeIPReader : MonoBehaviour
 
     private RawImage display;
     private WebCamTexture camTexture;
+    private IBarcodeReader barcodeReader;
 
-    private bool StopRead;
+    private volatile bool StopRead;
 
 
     #region Life Cycle
@@ -36,7 +38,7 @@ public class QrCodeIPReader : MonoBehaviour
             Permission.RequestUserPermission(Permission.Camera); // On les demande
 
             // On prepare le recepteur de texture
-            display.transform.localScale = new Vector3(-1 * display.transform.localScale.x, display.transform.localScale.y * -1, display.transform.localScale.z);
+            display.transform.localScale = new Vector3(display.transform.localScale.x * -1, display.transform.localScale.y * -1, display.transform.localScale.z);
 
         } else if (SystemInfo.deviceType == DeviceType.Desktop)
         {
@@ -100,36 +102,33 @@ public class QrCodeIPReader : MonoBehaviour
             display.texture = camTexture;
             camTexture.Play();
 
-            Result result = null;
-            IBarcodeReader barcodeReader = new BarcodeReader();
+            barcodeReader = new BarcodeReader();
             #endregion
 
-            while (!StopRead && result == null)
+            Result result = null;
+            Task.Run(() =>
             {
-                // Decode the current frame
-                Texture2D texture = TextureToTexture2D(display.texture); // On récupére la texture
-                result = barcodeReader.Decode(texture.GetPixels32(),
-                    texture.width, texture.height); // On écode l'image
-
-                #region Invalid IP
-                if (result != null && !IPManager.ValidateIPv4(result.Text))
+                while (!StopRead)
                 {
-                    errorMessage.text = "Invalid IP : " + result.Text;
-                    result = null;
+                    // Decode the current frame
+                    Result tampon = barcodeReader.Decode(camTexture.GetPixels32(),
+                    camTexture.width, camTexture.height); // On décode l'image
+
+                    if (IPManager.ValidateIPv4(tampon.Text))
+                    {
+                        StopRead = true;
+                        result = tampon;
+                    }
                 }
-                #endregion
+            });
+            
+            while (!StopRead)
+                yield return new WaitForSeconds(0.5f);
 
-                yield return new WaitForSeconds(1f);
-            }
-
-            // Renvoie du résultat.
-            if (result != null)
+            EventManager.Instance.Raise(new ServerConnectionEvent()
             {
-                EventManager.Instance.Raise(new ServerConnectionEvent()
-                {
-                    Adress = result.Text
-                });
-            }
+                Adress = result.Text
+            });
         }
     }
 
@@ -137,22 +136,6 @@ public class QrCodeIPReader : MonoBehaviour
 
 
     // Outils
-
-    private Texture2D TextureToTexture2D(Texture texture)
-    {
-        Texture2D texture2D = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
-        RenderTexture currentRT = RenderTexture.active;
-        RenderTexture renderTexture = RenderTexture.GetTemporary(texture.width, texture.height, 32);
-        Graphics.Blit(texture, renderTexture);
-
-        RenderTexture.active = renderTexture;
-        texture2D.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
-        texture2D.Apply();
-
-        RenderTexture.active = currentRT;
-        RenderTexture.ReleaseTemporary(renderTexture);
-        return texture2D;
-    }
 
     /// <summary>
     /// Renvoie true si l'initialisation c'est bien passé

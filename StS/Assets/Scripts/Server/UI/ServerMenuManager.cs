@@ -16,6 +16,7 @@ namespace ServerManager
 		[SerializeField] private GameObject m_PanelMusicResult;
 		[SerializeField] private GameObject m_PanelOptions;
 		[SerializeField] private GameObject m_PanelResult;
+		[SerializeField] private GameObject m_PanelPause;
 
 		private List<GameObject> m_AllPanels;
 		#endregion
@@ -33,6 +34,15 @@ namespace ServerManager
 			base.Awake();
 			RegisterPanels();
 		}
+
+		private void Update()
+		{
+			if (Input.GetKeyDown(KeyCode.Escape))
+			{
+				EventManager.Instance.Raise(new EscapeButtonHasBeenPressedEvent());
+			}
+		}
+
 		#endregion
 
 		#region Panel Methods
@@ -46,6 +56,7 @@ namespace ServerManager
 			m_AllPanels.Add(m_PanelMusicResult);
 			m_AllPanels.Add(m_PanelOptions);
 			m_AllPanels.Add(m_PanelResult);
+			m_AllPanels.Add(m_PanelPause);
 	}
 
 		private void OpenPanel(GameObject panel)
@@ -100,6 +111,16 @@ namespace ServerManager
 			EventManager.Instance.Raise(new MusicSelectionLeaveButtonClickedEvent());
 		}
 
+		public void ContinueButtonClicked()
+		{
+			EventManager.Instance.Raise(new ContinueButtonClickedEvent());
+		}
+
+		public void LeavePausePanelButtonClicked()
+		{
+			EventManager.Instance.Raise(new LeavePausePanelButtonClickedEvent());
+		}
+
 		#endregion
 
 		#region Callbacks to GameManager events
@@ -151,6 +172,20 @@ namespace ServerManager
 			base.GameResult(e);
 
 			OpenPanel(m_PanelResult);
+		}
+
+		protected override void GameContinue(GameContinueEvent e)
+		{
+			base.GameContinue(e);
+
+			CloseAllPanel();
+		}
+
+		protected override void GamePause(GamePauseEvent e)
+		{
+			base.GamePause(e);
+
+			OpenPanel(m_PanelPause);
 		}
 		#endregion
 	}

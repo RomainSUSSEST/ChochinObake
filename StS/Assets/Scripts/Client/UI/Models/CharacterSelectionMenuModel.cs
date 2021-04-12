@@ -30,11 +30,14 @@ public class CharacterSelectionMenuModel : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI YourStory;
 
-    [Header("Button Ready")]
+    [Header("Button Ready & Vibrator")]
 
     [SerializeField] private Button ButtonReady;
-    [SerializeField] private Sprite UnreadyButtonSprite;
-    [SerializeField] private Sprite ReadyButtonSprite;
+    [SerializeField] private Button Vibrator;
+
+    [SerializeField] private Sprite UnOKButtonSprite;
+    [SerializeField] private Sprite OKButtonSprite;
+
 
     [Header("Invalid Body Effect")]
 
@@ -60,6 +63,10 @@ public class CharacterSelectionMenuModel : MonoBehaviour
         }
 
         IndexBody = 0;
+
+        // Initialisation du vibrator
+        Vibrator.image.sprite = OKButtonSprite;
+        ClientVibratorManager.Instance.SetVibrator(true);
     }
 
     private void OnEnable()
@@ -116,6 +123,20 @@ public class CharacterSelectionMenuModel : MonoBehaviour
     {
         MoveBody(Direction.Right);
     }
+
+    public void VibratorButtonHasBeenClicked()
+    {
+        if (ClientVibratorManager.Instance.IsVibratorEnable())
+        {
+            Vibrator.image.sprite = UnOKButtonSprite;
+            ClientVibratorManager.Instance.SetVibrator(false);
+        } else
+        {
+            Vibrator.image.sprite = OKButtonSprite;
+            ClientVibratorManager.Instance.SetVibrator(true);
+        }
+    }
+
     #endregion
 
     #region Event Subscribe
@@ -332,15 +353,14 @@ public class CharacterSelectionMenuModel : MonoBehaviour
 
     private void SetReadyButtonColor()
     {
-        ButtonReady.image.sprite = ReadyButtonSprite;
-        //ButtonReadyImage.color = ReadyButtonColor;
+        ButtonReady.image.sprite = OKButtonSprite;
     }
 
     private void SetUnreadyButtonColor()
     {
-        ButtonReady.image.sprite = UnreadyButtonSprite;
-        //ButtonReadyImage.color = UnreadyButtonColor;
+        ButtonReady.image.sprite = UnOKButtonSprite;
     }
+
     #endregion
 
     #region Invalid Body Image

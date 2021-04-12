@@ -11,6 +11,7 @@ public class CharacterServer : CharacterPlayer
 
     private static readonly float UPDATE_POSITION_TIME = 1.5f; // En seconde
     private static readonly float FIRST_UPDATE_POSITION_TIME = 3f; // en s
+    private static readonly float VIBRATION_DELAI = 250;
 
     #endregion
 
@@ -152,6 +153,7 @@ public class CharacterServer : CharacterPlayer
         UpdateStreakStatus(CmptCombo);
 
         UpdatePosition(UPDATE_POSITION_TIME);
+        Vibrate();
     }
 
     public void ObstacleSendSuccessTime(Obstacle.Elements element)
@@ -632,6 +634,12 @@ public class CharacterServer : CharacterPlayer
         SetPowerLogo(ServerLevelManager.Instance.GetAssociatedSprite(power)); // On met à jours l'icone joueur in game
     }
 
+    private void Vibrate()
+    {
+        if (!IsAI)
+            MessagingManager.Instance.RaiseNetworkedEventOnClient(new VibrateEvent(AssociedClientID, VIBRATION_DELAI));
+    }
+
     #region ObstacleStatus
 
     private void NoObstacles()
@@ -651,6 +659,7 @@ public class CharacterServer : CharacterPlayer
         ++CmptObstacle;
 
         UpdateStreakStatus(CmptCombo);
+        Vibrate();
     }
 
     private void ObstacleSuccess()

@@ -5,7 +5,7 @@
 	using SDD.Events;
     using System.Collections.Generic;
 
-    public enum GameState { gameMenu, gamePlay, gameLobby, gamePause }
+    public enum GameState { gameMenu, gamePlay, gameLobby, gamePause, gameContinue }
 	
 	public class ServerGameManager : ServerManager<ServerGameManager>
 	{
@@ -112,6 +112,11 @@
 
 			EventManager.Instance.AddListener<ViewResultEndEvent>(ViewResultEnd);
 
+			EventManager.Instance.AddListener<EscapeButtonHasBeenPressedEvent>(EscapeButtonHasBeenPressed);
+
+			EventManager.Instance.AddListener<ContinueButtonClickedEvent>(ContinueButtonClicked);
+			EventManager.Instance.AddListener<LeavePausePanelButtonClickedEvent>(LeavePausePanelButtonClicked);
+
 			// ServerLevelManager
 
 			EventManager.Instance.AddListener<ScoreUpdatedEvent>(ScoreUpdated);
@@ -138,6 +143,11 @@
 			EventManager.Instance.RemoveListener<MusicResultGameReadyEvent>(MusicResultGameReady);
 
 			EventManager.Instance.RemoveListener<ViewResultEndEvent>(ViewResultEnd);
+
+			EventManager.Instance.RemoveListener<EscapeButtonHasBeenPressedEvent>(EscapeButtonHasBeenPressed);
+
+			EventManager.Instance.RemoveListener<ContinueButtonClickedEvent>(ContinueButtonClicked);
+			EventManager.Instance.RemoveListener<LeavePausePanelButtonClickedEvent>(LeavePausePanelButtonClicked);
 
 			// ServerLevelManager
 
@@ -233,6 +243,22 @@
 		{
 			Application.Quit();
 		}
+
+		private void EscapeButtonHasBeenPressed(EscapeButtonHasBeenPressedEvent e)
+		{
+			Pause();
+		}
+
+		private void ContinueButtonClicked(ContinueButtonClickedEvent e)
+		{
+			Pause();
+		}
+
+		private void LeavePausePanelButtonClicked(LeavePausePanelButtonClickedEvent e)
+		{
+			RoomMenu();
+		}
+
         #endregion
 
         #region Callbacks to Event issued by ServerLevelManager
@@ -303,6 +329,21 @@
 			SetTimeScale(1);
 			m_GameState = GameState.gameMenu;
 			EventManager.Instance.Raise(new GameResultEvent());
+		}
+
+		private void Pause()
+		{
+			if (m_GameState == GameState.gamePause)
+			{
+				m_GameState = GameState.gameContinue;
+				EventManager.Instance.Raise(new GameContinueEvent());
+				SetTimeScale(1);
+			} else
+			{
+				m_GameState = GameState.gamePause;
+				EventManager.Instance.Raise(new GamePauseEvent());
+				SetTimeScale(0);
+			}
 		}
 
 		#endregion

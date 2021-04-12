@@ -127,6 +127,12 @@ AudioSource:
     type: 3}
   m_PrefabInstance: {fileID: 1469988520}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &201039418 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5381896841026587508, guid: 969e2f750f5ebc34b9957d7cf766b210,
+    type: 3}
+  m_PrefabInstance: {fileID: 4578320737267200688}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1173963838 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114078314171263514, guid: 68480a01e4a00ab45b3d746ae2fc86ee,
@@ -330,6 +336,11 @@ PrefabInstance:
       propertyPath: m_PanelMusicResult
       value: 
       objectReference: {fileID: 83464477964409366}
+    - target: {fileID: 114078314171263514, guid: 68480a01e4a00ab45b3d746ae2fc86ee,
+        type: 3}
+      propertyPath: m_PanelPause
+      value: 
+      objectReference: {fileID: 201039418}
     - target: {fileID: 114186785974676832, guid: 68480a01e4a00ab45b3d746ae2fc86ee,
         type: 3}
       propertyPath: SpecialObstacleForest.Array.size
@@ -879,6 +890,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 198715101422625478, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 302686177894643388, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -998,6 +1014,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1606583215676626845, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1899476195512032103, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}
@@ -1149,6 +1170,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 3902651899534747775, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4143264445112376702, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1168,6 +1194,23 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4259059904963991288, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_text
+      value: "To start a game :\n\nJoin the lobby through the mobile application
+        by scanning the QR code or writing by hands your IP Address. \n(WARNING:
+        Be sure that your wifi is on private mode, otherwise you will not be able
+        to connect.)\n\nBefore clicking on \"NEXT\" on the server, be sure that you
+        have some music to play on. If not you can simply add them by clicking on
+        \"SONGS LIST\" below players list. Find your favorite song on Youtube and
+        then copy/paste it in the interface due for.\n\nWhen everyone joined and
+        ready and you have added a song. Then let's play!\n\n\n"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4259059904963991288, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 552
       objectReference: {fileID: 0}
     - target: {fileID: 4364893465015098497, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}
@@ -1289,6 +1332,31 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4577166310321009165, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4577166310321009165, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4577166310321009165, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4577166310321009165, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1173963838}
+    - target: {fileID: 4577166310321009165, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: MusicSelectionLeaveButtonClicked
+      objectReference: {fileID: 0}
     - target: {fileID: 4578675240377673639, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}
       propertyPath: m_IsActive
@@ -1403,6 +1471,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4790708771820635860, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1173963838}
+    - target: {fileID: 4790708771820635860, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ContinueButtonClicked
       objectReference: {fileID: 0}
     - target: {fileID: 4827712257252407372, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}
@@ -1579,6 +1657,36 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5274522829328209489, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5274522829328209489, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5274522829328209489, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5274522829328209489, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5274522829328209489, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5381896841026587508, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5449138844898227456, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -1708,6 +1816,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6390145751536588351, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6390145751536588351, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6390145751536588351, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6390145751536588351, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6572931672615064979, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1173963838}
+    - target: {fileID: 6572931672615064979, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LeavePausePanelButtonClicked
       objectReference: {fileID: 0}
     - target: {fileID: 6668028191231331344, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}

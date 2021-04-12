@@ -58,6 +58,11 @@ namespace ServerManager
 			return AudioSource.isPlaying;
 		}
 
+		public float GetVolume()
+		{
+			return AudioSource.volume;
+		}
+
 		#endregion
 
 		#region Subs methods
@@ -76,11 +81,20 @@ namespace ServerManager
 			EventManager.Instance.RemoveListener<RoundStartEvent>(RoundStart);
 		}
 
-		#endregion
+        #endregion
 
-		#region Tools
+        #region Methods
 
-		private void PlayMusic(AudioClip clip)
+		public void SetVolume(float v)
+		{
+			AudioSource.volume = v;
+		}
+
+        #endregion
+
+        #region Tools
+
+        private void PlayMusic(AudioClip clip)
 		{
 			// Si la musique demandé est déjà lancé, ne fait rien.
 			if (AudioSource.clip == clip)
@@ -147,7 +161,7 @@ namespace ServerManager
 		private void RoundStart(RoundStartEvent e)
 		{
 			AudioClip clip = ServerGameManager.Instance.GetCurrentAudioClip();
-			Debug.Log(clip.length);
+
 			AudioSource.loop = false;
 			PlayMusic(clip);
 		}
@@ -209,6 +223,20 @@ namespace ServerManager
 			base.GameMusicResultMenu(e);
 
 			StopCurrentMusic();
+		}
+
+		protected override void GameContinue(GameContinueEvent e)
+		{
+			base.GameContinue(e);
+
+			ReplayCurrentMusic();
+		}
+
+		protected override void GamePause(GamePauseEvent e)
+		{
+			base.GamePause(e);
+
+			PauseCurrentMusic();
 		}
 
 		#endregion

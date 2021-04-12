@@ -27,6 +27,13 @@ public class GameEndEvent : SDD.Events.Event
 public class GameResultEvent : SDD.Events.Event
 {
 }
+public class GamePauseEvent : SDD.Events.Event
+{
+}
+public class GameContinueEvent : SDD.Events.Event
+{
+}
+
 #endregion
 
 #region MenuManager Events
@@ -71,6 +78,18 @@ public class MusicResultGameReadyEvent : SDD.Events.Event
 }
 
 public class ViewResultEndEvent : SDD.Events.Event
+{
+}
+
+public class EscapeButtonHasBeenPressedEvent : SDD.Events.Event
+{
+}
+
+public class ContinueButtonClickedEvent : SDD.Events.Event
+{
+}
+
+public class LeavePausePanelButtonClickedEvent : SDD.Events.Event
 {
 }
 
