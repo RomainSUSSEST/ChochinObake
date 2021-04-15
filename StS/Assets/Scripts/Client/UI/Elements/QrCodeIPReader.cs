@@ -4,21 +4,15 @@ using ZXing;
 using SDD.Events;
 using System.Collections;
 using UnityEngine.Android;
-using System.Threading.Tasks;
 
 public class QrCodeIPReader : MonoBehaviour
 {
     // Attributs
 
-    [Header("QRCodeIPReader")]
-
-    [SerializeField] private Text errorMessage;
-
     private RawImage display;
     private WebCamTexture camTexture;
-    private IBarcodeReader barcodeReader;
 
-    private volatile bool StopRead;
+    private Coroutine Reader;
 
 
     #region Life Cycle
@@ -51,8 +45,7 @@ public class QrCodeIPReader : MonoBehaviour
     {
         #region On lance la lecture
 
-        StopRead = false;
-        StartCoroutine("SearchQRCode");
+        Reader = StartCoroutine("SearchQRCode");
 
         #endregion
     }
@@ -64,7 +57,10 @@ public class QrCodeIPReader : MonoBehaviour
         {
             camTexture.Stop();
         }
-        StopRead = true;
+        if (Reader != null)
+        {
+            StopCoroutine(Reader);
+        }
     }
 
     #endregion
@@ -77,15 +73,9 @@ public class QrCodeIPReader : MonoBehaviour
         if (Application.platform == RuntimePlatform.Android)
         {
             // On attend les permissions
-            while (!StopRead && !Permission.HasUserAuthorizedPermission(Permission.Camera))
+            while (!Permission.HasUserAuthorizedPermission(Permission.Camera))
             {
                 yield return new WaitForSeconds(0.5f);
-            }
-
-            // Si la lecture est terminé, on arrete
-            if (StopRead)
-            {
-                yield break;
             }
         }
 
@@ -98,32 +88,25 @@ public class QrCodeIPReader : MonoBehaviour
         else
         {
             #region Initialisation des composants & lancement de la caméra
-            errorMessage.text = ""; // initialisation du message d'erreur.
             display.texture = camTexture;
             camTexture.Play();
-
-            barcodeReader = new BarcodeReader();
             #endregion
 
             Result result = null;
-            Task.Run(() =>
-            {
-                while (!StopRead)
-                {
-                    // Decode the current frame
-                    Result tampon = barcodeReader.Decode(camTexture.GetPixels32(),
-                    camTexture.width, camTexture.height); // On décode l'image
+            BarcodeReader barcodeReader = new BarcodeReader();
 
-                    if (IPManager.ValidateIPv4(tampon.Text))
-                    {
-                        StopRead = true;
-                        result = tampon;
-                    }
+            while (result == null)
+            {
+                // Decode the current frame
+                result = barcodeReader.Decode(camTexture.GetPixels32(),
+                camTexture.width, camTexture.height); // On décode l'image
+
+                if (result == null || !IPManager.ValidateIPv4(result.Text))
+                {
+                    result = null;
+                    yield return new WaitForSeconds(0.5f);
                 }
-            });
-            
-            while (!StopRead)
-                yield return new WaitForSeconds(0.5f);
+            }
 
             EventManager.Instance.Raise(new ServerConnectionEvent()
             {
@@ -157,6 +140,8 @@ public class QrCodeIPReader : MonoBehaviour
         #endregion
 
         #region On initialise les components pour s'adapter à la platforme.
+        int width = 300;
+        int height = 150;
         if (SystemInfo.deviceType == DeviceType.Desktop)
         {
             // On recherche la front camera
@@ -165,7 +150,7 @@ public class QrCodeIPReader : MonoBehaviour
                 if (devices[i].isFrontFacing)
                 {
                     // On prend en dimension, la taille de l'écran.
-                    camTexture = new WebCamTexture(devices[i].name, Screen.width, Screen.height);
+                    camTexture = new WebCamTexture(devices[i].name, width, height);
                     break;
                 }
             }
@@ -181,7 +166,7 @@ public class QrCodeIPReader : MonoBehaviour
                     if (!devices[i].isFrontFacing)
                     {
                         // On prend en dimension, la taille de l'écran.
-                        camTexture = new WebCamTexture(devices[i].name, Screen.width, Screen.height);
+                        camTexture = new WebCamTexture(devices[i].name, width, height);
                         break;
                     }
                 }
