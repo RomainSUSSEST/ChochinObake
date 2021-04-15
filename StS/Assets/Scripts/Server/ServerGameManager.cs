@@ -5,7 +5,7 @@
 	using SDD.Events;
     using System.Collections.Generic;
 
-    public enum GameState { gameMenu, gamePlay, gameLobby, gamePause, gameContinue }
+    public enum GameState { gameMenu, gameMapSelect, gamePlay, gameLobby, gamePause, gameContinue }
 	
 	public class ServerGameManager : ServerManager<ServerGameManager>
 	{
@@ -246,7 +246,10 @@
 
 		private void EscapeButtonHasBeenPressed(EscapeButtonHasBeenPressedEvent e)
 		{
-			Pause();
+			if (m_GameState == GameState.gamePlay)
+			{
+				Pause();
+			}
 		}
 
 		private void ContinueButtonClicked(ContinueButtonClickedEvent e)
@@ -306,14 +309,14 @@
 		private void MusicSelection()
 		{
 			SetTimeScale(1);
-			m_GameState = GameState.gamePlay;
+			m_GameState = GameState.gameMapSelect;
 			EventManager.Instance.Raise(new GameMusicSelectionMenuEvent());
 		}
 
 		private void MusicResult()
 		{
 			SetTimeScale(1);
-			m_GameState = GameState.gamePlay;
+			m_GameState = GameState.gameMapSelect;
 			EventManager.Instance.Raise(new GameMusicResultMenuEvent());
 		}
 

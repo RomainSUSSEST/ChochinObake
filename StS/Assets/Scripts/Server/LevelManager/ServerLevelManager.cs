@@ -75,11 +75,9 @@
 
         #region Constants
 
-        public static readonly int MIN_NUMBER_WAVES = 12;
-
         public static readonly float DEFAULT_SPEED = 12f; // Vitesse par défaut
         public static readonly float MIN_SPEED = 20f;
-        public static readonly float MAX_SPEED = 35f;
+        public static readonly float MAX_SPEED = 30f;
 
         public static readonly float ALGO_MIN_SENSITIVITY = 0.7f; // en % (gestion de la difficulté) 0 = D / 0.1 = M / 0.2 = F
         public static readonly float ALGO_MAX_SENSITIVITY = 0.225f;

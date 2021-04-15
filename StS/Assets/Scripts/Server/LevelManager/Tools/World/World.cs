@@ -30,7 +30,8 @@ public class World : MonoBehaviour
     [SerializeField] private Material CustomFog;
 
     [Header("Map Config")]
-    [SerializeField] private float DistanceBetweenGround = 2f;
+    [SerializeField] private float MinDistanceBeetweenGround;
+    [SerializeField] private float MaxDistanceBeetweenGround;
     [SerializeField] private float ObstacleDistanceToCharacterSpawn;
     [SerializeField] private float ArrivalDistanceToCharacterSpawn;
     [SerializeField] private float DistanceToBackgroundY = -50;
@@ -40,14 +41,12 @@ public class World : MonoBehaviour
     [SerializeField] private float FogSpeed_Y;
     [SerializeField] private float FogRatio_Z;
 
-    [SerializeField] private float RoundEnd_SpeedUpCoefficient;
-    [SerializeField] private float RoundEnd_SpeedUpDelai;
-
     [Header("SlimeServer")]
     [SerializeField] private CharacterServer CharacterServerPrefab;
 
     // Information sur la carte
     private System.Collections.ObjectModel.ReadOnlyCollection<SpectralFluxInfo> CurrentMap;
+    private float CurrentDistanceBetweenGround;
 
     #region Gestion des grounds
 
@@ -130,8 +129,9 @@ public class World : MonoBehaviour
 
         // Ground
         SpiritWaySize = SpiritWay.GetComponent<Renderer>().bounds.size; // On récupére la taille d'un des grounds
-        NbrWays = Mathf.Max(ServerLevelManager.MIN_NUMBER_WAVES, Players.Count); // Il y a un nombre de wave minimum
-        StartWaySpawnPosition_X = transform.position.x - (((SpiritWaySize.x + DistanceBetweenGround) * NbrWays) - DistanceBetweenGround) / 2;
+        NbrWays = Players.Count + AI.Count; // Il y a un nombre de wave minimum
+        CurrentDistanceBetweenGround = Mathf.Lerp(MaxDistanceBeetweenGround, MinDistanceBeetweenGround, (float) NbrWays * 1.2f / ServerNetworkManager.MAX_PLAYER_CONNECTED);
+        StartWaySpawnPosition_X = transform.position.x - (((SpiritWaySize.x + CurrentDistanceBetweenGround) * NbrWays) - CurrentDistanceBetweenGround) / 2;
 
         // Background
         BackgroundSize = Vector3.one * Background.SIZE;
@@ -163,7 +163,7 @@ public class World : MonoBehaviour
                 // Slime Array
                 CharacterArray[i] = Instantiate(CharacterServerPrefab,
                     new Vector3(
-                        CharacterSpawn_X + (SpiritWaySize.x + DistanceBetweenGround) * i,
+                        CharacterSpawn_X + (SpiritWaySize.x + CurrentDistanceBetweenGround) * i,
                         CharacterSpawn_Y,
                         transform.position.z - DestroyElementsMargin),
                     Quaternion.identity, transform); // On créer le slime
@@ -181,7 +181,7 @@ public class World : MonoBehaviour
                 // Personnage array
                 CharacterArray[i] = Instantiate(CharacterServerPrefab,
                     new Vector3(
-                        CharacterSpawn_X + (SpiritWaySize.x + DistanceBetweenGround) * i,
+                        CharacterSpawn_X + (SpiritWaySize.x + CurrentDistanceBetweenGround) * i,
                         CharacterSpawn_Y,
                         transform.position.z - DestroyElementsMargin),
                     Quaternion.identity, transform); // On crée le personnage
@@ -413,7 +413,7 @@ public class World : MonoBehaviour
         for (int i = 0; i < NbrWays; ++i)
         {
             LastSpiritWay = Instantiate(SpiritWay, new Vector3(
-                StartPosition.x + (SpiritWaySize.x + DistanceBetweenGround) * i,
+                StartPosition.x + (SpiritWaySize.x + CurrentDistanceBetweenGround) * i,
                 StartPosition.y,
                 StartPosition.z),
                 Quaternion.identity, transform);

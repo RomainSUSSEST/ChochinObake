@@ -78,7 +78,8 @@ MonoBehaviour:
   EndMapPrefab: {fileID: 2722715495655724742, guid: ee9903a992725f74898880f5641e95e8,
     type: 3}
   CustomFog: {fileID: 2100000, guid: 37be7088ba90ff845b67168a2ae58a8f, type: 2}
-  DistanceBetweenGround: 5
+  MinDistanceBeetweenGround: 5
+  MaxDistanceBeetweenGround: 18.5
   ObstacleDistanceToCharacterSpawn: 125
   ArrivalDistanceToCharacterSpawn: 150
   DistanceToBackgroundY: -80
@@ -86,8 +87,6 @@ MonoBehaviour:
   FogSpeed_X: 2
   FogSpeed_Y: 1
   FogRatio_Z: 1
-  RoundEnd_SpeedUpCoefficient: 1.5
-  RoundEnd_SpeedUpDelai: 2
   CharacterServerPrefab: {fileID: -3312898644491709661, guid: 6047c66e9e3fafe4e88df5fa1f3aaae1,
     type: 3}
 --- !u!1 &5479835037319769586
