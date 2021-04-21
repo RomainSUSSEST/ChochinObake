@@ -178,6 +178,7 @@
             if (UsePower(e.CharacterServer, e.CmptCombo)) // Si un bonus est utilisé
             {
                 e.CharacterServer.ResetCombo(); // On reset les combos du joueur
+                e.CharacterServer.UsePowerEffect();
             }
         }
 
@@ -429,6 +430,7 @@
 
             if (target.InvertKanji())
             {
+                target.UseInvertKanjiEffect();
                 AddSafePlayer(target);
                 return true;
             } else

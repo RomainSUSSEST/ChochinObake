@@ -33,6 +33,10 @@ public class CharacterServer : CharacterPlayer
     [SerializeField] private Shield ShieldPrefab;
     private Shield CurrentShield; // Eventuel shield actuel
 
+    [Header("Effect")]
+    [SerializeField] private Effect m_UsePower;
+    [SerializeField] private Effect m_InvertKanji;
+
     private Coroutine LastUpdatePositionCoroutine;
 
     #region Malus
@@ -363,6 +367,20 @@ public class CharacterServer : CharacterPlayer
     public void AIPower()
     {
        GetCharacterBody().StartAttackPower();
+    }
+
+    #endregion
+
+    #region Effect
+
+    public void UsePowerEffect()
+    {
+        m_UsePower.gameObject.SetActive(true);
+    }
+
+    public void UseInvertKanjiEffect()
+    {
+        m_InvertKanji.gameObject.SetActive(true);
     }
 
     #endregion
