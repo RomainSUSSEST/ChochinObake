@@ -12,7 +12,9 @@ public class PanelInGameModel : MonoBehaviour
     #region Attributes
 
     [Header("Bonus Icons")]
-    [SerializeField] private Image bonusImage;
+    [SerializeField] private Image bonusImageDefault;
+    [SerializeField] private Image bonusImageRevert;
+
     // Bonus icons
     [SerializeField] Sprite ResetAllCombo;
     [SerializeField] Sprite Shield;
@@ -125,28 +127,37 @@ public class PanelInGameModel : MonoBehaviour
         switch (e.Value)
         {
             case UpdateSuccessiveSuccessEvent.BonusStreak.ResetAllCombo:
-                bonusImage.sprite = ResetAllCombo;
+                bonusImageDefault.sprite = ResetAllCombo;
+                bonusImageRevert.sprite = ResetAllCombo;
                 break;
             case UpdateSuccessiveSuccessEvent.BonusStreak.Shield:
-                bonusImage.sprite = Shield;
+                bonusImageDefault.sprite = Shield;
+                bonusImageRevert.sprite = Shield;
                 break;
             case UpdateSuccessiveSuccessEvent.BonusStreak.InvertKanji:
-                bonusImage.sprite = InvertKanji;
+                bonusImageDefault.sprite = InvertKanji;
+                bonusImageRevert.sprite = InvertKanji;
                 break;
             case UpdateSuccessiveSuccessEvent.BonusStreak.UncolorKanji:
-                bonusImage.sprite = UncolorKanji;
+
+                bonusImageDefault.sprite = UncolorKanji;
+                bonusImageRevert.sprite = UncolorKanji;
                 break;
             case UpdateSuccessiveSuccessEvent.BonusStreak.FlashKanji:
-                bonusImage.sprite = FlashKanji;
+                bonusImageDefault.sprite = FlashKanji;
+                bonusImageRevert.sprite = FlashKanji;
                 break;
             case UpdateSuccessiveSuccessEvent.BonusStreak.InvertInput:
-                bonusImage.sprite = InvertInputKanji;
+                bonusImageDefault.sprite = InvertInputKanji;
+                bonusImageRevert.sprite = InvertInputKanji;
                 break;
             case UpdateSuccessiveSuccessEvent.BonusStreak.DisableOtherPlayers:
-                bonusImage.sprite = DisableOtherPlayers;
+                bonusImageDefault.sprite = DisableOtherPlayers;
+                bonusImageRevert.sprite = DisableOtherPlayers;
                 break;
             default:
-                bonusImage.sprite = Default;
+                bonusImageDefault.sprite = Default;
+                bonusImageRevert.sprite = Default;
                 break;
         }
     }

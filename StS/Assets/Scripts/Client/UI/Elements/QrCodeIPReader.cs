@@ -31,13 +31,10 @@ public class QrCodeIPReader : MonoBehaviour
         {
             Permission.RequestUserPermission(Permission.Camera); // On les demande
 
-            // On prepare le recepteur de texture
-            display.transform.localScale = new Vector3(display.transform.localScale.x * -1, display.transform.localScale.y * -1, display.transform.localScale.z);
-
-        } else if (SystemInfo.deviceType == DeviceType.Desktop)
-        {
-            // On prépare le recepteur de texture
-            display.transform.localScale = new Vector3(-1 * display.transform.localScale.x, display.transform.localScale.y, display.transform.localScale.z);
+            if (Screen.orientation == ScreenOrientation.LandscapeLeft)
+            {
+                display.transform.localScale = new Vector3(-1, -1, 1);
+            }
         }
     }
 
@@ -140,8 +137,8 @@ public class QrCodeIPReader : MonoBehaviour
         #endregion
 
         #region On initialise les components pour s'adapter à la platforme.
-        int width = 300;
-        int height = 150;
+        int width = (int) (Screen.width * 0.4f);
+        int height = (int) (Screen.height * 0.4f);
         if (SystemInfo.deviceType == DeviceType.Desktop)
         {
             // On recherche la front camera

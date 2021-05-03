@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 3757615921341821698}
   - component: {fileID: 4578774238582405207}
   - component: {fileID: 327517768718976604}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Clouds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
