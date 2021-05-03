@@ -5,7 +5,7 @@
 	using SDD.Events;
     using System.Collections.Generic;
 
-    public enum GameState { gameMenu, gameMapSelect, gamePlay, gameLobby, gamePause, gameContinue }
+    public enum GameState { gameMenu, gameMapSelect, gamePlay, gameLobby, gamePause }
 	
 	public class ServerGameManager : ServerManager<ServerGameManager>
 	{
@@ -338,7 +338,7 @@
 		{
 			if (m_GameState == GameState.gamePause)
 			{
-				m_GameState = GameState.gameContinue;
+				m_GameState = GameState.gamePlay;
 				EventManager.Instance.Raise(new GameContinueEvent());
 				SetTimeScale(1);
 			} else

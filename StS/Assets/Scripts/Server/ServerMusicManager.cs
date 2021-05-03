@@ -103,7 +103,6 @@ namespace ServerManager
 			}
 
 			AudioSource.Stop();
-			AudioSource.volume = 0;
 			AudioSource.clip = clip;
 			AudioSource.Play();
 			StartCoroutine("PlaySongSmooth");
@@ -111,12 +110,16 @@ namespace ServerManager
 
 		private IEnumerator PlaySongSmooth()
 		{
+			float tampon = AudioSource.volume;
+			AudioSource.volume = 0;
 
-			while (AudioSource.volume < 1)
+			while (AudioSource.volume < tampon)
 			{
 				AudioSource.volume = AudioSource.volume + SPEED_INCREMENT_VOLUME;
 				yield return new WaitForSeconds(SPEED_ACTUALISE_VOLUME);
 			}
+
+			AudioSource.volume = tampon;
 		}
 
 		private void StopCurrentMusic()

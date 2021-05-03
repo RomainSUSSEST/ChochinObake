@@ -355,6 +355,7 @@ namespace ServerManager
         /// <returns> L'audioClip associé au .Wav pointé par Path. </returns>
         private async Task<AudioClip> LoadWavAudioFromAsync(string path)
         {
+            DownloadedSongAtAudioClip = null;
             StartCoroutine("_UnityWebRequestDownloadFile", path);
             await Task.Run(() =>
             {
