@@ -31,6 +31,12 @@ public class Obstacle : MonoBehaviour
     [SerializeField] private Material ValidInputMaterial;
     [SerializeField] private Material InvalidInputMaterial;
 
+    [Header("Gameplay")]
+
+    [SerializeField] private Renderer LanternRenderer;
+    [SerializeField] private Material LanternOFF;
+    [SerializeField] private Material LanternON;
+
     [Header("Malus")]
     [SerializeField] private Renderer KanjiRenderer;
     [SerializeField] private Material OutlinerMaterial;
@@ -51,6 +57,7 @@ public class Obstacle : MonoBehaviour
     private void Start()
     {
         PositionStart = transform.position.z;
+        KanjiRenderer.material = LanternOFF;
 
         m_IndicatorManagement = StartCoroutine("IndicatorManagement");
     }
@@ -101,6 +108,7 @@ public class Obstacle : MonoBehaviour
     {
         Destroy(Kanji.gameObject);
         StopCoroutine(m_IndicatorManagement);
+        LanternRenderer.material = LanternON;
     }
 
     public void SetKanjiRendererStatus(bool b)

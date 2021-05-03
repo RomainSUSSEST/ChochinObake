@@ -153,6 +153,9 @@ MonoBehaviour:
   ValidInputMaterial: {fileID: 2100000, guid: d3a060aae15cb864ea9360fd919cb297, type: 2}
   InvalidInputMaterial: {fileID: 2100000, guid: 3033ee82d6b1f114abcdeba565dc9707,
     type: 2}
+  LanternRenderer: {fileID: 5505168384162694618}
+  LanternOFF: {fileID: 2100000, guid: 7f675e8cea9a93644835db90df284bf9, type: 2}
+  LanternON: {fileID: 2100000, guid: 0031c9353fda9e544b5a9631a70697af, type: 2}
   KanjiRenderer: {fileID: 8402313194284475260}
   OutlinerMaterial: {fileID: 2100000, guid: 1e71e2b84afba964980fc68ae97e7f77, type: 2}
   UncolorMaterial: {fileID: 2100000, guid: 1d217c5f7bba48d418ca09a819794aa9, type: 2}
