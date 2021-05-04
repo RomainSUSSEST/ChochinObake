@@ -101,15 +101,11 @@
             EventManager.Instance.Raise(new ReadyCharacterSelectionButtonClickedEvent());
         }
 
-        public void PreviousMusicSelectionButtonHasBeenClicked()
+        public void ExitButtonHasBeenClicked()
         {
-            EventManager.Instance.Raise(new PreviousMusicSelectionButtonClickedEvent());
+            EventManager.Instance.Raise(new ExitButtonClickedEvent());
         }
 
-        public void RespawnButtonClicked()
-        {
-            EventManager.Instance.Raise(new RespawnButtonClickedEvent());
-        }
         #endregion
 
         #region CallBacks to GameManager Events

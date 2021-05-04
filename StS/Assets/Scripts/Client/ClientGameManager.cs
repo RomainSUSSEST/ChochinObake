@@ -45,6 +45,7 @@
             EventManager.Instance.AddListener<PreviousCharacterSelectionButtonClickedEvent>(PreviousCharacterSelectionButtonClicked);
             EventManager.Instance.AddListener<ReadyCharacterSelectionButtonClickedEvent>(ReadyCharacterSelectionButtonClicked);
             EventManager.Instance.AddListener<RefreshCharacterInformationEvent>(RefreshSlimeInformation);
+            EventManager.Instance.AddListener<ExitButtonClickedEvent>(ExitButtonClicked);
 
             // Network
             EventManager.Instance.AddListener<ServerConnectionSuccessEvent>(ServerConnectionSuccess);
@@ -68,6 +69,7 @@
             EventManager.Instance.RemoveListener<PreviousCharacterSelectionButtonClickedEvent>(PreviousCharacterSelectionButtonClicked);
             EventManager.Instance.RemoveListener<ReadyCharacterSelectionButtonClickedEvent>(ReadyCharacterSelectionButtonClicked);
             EventManager.Instance.RemoveListener<RefreshCharacterInformationEvent>(RefreshSlimeInformation);
+            EventManager.Instance.RemoveListener<ExitButtonClickedEvent>(ExitButtonClicked);
 
             // Network
             EventManager.Instance.RemoveListener<ServerConnectionSuccessEvent>(ServerConnectionSuccess);
@@ -103,6 +105,11 @@
         #endregion
 
         #region Callbacks to Events issued by MenuManager
+
+        private void ExitButtonClicked(ExitButtonClickedEvent e)
+        {
+            Application.Quit();
+        }
 
         private void JoinButtonClicked(JoinButtonClickedEvent e)
         {

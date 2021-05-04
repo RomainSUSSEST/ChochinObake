@@ -176,7 +176,8 @@ public class CharacterServer : CharacterPlayer
         m_IsSafe = b;
 
         if (m_IsSafe)
-            CurrentShield = Instantiate(ShieldPrefab, this.transform);
+            if (CurrentShield == null)
+                CurrentShield = Instantiate(ShieldPrefab, this.transform);
         else if (CurrentShield != null)
         {
             Destroy(CurrentShield.gameObject);
@@ -626,7 +627,10 @@ public class CharacterServer : CharacterPlayer
         }
         else if (cmptCombo <= (int)ServerLevelManager.Power.Shield)
         {
-            power = ServerLevelManager.Power.Shield;
+            if (IsSafe())
+                power = ServerLevelManager.Power.NoPower;
+            else
+                power = ServerLevelManager.Power.Shield;
         }
         else if (cmptCombo >= (int)ServerLevelManager.Power.DisableOtherPlayers)
         {

@@ -34,6 +34,7 @@ namespace ServerManager
 			if (ServerGameManager.Instance.GetGameState != GameState.gamePlay)
 				throw new System.Exception("Nous ne sommes pas en partie");
 
+
 			return AudioSource.clip.length;
 		}
 
@@ -126,6 +127,7 @@ namespace ServerManager
 		{
 			if (AudioSource.isPlaying)
 			{
+				AudioSource.clip = null;
 				AudioSource.Stop();
 			}
 		}
@@ -163,15 +165,22 @@ namespace ServerManager
 
 		private void RoundStart(RoundStartEvent e)
 		{
-			AudioClip clip = ServerGameManager.Instance.GetCurrentAudioClip();
-
-			AudioSource.loop = false;
-			PlayMusic(clip);
+			AudioSource.Play();
+			StartCoroutine("PlaySongSmooth");
 		}
 
 		#endregion
 
 		#region GameEvent Function
+
+		protected override void GamePlay(GamePlayEvent e)
+		{
+			base.GamePlay(e);
+
+			AudioSource.Stop();
+			AudioSource.loop = false;
+			AudioSource.clip = ServerGameManager.Instance.GetCurrentAudioClip();
+		}
 
 		protected override void GameMainMenu(GameMainMenuEvent e)
 		{

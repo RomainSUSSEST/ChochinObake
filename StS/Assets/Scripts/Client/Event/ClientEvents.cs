@@ -51,13 +51,10 @@ public class ReadyCharacterSelectionButtonClickedEvent : Event
 {
 }
 
-public class PreviousMusicSelectionButtonClickedEvent : Event
+public class ExitButtonClickedEvent : Event
 {
 }
 
-public class RespawnButtonClickedEvent : Event
-{
-}
 #endregion
 
 #region Character Selection Menu

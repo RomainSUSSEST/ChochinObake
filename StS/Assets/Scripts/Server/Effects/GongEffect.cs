@@ -21,7 +21,7 @@ public class GongEffect : Effect
 
         if (m_AssociatedCharacterServer.IsAI)
         {
-            SfxManager.Instance.AIPlaySfx(m_AssociatedCharacterServer.AssociatedAIManager.name, SfxManager.Instance.GongAppear);
+            SfxManager.Instance.AIPlaySfx(m_AssociatedCharacterServer.AssociatedAIManager.GetAssociatedProfil().Name, SfxManager.Instance.GongAppear);
         }
         else
         {
