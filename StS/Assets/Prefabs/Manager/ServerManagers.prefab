@@ -258,10 +258,12 @@ MonoBehaviour:
   CharacterHappy2: {fileID: 0}
   CharacterHit: {fileID: 0}
   CharacterHit2: {fileID: 0}
+  GongAppear: {fileID: 0}
+  GongHit: {fileID: 0}
   UI_Sound1: {fileID: 0}
   UI_Sound2: {fileID: 0}
-  UI_Sound3: {fileID: 0}
-  Source: {fileID: 0}
+  UI_Sound3: {fileID: 8300000, guid: c85f3e65edb07de4a9f9c659d36e7c52, type: 3}
+  Source: {fileID: 82451109799386276}
 --- !u!1 &1680404950657250
 GameObject:
   m_ObjectHideFlags: 0

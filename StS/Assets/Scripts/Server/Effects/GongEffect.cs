@@ -18,7 +18,15 @@ public class GongEffect : Effect
     {
         m_Animator.SetTrigger("Play");
         m_SmokeEffect.Play();
-        SfxManager.Instance.PlaySfx(SfxManager.Instance.GongAppear);
+
+        if (m_AssociatedCharacterServer.IsAI)
+        {
+            SfxManager.Instance.AIPlaySfx(m_AssociatedCharacterServer.AssociatedAIManager.name, SfxManager.Instance.GongAppear);
+        }
+        else
+        {
+            SfxManager.Instance.PlayerPlaySfx(m_AssociatedCharacterServer.AssociedClientID, SfxManager.Instance.GongAppear);
+        }
     }
 
     private void AnimationEnd()
@@ -28,7 +36,15 @@ public class GongEffect : Effect
 
     private void GongHit()
     {
-        SfxManager.Instance.PlaySfx(SfxManager.Instance.GongHit);
+        if (m_AssociatedCharacterServer.IsAI)
+        {
+            SfxManager.Instance.AIPlaySfx(m_AssociatedCharacterServer.AssociatedAIManager.GetAssociatedProfil().Name, SfxManager.Instance.GongHit);
+        }
+        else
+        {
+            SfxManager.Instance.PlayerPlaySfx(m_AssociatedCharacterServer.AssociedClientID, SfxManager.Instance.GongHit);
+        }
+
         m_AssociatedCharacterServer.PowerStart();
     }
 
