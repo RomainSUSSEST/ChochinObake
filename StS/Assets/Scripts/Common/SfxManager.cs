@@ -17,6 +17,9 @@ namespace ServerManager
 		[SerializeField] private AudioClip CharacterHit;
 		[SerializeField] private AudioClip CharacterHit2;
 
+		public AudioClip GongAppear;
+		public AudioClip GongHit;
+
 		[Header("UI")]
 		[SerializeField] private AudioClip UI_Sound1;
 		[SerializeField] private AudioClip UI_Sound2;

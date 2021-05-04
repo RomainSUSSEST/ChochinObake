@@ -151,6 +151,7 @@
             // Player
 
             EventManager.Instance.AddListener<PowerDeclenchementEvent>(PowerDeclenchement);
+            EventManager.Instance.AddListener<PowerStartEvent>(PowerStart);
         }
 
         public override void UnsubscribeEvents()
@@ -164,6 +165,7 @@
             // Player
 
             EventManager.Instance.RemoveListener<PowerDeclenchementEvent>(PowerDeclenchement);
+            EventManager.Instance.RemoveListener<PowerStartEvent>(PowerStart);
         }
 
         #endregion
@@ -175,54 +177,64 @@
 
         private void PowerDeclenchement(PowerDeclenchementEvent e)
         {
-            if (UsePower(e.CharacterServer, e.CmptCombo)) // Si un bonus est utilisé
+            if (CanUsePower(e.CmptCombo))
             {
+                e.CharacterServer.LockPowerInput();
                 e.CharacterServer.ResetCombo(); // On reset les combos du joueur
-                e.CharacterServer.UsePowerEffect();
+                e.CharacterServer.UsePowerEffect(e.CmptCombo);
             }
         }
 
+        private void PowerStart(PowerStartEvent e)
+        {
+            UsePower(e.CharacterServer, e.CmptCombo);
+            e.CharacterServer.UnLockPowerInput();
+        }
+
+        private bool CanUsePower(int CmptCombo)
+        {
+            return CmptCombo <= (int)Power.Shield || CmptCombo >= (int)Power.InvertKanji;
+        }
+
         /// <summary>
-        /// Tente d'utliser un bonus sur le joueur "Player"
-        /// renvoie true en cas de succès, false en cas d'échec.
+        /// Utlise un bonus sur le joueur "Player"
         /// </summary>
         /// <param name="Player"></param>
         /// <param name="CmptCombo"></param>
         /// <returns></returns>
-        private bool UsePower(CharacterServer Player, int CmptCombo)
+        private void UsePower(CharacterServer Player, int CmptCombo)
         {
-            if (CmptCombo <= (int) Power.ResetAllCombo)
+            if (CmptCombo <= (int)Power.ResetAllCombo)
             {
                 ResetAllCombo();
-                return true;
-
-            } else if (CmptCombo <= (int) Power.Shield)
+            }
+            else if (CmptCombo <= (int)Power.Shield)
             {
-                return Shield(Player);
-            } else if (CmptCombo >= (int)Power.DisableOtherPlayers)
+                Shield(Player);
+            }
+            else if (CmptCombo >= (int)Power.DisableOtherPlayers)
             {
                 DisableOtherPlayers(Player); // A changer
-                return true;
             }
             else if (CmptCombo >= (int)Power.InvertInput)
             {
-                return InvertInput(Player);
+                InvertInput(Player);
             }
             else if (CmptCombo >= (int)Power.FlashKanji)
             {
-                return FlashKanji(Player);
+                FlashKanji(Player);
             }
             else if (CmptCombo >= (int)Power.UncolorKanji)
             {
-                return UncolorKanji(Player);
+                UncolorKanji(Player);
             }
             else if (CmptCombo >= (int)Power.InvertKanji)
             {
-                return InvertKanji(Player);
+                InvertKanji(Player);
             }
             else
             {
-                return false;
+                return;
             }
         }
 
@@ -243,21 +255,13 @@
         }
 
         /// <summary>
-        /// Essai de mettre un shield sur le joueur appelant, renvois false
-        /// si le joueur est déjà safe.
-        /// Sinon retourne AddSafePlayer
+        /// Essai de mettre un shield sur le joueur appelant
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        private bool Shield(CharacterServer target)
+        private void Shield(CharacterServer target)
         {
-            if (target.IsSafe())
-            {
-                return false;
-            } else
-            {
-                return AddSafePlayer(target);
-            }
+            AddSafePlayer(target);
         }
 
         #endregion
@@ -281,11 +285,11 @@
 
         /// <summary>
         /// Inverse les touches de jusqu'à 2 joueurs
-        /// Renvoie true en cas de succès, false en cas d'échec
+        /// Ne fais rien en cas d'échec
         /// </summary>
         /// <param name="Exception"></param>
         /// <returns></returns>
-        private bool InvertInput(CharacterServer Exception)
+        private void InvertInput(CharacterServer Exception)
         {
             // On repere les victimes potentiel
             List<CharacterServer> PotentialTargets = new List<CharacterServer>();
@@ -300,7 +304,7 @@
 
             // Si il n'y a aucune potentiel victime
             if (PotentialTargets.Count == 0)
-                return false;
+                return;
 
             // On recherche une victime
             CharacterServer target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
@@ -311,24 +315,22 @@
 
             if (PotentialTargets.Count == 0)
             {
-                return true;
+                return;
             }
 
             // On recherche une 2ème victime
             target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
             target.InvertInput(INVERT_KANJI_DELAI);
             AddSafePlayer(target);
-
-            return true;
         }
         
         /// <summary>
         /// Fait clignoter les kanji de jusqu'à 2 joueurs
         /// Les mets ensuite en safe
-        /// Renvoie true en cas de succès, false en cas d'échec.
+        /// Ne fait rien en cas d'échec
         /// </summary>
         /// <returns></returns>
-        private bool FlashKanji(CharacterServer Exception)
+        private void FlashKanji(CharacterServer Exception)
         {
             // On repère les victimes potentiel
             List<CharacterServer> PotentialTargets = new List<CharacterServer>();
@@ -344,7 +346,7 @@
             // Si il n'y a aucune potentiel victime
             if (PotentialTargets.Count == 0)
             {
-                return false;
+                return;
             }
 
             // On recherche une victime
@@ -356,24 +358,22 @@
 
             if (PotentialTargets.Count == 0)
             {
-                return true;
+                return;
             }
 
             // On recherche une 2ème victime
             target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
             target.FlashKanji(FLASH_KANJI_DELAI, DELAI_INTER_FLASH);
             AddSafePlayer(target);
-
-            return true;
         }
 
         /// <summary>
         /// Les kanjis d'un joueur deviennent gris.
         /// Place ensuite le joueur en safe.
-        /// Renvoie true en cas de succès, false en cas d'echec.
+        /// Ne fais rien en cas d'échec
         /// </summary>
         /// <returns></returns>
-        private bool UncolorKanji(CharacterServer Exception)
+        private void UncolorKanji(CharacterServer Exception)
         {
             // On repère les victimes potentiel
             List<CharacterServer> PotentialTargets = new List<CharacterServer>();
@@ -389,24 +389,22 @@
             // Si il n'y a aucune potentiel victime
             if (PotentialTargets.Count == 0)
             {
-                return false;
+                return;
             }
 
             // On recherche une victime
             CharacterServer target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
             target.UncolorKanji();
             AddSafePlayer(target);
-
-            return true;
         }
 
         /// <summary>
         /// Les kanji d'un joueur s'inverse.
         /// Place ensuite le joueur en safe.
-        /// Renvoie true en cas de succès, false en cas d'échec.
+        /// Ne fait rien en cas d'échec
         /// </summary>
         /// <param name="Exception"></param>
-        private bool InvertKanji(CharacterServer Exception)
+        private void InvertKanji(CharacterServer Exception)
         {
             // On repère les victimes potentiel
             List<CharacterServer> PotentialTargets = new List<CharacterServer>();
@@ -422,21 +420,14 @@
             // Si il n'y a aucune potentiel victime
             if (PotentialTargets.Count == 0)
             {
-                return false;
+                return;
             }
 
             // On recherche une victime
             CharacterServer target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
 
-            if (target.InvertKanji())
-            {
-                target.UseInvertKanjiEffect();
-                AddSafePlayer(target);
-                return true;
-            } else
-            {
-                return false;
-            }
+            target.InvertKanji();  
+            AddSafePlayer(target);
         }
 
         #endregion
@@ -450,9 +441,9 @@
         /// 
         /// Ne marche que si nmbr de joueurs > MIN_SAFE_PLAYER
         /// 
-        /// Renvoie true en cas de succès, false en cas d'échec
+        /// Ne fait rien en cas d'échec
         /// </summary>
-        private bool AddSafePlayer(CharacterServer Target)
+        private void AddSafePlayer(CharacterServer Target)
         {
             // On calcul le nombre de joueur effectif en jeu ----
             int cmpt = 0;
@@ -463,7 +454,7 @@
 
             // Si le nombre de joueurs dans la partie est insuffisant au système de safe, on annule. ----
             if (cmpt <= MIN_SAFE_PLAYER + 1) 
-                return false;
+                return;
 
             // Systeme de safe
             if (++SafePlayerCount >= cmpt - MIN_SAFE_PLAYER)
@@ -478,8 +469,6 @@
             {
                 Target.SetSafeStatus(true);
             }
-
-            return true;
         }
 
         #endregion

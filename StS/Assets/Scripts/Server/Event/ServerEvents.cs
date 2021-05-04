@@ -146,6 +146,12 @@ public class PowerDeclenchementEvent : SDD.Events.Event
 	public int CmptCombo;
 	public CharacterServer CharacterServer;
 }
+
+public class PowerStartEvent : SDD.Events.Event
+{
+	public int CmptCombo;
+	public CharacterServer CharacterServer;
+}
 	
 #endregion
 

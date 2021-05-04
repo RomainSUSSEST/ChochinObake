@@ -28,6 +28,9 @@ public class CharacterServer : CharacterPlayer
     private int CmptObstacle; // Obstacle passé
     private int CmptCombo; // Nombre courant de combos
 
+    private bool PowerLocked; // Renvoie si un pouvoir est entrain d'etre utilisé.
+    private int PowerCmptCombo; // Nombre de combo enregistré lors du lancement d'un pouvoir
+
     private bool m_IsSafe; // Si le joueur est safe aux pouvoirs des autres joueurs
 
     [SerializeField] private Shield ShieldPrefab;
@@ -193,6 +196,11 @@ public class CharacterServer : CharacterPlayer
     {
         base.TriggerAttackPower();
 
+        if (PowerLocked)
+        {
+            return;
+        }
+
         EventManager.Instance.Raise(new PowerDeclenchementEvent()
         {
             CharacterServer = this,
@@ -223,6 +231,20 @@ public class CharacterServer : CharacterPlayer
         CmptCombo = 0;
 
         UpdateStreakStatus(CmptCombo);
+    }
+
+    #endregion
+
+    #region Power Lock
+
+    public void LockPowerInput()
+    {
+        PowerLocked = true;
+    }
+
+    public void UnLockPowerInput()
+    {
+        PowerLocked = false;
     }
 
     #endregion
@@ -312,23 +334,24 @@ public class CharacterServer : CharacterPlayer
     }
 
     /// <summary>
-    /// Essai d'inverser les kanaji du joueur
+    /// Essai d'inverser les kanji du joueur
     /// Renvoie true en cas de succès, false en cas d'échec
     /// </summary>
-    public bool InvertKanji()
+    public void InvertKanji()
     {
-        if (QueueObstacle.Count > 3)
+        if (QueueObstacle.Count >= 2)
         {
+            UseInvertKanjiEffect();
             Obstacle[] currentObstacle = QueueObstacle.ToArray();
 
-            Obstacle tampon = currentObstacle[1];
-            Vector3 tampon2 = currentObstacle[1].transform.position;
+            Obstacle tampon = currentObstacle[0];
+            Vector3 tampon2 = currentObstacle[0].transform.position;
 
-            currentObstacle[1].transform.position = currentObstacle[2].transform.position;
-            currentObstacle[1] = currentObstacle[2];
+            currentObstacle[0].transform.position = currentObstacle[1].transform.position;
+            currentObstacle[0] = currentObstacle[1];
 
-            currentObstacle[2].transform.position = tampon2;
-            currentObstacle[2] = tampon;
+            currentObstacle[1].transform.position = tampon2;
+            currentObstacle[1] = tampon;
             
 
             // On reforme la queue
@@ -338,10 +361,10 @@ public class CharacterServer : CharacterPlayer
             {
                 QueueObstacle.Enqueue(o);
             }
-            return true;
+
         } else
         {
-            return false;
+            StartCoroutine("_InvertKanji");
         }
     }
 
@@ -371,11 +394,21 @@ public class CharacterServer : CharacterPlayer
 
     #endregion
 
-    #region Effect
+    #region Effect_Animation
 
-    public void UsePowerEffect()
+    public void UsePowerEffect(int CmptCombo)
     {
         m_UsePower.gameObject.SetActive(true);
+        PowerCmptCombo = CmptCombo;
+    }
+
+    public void PowerStart()
+    {
+        EventManager.Instance.Raise(new PowerStartEvent()
+        {
+            CharacterServer = this,
+            CmptCombo = PowerCmptCombo
+        });
     }
 
     public void UseInvertKanjiEffect()
@@ -456,6 +489,16 @@ public class CharacterServer : CharacterPlayer
         yield return new WaitForSeconds(delai);
 
         transform.parent = newParent;
+    }
+
+    private IEnumerator _InvertKanji()
+    {
+        while (QueueObstacle.Count < 2)
+        {
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        InvertKanji();
     }
 
     #endregion
