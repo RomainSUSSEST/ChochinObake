@@ -59,7 +59,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: InvertKanji
+  m_Name: UncolorKanji
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -73,7 +73,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 8ff99f1319e6bd841a16b5efb8f3f1fd, type: 2}
+  m_Motion: {fileID: 7400000, guid: d99d1614c6b4b3f43adda3f72741541e, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -85,7 +85,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: InvertKanjiEffect
+  m_Name: UncolorKanjiEffect
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Play

@@ -258,8 +258,9 @@ MonoBehaviour:
   CharacterHappy2: {fileID: 0}
   CharacterHit: {fileID: 0}
   CharacterHit2: {fileID: 0}
-  GongAppear: {fileID: 0}
-  GongHit: {fileID: 0}
+  GongAppear: {fileID: 8300000, guid: db55e9482e6b78d4ab46685cd3e1e6ae, type: 3}
+  GongHit: {fileID: 8300000, guid: cba450ba41d208c45a46249f0102a8e2, type: 3}
+  FireworksExplosion: {fileID: 8300000, guid: ca7f43b2cac972845a944af36451e155, type: 3}
   UI_Sound1: {fileID: 0}
   UI_Sound2: {fileID: 0}
   UI_Sound3: {fileID: 8300000, guid: c85f3e65edb07de4a9f9c659d36e7c52, type: 3}

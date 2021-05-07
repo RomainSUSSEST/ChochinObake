@@ -21,8 +21,11 @@ namespace ServerManager
 		[SerializeField] private AudioClip CharacterHit;
 		[SerializeField] private AudioClip CharacterHit2;
 
+		[Header("Effects")]
 		public AudioClip GongAppear;
 		public AudioClip GongHit;
+
+		public AudioClip FireworksExplosion;
 
 		[Header("UI")]
 		[SerializeField] private AudioClip UI_Sound1;
@@ -165,6 +168,36 @@ namespace ServerManager
 			base.GameResult(e);
 
 			ClearAudioSources();
+		}
+
+		protected override void GamePause(GamePauseEvent e)
+		{
+			base.GamePause(e);
+
+			Source.Pause();
+			foreach (AudioSource audio in AudioSourcesPlayer.Values)
+			{
+				audio.Pause();
+			}
+			foreach (AudioSource audio in AudioSourcesAI.Values)
+			{
+				audio.Pause();
+			}
+		}
+
+		protected override void GameContinue(GameContinueEvent e)
+		{
+			base.GameContinue(e);
+
+			Source.UnPause();
+			foreach (AudioSource audio in AudioSourcesPlayer.Values)
+			{
+				audio.UnPause();
+			}
+			foreach (AudioSource audio in AudioSourcesAI.Values)
+			{
+				audio.UnPause();
+			}
 		}
 
 		protected override void GameMusicSelectionMenu(GameMusicSelectionMenuEvent e)

@@ -218,6 +218,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 343249148}
+    - target: {fileID: 814320531558605362, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1852861593651253615, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -257,6 +262,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2897939084626965977, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 343249148}
+    - target: {fileID: 2897939084626965977, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ExitButtonHasBeenClicked
       objectReference: {fileID: 0}
     - target: {fileID: 3597158300901010827, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
         type: 3}
@@ -443,6 +458,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 343249148}
+    - target: {fileID: 9222476192525577949, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9222738097182470089, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
         type: 3}
       propertyPath: m_Name

@@ -474,14 +474,9 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 7ffe2404f4e9e5e46853fd227a7a35c8, type: 3}
     - target: {fileID: 114331011742233390, guid: 68480a01e4a00ab45b3d746ae2fc86ee,
         type: 3}
-      propertyPath: GongHit
-      value: 
-      objectReference: {fileID: 8300000, guid: 6d08404748ee7b6408bb58ed31e4c51e, type: 3}
-    - target: {fileID: 114331011742233390, guid: 68480a01e4a00ab45b3d746ae2fc86ee,
-        type: 3}
       propertyPath: GongAppear
       value: 
-      objectReference: {fileID: 8300000, guid: db55e9482e6b78d4ab46685cd3e1e6ae, type: 3}
+      objectReference: {fileID: 8300000, guid: a7c8573806e099c4a9fc731a96116ca1, type: 3}
     - target: {fileID: 440146086460121455, guid: 68480a01e4a00ab45b3d746ae2fc86ee,
         type: 3}
       propertyPath: m_Cameras.Array.size

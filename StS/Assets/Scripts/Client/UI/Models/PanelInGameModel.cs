@@ -151,10 +151,6 @@ public class PanelInGameModel : MonoBehaviour
                 bonusImageDefault.sprite = InvertInputKanji;
                 bonusImageRevert.sprite = InvertInputKanji;
                 break;
-            case UpdateSuccessiveSuccessEvent.BonusStreak.DisableOtherPlayers:
-                bonusImageDefault.sprite = DisableOtherPlayers;
-                bonusImageRevert.sprite = DisableOtherPlayers;
-                break;
             default:
                 bonusImageDefault.sprite = Default;
                 bonusImageRevert.sprite = Default;

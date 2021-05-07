@@ -8,6 +8,8 @@ public class GongEffect : Effect
     [SerializeField] private ParticleSystem m_SmokeEffect;
     [SerializeField] private Animator m_Animator;
 
+    [SerializeField] private LightProjectiles m_LightProjectilePrefab;
+
     [SerializeField] private CharacterServer m_AssociatedCharacterServer;
 
     #endregion
@@ -45,7 +47,12 @@ public class GongEffect : Effect
             SfxManager.Instance.PlayerPlaySfx(m_AssociatedCharacterServer.AssociedClientID, SfxManager.Instance.GongHit);
         }
 
-        m_AssociatedCharacterServer.PowerStart();
+        foreach (CharacterServer c in m_AssociatedCharacterServer.GetCurrentTargets())
+        {
+            LightProjectiles projectile = Instantiate(m_LightProjectilePrefab, transform.position, Quaternion.identity);
+            projectile.Target = c.GetLightProjectilesTarget();
+            projectile.AssociatedCharacter = m_AssociatedCharacterServer;
+        }
     }
 
     #endregion

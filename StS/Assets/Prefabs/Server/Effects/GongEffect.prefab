@@ -68,6 +68,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SmokeEffect: {fileID: 1395037348231967858}
   m_Animator: {fileID: 1395037347923505636}
+  m_LightProjectilePrefab: {fileID: 143563443591746132, guid: 22edafb27d6cd724eadafc6e1b1e5e3e,
+    type: 3}
   m_AssociatedCharacterServer: {fileID: 0}
 --- !u!1 &1395037349407051357
 GameObject:

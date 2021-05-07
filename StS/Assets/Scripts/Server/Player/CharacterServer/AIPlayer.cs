@@ -124,7 +124,7 @@ public class AIPlayer : MonoBehaviour
         }
 
         // On regarde si on lance un pouvoir
-        if (CmptCombo <= (int) ServerLevelManager.Power.Shield || CmptCombo >= (int) ServerLevelManager.Power.InvertKanji)
+        if (CmptCombo <= (int) ServerLevelManager.Power.ResetAllCombo|| CmptCombo >= (int) ServerLevelManager.Power.InvertKanji)
         {
             if (Random.Range(0, 100) <= POWER_PRESS_RATE)
             {

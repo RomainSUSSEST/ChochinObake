@@ -30,6 +30,7 @@ public class CharacterServer : CharacterPlayer
 
     private bool PowerLocked; // Renvoie si un pouvoir est entrain d'etre utilisé.
     private int PowerCmptCombo; // Nombre de combo enregistré lors du lancement d'un pouvoir
+    private List<CharacterServer> CurrentTargets; // Les targets indiqué par le levelmanager
 
     private bool m_IsSafe; // Si le joueur est safe aux pouvoirs des autres joueurs
 
@@ -39,6 +40,10 @@ public class CharacterServer : CharacterPlayer
     [Header("Effect")]
     [SerializeField] private Effect m_UsePower;
     [SerializeField] private Effect m_InvertKanji;
+    [SerializeField] private Effect m_UncolorKanji;
+    [SerializeField] private Effect m_FlashKanji;
+
+    [SerializeField] private Transform LightProjectilesTarget;
 
     private Coroutine LastUpdatePositionCoroutine;
 
@@ -95,6 +100,16 @@ public class CharacterServer : CharacterPlayer
     public int GetTotalObstacle()
     {
         return CmptObstacle;
+    }
+
+    public List<CharacterServer> GetCurrentTargets()
+    {
+        return CurrentTargets;
+    }
+
+    public Transform GetLightProjectilesTarget()
+    {
+        return LightProjectilesTarget;
     }
 
     #endregion
@@ -176,8 +191,12 @@ public class CharacterServer : CharacterPlayer
         m_IsSafe = b;
 
         if (m_IsSafe)
+        {
             if (CurrentShield == null)
+            {
                 CurrentShield = Instantiate(ShieldPrefab, this.transform);
+            }
+        }
         else if (CurrentShield != null)
         {
             Destroy(CurrentShield.gameObject);
@@ -284,6 +303,8 @@ public class CharacterServer : CharacterPlayer
 
     public void FlashKanji(float delai, float delaiInterFlash)
     {
+        UseFlashKanjiEffect();
+
         if (FlashKanji_Coroutine != null)
         {
             StopCoroutine(FlashKanji_Coroutine);
@@ -323,6 +344,8 @@ public class CharacterServer : CharacterPlayer
 
     public void UncolorKanji()
     {
+        UseUncolorKanjiEffect();
+
         foreach (Obstacle o in QueueObstacle)
         {
             o.UncolorKanji();
@@ -397,24 +420,39 @@ public class CharacterServer : CharacterPlayer
 
     #region Effect_Animation
 
-    public void UsePowerEffect(int CmptCombo)
+    public void UsePowerEffect(int CmptCombo, List<CharacterServer> targets)
     {
         m_UsePower.gameObject.SetActive(true);
         PowerCmptCombo = CmptCombo;
+        CurrentTargets = targets;
     }
 
     public void PowerStart()
     {
         EventManager.Instance.Raise(new PowerStartEvent()
         {
-            CharacterServer = this,
-            CmptCombo = PowerCmptCombo
+            Targets = CurrentTargets,
+            CmptCombo = PowerCmptCombo,
+            Player = this
         });
+
+        PowerCmptCombo = 0;
+        CurrentTargets = null;
     }
 
-    public void UseInvertKanjiEffect()
+    private void UseInvertKanjiEffect()
     {
         m_InvertKanji.gameObject.SetActive(true);
+    }
+
+    private void UseUncolorKanjiEffect()
+    {
+        m_UncolorKanji.gameObject.SetActive(true);
+    }
+
+    private void UseFlashKanjiEffect()
+    {
+        m_FlashKanji.gameObject.SetActive(true);
     }
 
     #endregion
@@ -625,17 +663,6 @@ public class CharacterServer : CharacterPlayer
         {
             power = ServerLevelManager.Power.ResetAllCombo;
         }
-        else if (cmptCombo <= (int)ServerLevelManager.Power.Shield)
-        {
-            if (IsSafe())
-                power = ServerLevelManager.Power.NoPower;
-            else
-                power = ServerLevelManager.Power.Shield;
-        }
-        else if (cmptCombo >= (int)ServerLevelManager.Power.DisableOtherPlayers)
-        {
-            power = ServerLevelManager.Power.DisableOtherPlayers;
-        }
         else if (cmptCombo >= (int)ServerLevelManager.Power.InvertInput)
         {
             power = ServerLevelManager.Power.InvertInput;
@@ -667,9 +694,6 @@ public class CharacterServer : CharacterPlayer
 
             switch (power)
             {
-                case ServerLevelManager.Power.DisableOtherPlayers:
-                    bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.DisableOtherPlayers;
-                    break;
                 case ServerLevelManager.Power.FlashKanji:
                     bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.FlashKanji;
                     break;
@@ -684,9 +708,6 @@ public class CharacterServer : CharacterPlayer
                     break;
                 case ServerLevelManager.Power.ResetAllCombo:
                     bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.ResetAllCombo;
-                    break;
-                case ServerLevelManager.Power.Shield:
-                    bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.Shield;
                     break;
                 default:// ServerLevelManager.Power.UncolorKanji:
                     bonusValue = UpdateSuccessiveSuccessEvent.BonusStreak.UncolorKanji;

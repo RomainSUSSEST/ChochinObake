@@ -14,7 +14,7 @@ public class AI_Player
 {
     #region Constants
 
-    public static readonly int MIN_SUCCESS_RATE = 20;
+    public static readonly int MIN_SUCCESS_RATE = 40;
     public static readonly int MAX_SUCCESS_RATE = 90;
 
     #endregion

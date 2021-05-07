@@ -116,9 +116,7 @@ public class Obstacle : MonoBehaviour
 
     public void UncolorKanji()
     {
-        KanjiRenderer.materials = new Material[2];
-        KanjiRenderer.materials[0] = OutlinerMaterial;
-        KanjiRenderer.materials[1] = UncolorMaterial;
+        KanjiRenderer.materials = new Material[] { OutlinerMaterial, UncolorMaterial };
     }
 
     public void EchecObstacle()

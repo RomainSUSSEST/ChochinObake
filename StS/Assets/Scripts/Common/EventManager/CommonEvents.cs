@@ -241,7 +241,6 @@ public class UpdateSuccessiveSuccessEvent : NetworkedEvent
 		UncolorKanji,
 		FlashKanji,
 		InvertInput,
-		DisableOtherPlayers,
 		ResetAllCombo,
 		Shield,
 		Default

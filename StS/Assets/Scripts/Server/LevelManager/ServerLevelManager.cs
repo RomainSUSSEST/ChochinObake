@@ -29,13 +29,11 @@
         public enum Power : int
         {
             ResetAllCombo = -12,
-            Shield = -6,
             NoPower = 0,
             InvertKanji = 8,
             UncolorKanji = 16,
             FlashKanji = 24,
             InvertInput = 32,
-            DisableOtherPlayers = 40
         }
 
         #region Tools
@@ -52,8 +50,6 @@
             {
                 case Power.ResetAllCombo:
                     return ResetAllCombo_Sprite;
-                case Power.Shield:
-                    return Shield_Sprite;
                 case Power.InvertKanji:
                     return InvertKanji_Sprite;
                 case Power.UncolorKanji:
@@ -62,8 +58,6 @@
                     return FlashKanji_Sprite;
                 case Power.InvertInput:
                     return InvertInput_Sprite;
-                case Power.DisableOtherPlayers:
-                    return DisableOtherPlayers_Sprite;
                 default:
                     return NoPower_Sprite;
             }
@@ -181,19 +175,20 @@
             {
                 e.CharacterServer.LockPowerInput();
                 e.CharacterServer.ResetCombo(); // On reset les combos du joueur
-                e.CharacterServer.UsePowerEffect(e.CmptCombo);
+
+                e.CharacterServer.UsePowerEffect(e.CmptCombo, GetTargets(e.CharacterServer, e.CmptCombo));
             }
         }
 
         private void PowerStart(PowerStartEvent e)
         {
-            UsePower(e.CharacterServer, e.CmptCombo);
-            e.CharacterServer.UnLockPowerInput();
+            UsePower(e.Targets, e.CmptCombo);
+            e.Player.UnLockPowerInput();
         }
 
         private bool CanUsePower(int CmptCombo)
         {
-            return CmptCombo <= (int)Power.Shield || CmptCombo >= (int)Power.InvertKanji;
+            return CmptCombo <= (int)Power.ResetAllCombo || CmptCombo >= (int)Power.InvertKanji;
         }
 
         /// <summary>
@@ -202,39 +197,106 @@
         /// <param name="Player"></param>
         /// <param name="CmptCombo"></param>
         /// <returns></returns>
-        private void UsePower(CharacterServer Player, int CmptCombo)
+        private void UsePower(List<CharacterServer> targets, int CmptCombo)
         {
             if (CmptCombo <= (int)Power.ResetAllCombo)
             {
-                ResetAllCombo();
-            }
-            else if (CmptCombo <= (int)Power.Shield)
-            {
-                Shield(Player);
-            }
-            else if (CmptCombo >= (int)Power.DisableOtherPlayers)
-            {
-                DisableOtherPlayers(Player); // A changer
+                ResetAllCombo(targets);
             }
             else if (CmptCombo >= (int)Power.InvertInput)
             {
-                InvertInput(Player);
+                InvertInput(targets);
             }
             else if (CmptCombo >= (int)Power.FlashKanji)
             {
-                FlashKanji(Player);
+                FlashKanji(targets);
             }
             else if (CmptCombo >= (int)Power.UncolorKanji)
             {
-                UncolorKanji(Player);
+                UncolorKanji(targets);
             }
             else if (CmptCombo >= (int)Power.InvertKanji)
             {
-                InvertKanji(Player);
+                InvertKanji(targets);
             }
             else
             {
                 return;
+            }
+        }
+
+        private List<CharacterServer> GetTargets(CharacterServer Player, int CmptCombo)
+        {
+            List<CharacterServer> tampon = new List<CharacterServer>();
+            if (CmptCombo <= (int)Power.ResetAllCombo)
+            {
+                foreach (CharacterServer c in RoundPlayers)
+                {
+                    if (c != null)
+                    {
+                        tampon.Add(c);
+                    }
+                }
+                return tampon;
+            }
+            else if (CmptCombo >= (int)Power.InvertInput || CmptCombo >= (int)Power.FlashKanji) // 2 Targets
+            {
+                // On repere les victimes potentiel
+                List<CharacterServer> PotentialTargets = new List<CharacterServer>();
+
+                foreach (CharacterServer c in RoundPlayers)
+                {
+                    if (c != null && c != Player && !c.IsSafe())
+                    {
+                        PotentialTargets.Add(c);
+                    }
+                }
+
+                // Si il n'y a aucune potentiel victime
+                if (PotentialTargets.Count == 0)
+                    return tampon;
+
+                CharacterServer target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
+                PotentialTargets.Remove(target);
+                tampon.Add(target);
+
+                if (PotentialTargets.Count == 0)
+                {
+                    return tampon;
+                }
+
+                target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
+                tampon.Add(target);
+
+                return tampon;
+
+            }
+            else if (CmptCombo >= (int)Power.UncolorKanji || CmptCombo >= (int)Power.InvertKanji) // 1 target
+            {
+                // On repère les victimes potentiel
+                List<CharacterServer> PotentialTargets = new List<CharacterServer>();
+
+                foreach (CharacterServer c in RoundPlayers)
+                {
+                    if (c != null && c != Player && !c.IsSafe())
+                    {
+                        PotentialTargets.Add(c);
+                    }
+                }
+
+                // Si il n'y a aucune potentiel victime
+                if (PotentialTargets.Count == 0)
+                {
+                    return tampon;
+                }
+
+                // On recherche une victime
+                tampon.Add(PotentialTargets[Random.Range(0, PotentialTargets.Count)]);
+                return tampon;
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -243,7 +305,7 @@
         #region Powers
 
         #region Bonus
-        private void ResetAllCombo()
+        private void ResetAllCombo(List<CharacterServer> targets)
         {
             foreach (CharacterServer c in RoundPlayers)
             {
@@ -259,10 +321,13 @@
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        private void Shield(CharacterServer target)
-        {
-            AddSafePlayer(target);
-        }
+        //private void Shield(List<CharacterServer> targets)
+        //{
+        //    foreach (CharacterServer c in targets)
+        //    {
+        //        AddSafePlayer(c);
+        //    }
+        //}
 
         #endregion
 
@@ -272,16 +337,16 @@
         /// Endort tous les joueurs sauf Exception
         /// </summary>
         /// <param name="Exception"></param>
-        private void DisableOtherPlayers(CharacterServer Exception)
-        {
-            foreach (CharacterServer c in RoundPlayers)
-            {
-                if (c != null && c.AssociedClientID != Exception.AssociedClientID)
-                {
-                    c.Sleep(SLEEP_DELAI);
-                }
-            }
-        }
+        //private void DisableOtherPlayers(CharacterServer Exception)
+        //{
+        //    foreach (CharacterServer c in RoundPlayers)
+        //    {
+        //        if (c != null && c.AssociedClientID != Exception.AssociedClientID)
+        //        {
+        //            c.Sleep(SLEEP_DELAI);
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// Inverse les touches de jusqu'à 2 joueurs
@@ -289,39 +354,13 @@
         /// </summary>
         /// <param name="Exception"></param>
         /// <returns></returns>
-        private void InvertInput(CharacterServer Exception)
+        private void InvertInput(List<CharacterServer> targets)
         {
-            // On repere les victimes potentiel
-            List<CharacterServer> PotentialTargets = new List<CharacterServer>();
-
-            foreach (CharacterServer c in RoundPlayers)
+            foreach(CharacterServer c in targets)
             {
-                if (c != null && c.AssociedClientID != Exception.AssociedClientID && !c.IsSafe())
-                {
-                    PotentialTargets.Add(c);
-                }
+                c.InvertInput(INVERT_KANJI_DELAI);
+                AddSafePlayer(c);
             }
-
-            // Si il n'y a aucune potentiel victime
-            if (PotentialTargets.Count == 0)
-                return;
-
-            // On recherche une victime
-            CharacterServer target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
-            target.InvertInput(INVERT_KANJI_DELAI);
-            AddSafePlayer(target);
-
-            PotentialTargets.Remove(target);
-
-            if (PotentialTargets.Count == 0)
-            {
-                return;
-            }
-
-            // On recherche une 2ème victime
-            target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
-            target.InvertInput(INVERT_KANJI_DELAI);
-            AddSafePlayer(target);
         }
         
         /// <summary>
@@ -330,41 +369,13 @@
         /// Ne fait rien en cas d'échec
         /// </summary>
         /// <returns></returns>
-        private void FlashKanji(CharacterServer Exception)
+        private void FlashKanji(List<CharacterServer> targets)
         {
-            // On repère les victimes potentiel
-            List<CharacterServer> PotentialTargets = new List<CharacterServer>();
-
-            foreach (CharacterServer c in RoundPlayers)
+            foreach (CharacterServer c in targets)
             {
-                if (c!= null && c.AssociedClientID != Exception.AssociedClientID && !c.IsSafe())
-                {
-                    PotentialTargets.Add(c);
-                }
+                c.FlashKanji(FLASH_KANJI_DELAI, DELAI_INTER_FLASH);
+                AddSafePlayer(c);
             }
-
-            // Si il n'y a aucune potentiel victime
-            if (PotentialTargets.Count == 0)
-            {
-                return;
-            }
-
-            // On recherche une victime
-            CharacterServer target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
-            target.FlashKanji(FLASH_KANJI_DELAI, DELAI_INTER_FLASH);
-            AddSafePlayer(target);
-
-            PotentialTargets.Remove(target);
-
-            if (PotentialTargets.Count == 0)
-            {
-                return;
-            }
-
-            // On recherche une 2ème victime
-            target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
-            target.FlashKanji(FLASH_KANJI_DELAI, DELAI_INTER_FLASH);
-            AddSafePlayer(target);
         }
 
         /// <summary>
@@ -373,29 +384,14 @@
         /// Ne fais rien en cas d'échec
         /// </summary>
         /// <returns></returns>
-        private void UncolorKanji(CharacterServer Exception)
+        private void UncolorKanji(List<CharacterServer> targets)
         {
-            // On repère les victimes potentiel
-            List<CharacterServer> PotentialTargets = new List<CharacterServer>();
-
-            foreach (CharacterServer c in RoundPlayers)
+            foreach (CharacterServer c in targets)
             {
-                if (c != null && c.AssociedClientID != Exception.AssociedClientID && !c.IsSafe())
-                {
-                    PotentialTargets.Add(c);
-                }
+                c.UncolorKanji();
+                AddSafePlayer(c);
             }
 
-            // Si il n'y a aucune potentiel victime
-            if (PotentialTargets.Count == 0)
-            {
-                return;
-            }
-
-            // On recherche une victime
-            CharacterServer target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
-            target.UncolorKanji();
-            AddSafePlayer(target);
         }
 
         /// <summary>
@@ -404,30 +400,13 @@
         /// Ne fait rien en cas d'échec
         /// </summary>
         /// <param name="Exception"></param>
-        private void InvertKanji(CharacterServer Exception)
+        private void InvertKanji(List<CharacterServer> targets)
         {
-            // On repère les victimes potentiel
-            List<CharacterServer> PotentialTargets = new List<CharacterServer>();
-
-            foreach (CharacterServer c in RoundPlayers)
+            foreach (CharacterServer c in targets)
             {
-                if (c != null && c.AssociedClientID != Exception.AssociedClientID && !c.IsSafe())
-                {
-                    PotentialTargets.Add(c);
-                }
+                c.InvertKanji();
+                AddSafePlayer(c);
             }
-
-            // Si il n'y a aucune potentiel victime
-            if (PotentialTargets.Count == 0)
-            {
-                return;
-            }
-
-            // On recherche une victime
-            CharacterServer target = PotentialTargets[Random.Range(0, PotentialTargets.Count)];
-
-            target.InvertKanji();  
-            AddSafePlayer(target);
         }
 
         #endregion
