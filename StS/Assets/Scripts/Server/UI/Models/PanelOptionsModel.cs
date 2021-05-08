@@ -5,7 +5,6 @@ public class PanelOptionsModel : MonoBehaviour
 {
 	#region Panels
 	[Header("Panels")]
-	[SerializeField] private GameObject m_PanelGraphics;
 	[SerializeField] private GameObject m_PanelSounds;
 	[SerializeField] private GameObject m_PanelCredits;
 	[SerializeField] private GameObject m_PanelTutorials;
@@ -29,7 +28,6 @@ public class PanelOptionsModel : MonoBehaviour
 	{
 		m_AllPanels = new List<GameObject>();
 
-		m_AllPanels.Add(m_PanelGraphics);
 		m_AllPanels.Add(m_PanelSounds);
 		m_AllPanels.Add(m_PanelCredits);
 		m_AllPanels.Add(m_PanelTutorials);
@@ -47,11 +45,6 @@ public class PanelOptionsModel : MonoBehaviour
     #endregion
 
     #region OnClickButtons
-
-	public void OnClickGraphicsButton()
-    {
-		OpenPanel(m_PanelGraphics);
-	}
 
 	public void OnClickSoundsButton()
 	{

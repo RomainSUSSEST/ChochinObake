@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using CommonVisibleManager;
 using ServerManager;
+using System;
 
 public class RoomModel : MonoBehaviour
 {
@@ -19,7 +20,8 @@ public class RoomModel : MonoBehaviour
     [Header("RoomModel")]
 
     [SerializeField] private Button NextButton;
-    [SerializeField] private TextMeshProUGUI TextPrinter;
+    [SerializeField] private GameObject ContentNodePlayers;
+    [SerializeField] private PlayerListModel PlayerPrefabItems;
 
     [SerializeField] private List<CharacterBody> ListBody;
 
@@ -143,7 +145,7 @@ public class RoomModel : MonoBehaviour
             AI_Player currentAI = new AI_Player();
             currentAI.Name = "AI." + AI_Players.Count;
 
-            currentAI.Difficulty = Random.Range(AI_Player.MIN_SUCCESS_RATE, AI_Player.MAX_SUCCESS_RATE);
+            currentAI.Difficulty = UnityEngine.Random.Range(AI_Player.MIN_SUCCESS_RATE, AI_Player.MAX_SUCCESS_RATE);
 
             AI_Players.Add(currentAI);
 
@@ -292,28 +294,56 @@ public class RoomModel : MonoBehaviour
 
     private void RefreshListPlayer()
     {
-        string text = "";
+        // Clear
 
+        foreach (Transform child in ContentNodePlayers.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // Generate
         Dictionary<ulong, Player>.ValueCollection value = Players.Values;
- 
+
+        List<PlayerListModel> list = new List<PlayerListModel>();
+        PlayerListModel tampon;
+
         foreach (Player v in value)
         {
+            tampon = Instantiate(PlayerPrefabItems, ContentNodePlayers.transform);
             if (v.Pseudo == "")
             {
-                text += DEFAULT_NAME + " : " + GetTextFrom(v.PlayerState) + "\n";
-            }
-            else
+                tampon.m_Pseudo.text = DEFAULT_NAME;
+            } else
             {
-                text += v.Pseudo + " : " + GetTextFrom(v.PlayerState) + "\n";
+                tampon.m_Pseudo.text = v.Pseudo;
             }
+
+            tampon.m_Score.text = v.Score.ToString();
+            tampon.m_Victory.text = v.Victory.ToString();
+
+            list.Add(tampon);
         }
 
         for (int i = 0; i < AI_Players.Count; ++i)
         {
-            text += "AI " + i + "\n";
+            tampon = Instantiate(PlayerPrefabItems, ContentNodePlayers.transform);
+
+            tampon.m_Pseudo.text = "Chochin " + i;
+            tampon.m_Score.text = AI_Players[i].Score.ToString();
+            tampon.m_Victory.text = AI_Players[i].Victory.ToString();
+
+            list.Add(tampon);
         }
 
-        TextPrinter.text = text;
+        // Sort
+
+        list.Sort((PlayerListModel x, PlayerListModel y) =>
+            Int32.Parse(x.m_Score.text) - Int32.Parse(y.m_Score.text)
+            );
+
+        // Organise
+
+
     }
 
     private void SetAIBodys()

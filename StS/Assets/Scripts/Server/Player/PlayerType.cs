@@ -8,6 +8,15 @@ public class Player
     public CharacterBody Body { get; set; }
 
     public int Score;
+
+    public int Victory;
+
+    #region last Game Stats
+    public int LastGameLanternSuccess;
+    public int LastGamePowerUse;
+    public int LastGameBestCombo;
+    public int lastGameTotalLantern;
+    #endregion
 }
 
 public class AI_Player
@@ -26,4 +35,13 @@ public class AI_Player
     public int Score;
 
     public int Difficulty;
+
+    public int Victory;
+
+    #region last Game Stats
+    public int LastGameLanternSuccess;
+    public int LastGamePowerUse;
+    public int LastGameBestCombo;
+    public int lastGameTotalLantern;
+    #endregion
 }

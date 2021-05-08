@@ -540,6 +540,12 @@
 
         private void RoundEnd(RoundEndEvent e)
         {
+            List<AI_Player> aiWinners = new List<AI_Player>(); // Les AI gagnantes
+            List<Player> playerWinners = new List<Player>(); // Les joueurs gagnants
+
+            int CurrentScore;
+            int bestCurrentScore = 0;
+
             IReadOnlyDictionary<ulong, Player> Players = ServerGameManager.Instance.GetPlayers();
 
             foreach (CharacterServer p in RoundPlayers)
@@ -548,20 +554,66 @@
                 {
                     if (p.IsAI)
                     {
-                        p.AssociatedAIManager.GetAssociatedProfil().Score +=
-                            (int)Mathf.Lerp(
+                        AI_Player aiProfil = p.AssociatedAIManager.GetAssociatedProfil();
+
+                        CurrentScore = (int)Mathf.Lerp(
                             MIN_SCORE,
                             MAX_SCORE,
-                            p.GetTotalObstacle() == 0 ? 1 : (float) p.GetTotalSuccess() / p.GetTotalObstacle());
+                            p.GetTotalObstacle() == 0 ? 1 : (float)p.GetTotalSuccess() / p.GetTotalObstacle());
+
+                        aiProfil.Score += CurrentScore;
+                        aiProfil.LastGameBestCombo = p.GetBestCombo();
+                        aiProfil.LastGameLanternSuccess = p.GetTotalSuccess();
+                        aiProfil.LastGamePowerUse = p.GetPowerUse();
+                        aiProfil.lastGameTotalLantern = p.GetTotalObstacle();
+
+                        if (CurrentScore > bestCurrentScore) // Si le gagnant est battu, on clear
+                        {
+                            aiWinners.Clear();
+                            aiWinners.Add(aiProfil); // On ajoute le gagnant
+                        } else if (CurrentScore == bestCurrentScore) // Si égalité
+                        {
+                            aiWinners.Add(aiProfil);
+                        }
                     } else
                     {
-                        Players[p.AssociedClientID].Score +=
-                            (int)Mathf.Lerp(
+                        Player playerProfil = Players[p.AssociedClientID];
+
+                        CurrentScore = (int)Mathf.Lerp(
                             MIN_SCORE,
                             MAX_SCORE,
-                            p.GetTotalObstacle() == 0 ? 1 : (float) p.GetTotalSuccess() / p.GetTotalObstacle());
+                            p.GetTotalObstacle() == 0 ? 1 : (float)p.GetTotalSuccess() / p.GetTotalObstacle());
+
+                        playerProfil.Score += CurrentScore;
+                        playerProfil.LastGameBestCombo = p.GetBestCombo();
+                        playerProfil.LastGameLanternSuccess = p.GetTotalSuccess();
+                        playerProfil.LastGamePowerUse = p.GetPowerUse();
+                        playerProfil.lastGameTotalLantern = p.GetTotalObstacle();
+
+                        if (CurrentScore > bestCurrentScore) // Si le gagnant est battu, on clear
+                        {
+                            aiWinners.Clear();
+                            playerWinners.Clear();
+                            playerWinners.Add(playerProfil); // On ajoute le gagnant
+                        }
+                        else if (CurrentScore == bestCurrentScore) // Si égalité
+                        {
+                            playerWinners.Add(playerProfil);
+                        }
                     }
                 }
+            }
+
+            // On incrémente le nombre de victoire du/des gagnant(s)
+
+            foreach (AI_Player ai in aiWinners)
+            {
+                ai.Victory++;
+            }
+
+            foreach (Player p in playerWinners)
+            {
+                p.Victory++;
             }
 
             Destroy(CurrentWorld.gameObject);

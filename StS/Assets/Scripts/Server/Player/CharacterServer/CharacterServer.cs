@@ -21,6 +21,12 @@ public class CharacterServer : CharacterPlayer
     public ulong AssociedClientID { get; set; }
     public AIPlayer AssociatedAIManager { get; set; }
 
+    #region Stats
+
+    private int PowerUse;
+    private int BestCombo;
+
+    #endregion
 
     private Queue<Obstacle> QueueObstacle; // Queue des obstacles suivant associé à ce character
 
@@ -110,6 +116,16 @@ public class CharacterServer : CharacterPlayer
     public Transform GetLightProjectilesTarget()
     {
         return LightProjectilesTarget;
+    }
+
+    public int GetBestCombo()
+    {
+        return BestCombo;
+    }
+
+    public int GetPowerUse()
+    {
+        return PowerUse;
     }
 
     #endregion
@@ -436,6 +452,7 @@ public class CharacterServer : CharacterPlayer
             Player = this
         });
 
+        PowerUse++;
         PowerCmptCombo = 0;
         CurrentTargets = null;
     }
@@ -762,6 +779,11 @@ public class CharacterServer : CharacterPlayer
 
         ++CmptSuccess;
         ++CmptObstacle;
+
+        if (CmptCombo > BestCombo)
+        {
+            BestCombo = CmptCombo;
+        }
 
         UpdateStreakStatus(CmptCombo);
     }
