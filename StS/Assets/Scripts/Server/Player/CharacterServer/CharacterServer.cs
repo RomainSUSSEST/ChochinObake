@@ -40,8 +40,8 @@ public class CharacterServer : CharacterPlayer
 
     private bool m_IsSafe; // Si le joueur est safe aux pouvoirs des autres joueurs
 
-    [SerializeField] private Shield ShieldPrefab;
-    private Shield CurrentShield; // Eventuel shield actuel
+    [SerializeField] private GameObject ShieldPrefab;
+    private GameObject CurrentShield; // Eventuel shield actuel
 
     [Header("Effect")]
     [SerializeField] private Effect m_UsePower;

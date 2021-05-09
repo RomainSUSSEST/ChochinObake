@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3c39436b34090846a835bf0fdb29c8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShieldPrefab: {fileID: 1148895289193186004, guid: e8fc6fd7738c11e4b95500b4a42e0c81,
+  ShieldPrefab: {fileID: 1148895289193186005, guid: e8fc6fd7738c11e4b95500b4a42e0c81,
     type: 3}
   m_UsePower: {fileID: 1108782744381185629}
   m_InvertKanji: {fileID: 7121046381074703710}
