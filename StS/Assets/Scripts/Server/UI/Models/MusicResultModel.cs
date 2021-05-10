@@ -28,6 +28,11 @@ public class MusicResultModel : MonoBehaviour
 
     // Attributs
 
+    [Header("Tips")]
+
+    [SerializeField] private TextMeshProUGUI Tips;
+    [SerializeField] private List<String> AllTips;
+
     [Header("UI Elements")]
 
     [SerializeField] private TextMeshProUGUI Timer;
@@ -102,6 +107,7 @@ public class MusicResultModel : MonoBehaviour
         InitializePlayersDefaultStates();
         RefreshTimerUI(); // Affichage du timer
         LoadMapAsync(); // On charge la carte
+        ChooseTips(); // On affiche un tips
     }
 
     private void Update()
@@ -295,6 +301,11 @@ public class MusicResultModel : MonoBehaviour
     #endregion
 
     #region Tools
+
+    private void ChooseTips()
+    {
+        Tips.text = AllTips.Count == 0 ? "" : AllTips[UnityEngine.Random.Range(0, AllTips.Count)];
+    }
 
     private void InitializePlayersDefaultStates()
     {

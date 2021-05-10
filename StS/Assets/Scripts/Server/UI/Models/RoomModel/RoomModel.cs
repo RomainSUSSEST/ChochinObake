@@ -168,6 +168,23 @@ public class RoomModel : MonoBehaviour
         }
     }
 
+    public void ResetScoreButtonHasBeenClicked()
+    {
+        foreach (Player p in Players.Values)
+        {
+            p.Score = 0;
+            p.Victory = 0;
+        }
+
+        foreach (AI_Player ai in AI_Players)
+        {
+            ai.Score = 0;
+            ai.Victory = 0;
+        }
+
+        RefreshListPlayer();
+    }
+
     #endregion
 
     #region Network event call
