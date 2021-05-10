@@ -133,6 +133,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4578320737267200688}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &729594110 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4326354904200571207, guid: 969e2f750f5ebc34b9957d7cf766b210,
+    type: 3}
+  m_PrefabInstance: {fileID: 4578320737267200688}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07e4b411d1ae1b040a15e98ce1d1e14f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1173963838 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114078314171263514, guid: 68480a01e4a00ab45b3d746ae2fc86ee,
@@ -1055,6 +1067,21 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2854472109807055882, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1173963838}
+    - target: {fileID: 2854472109807055882, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OptionsLeaveButtonHasBeenClicked
+      objectReference: {fileID: 0}
+    - target: {fileID: 2854472109807055882, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2863728799263310794, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1616,6 +1643,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5111974022365303856, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 729594110}
+    - target: {fileID: 5111974022365303856, guid: 969e2f750f5ebc34b9957d7cf766b210,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ButtonNextHasBeenPressed
       objectReference: {fileID: 0}
     - target: {fileID: 5211193547006918399, guid: 969e2f750f5ebc34b9957d7cf766b210,
         type: 3}
