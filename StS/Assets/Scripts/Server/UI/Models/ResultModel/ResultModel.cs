@@ -15,8 +15,13 @@ public class ResultModel : MonoBehaviour
     #region Attributs
 
     [SerializeField] private RectTransform ViewPanel;
-    [SerializeField] private GameObject ContentNode;
+    [SerializeField] private GameObject ContentNodeDefault;
     [SerializeField] private ServerResultDefaultItem DefaultItemPrefab;
+
+    [Header("Info with details")]
+    [SerializeField] private GameObject PanelWithDetails;
+    [SerializeField] private GameObject ContentNodeDetails;
+    [SerializeField] private ServerResultDetailsItem DetailsItemPrefab;
 
     #endregion
 
@@ -25,6 +30,7 @@ public class ResultModel : MonoBehaviour
     private void OnEnable()
     {
         RefreshListPlayer();
+        PanelWithDetails.SetActive(false);
     }
 
     #endregion
@@ -36,6 +42,16 @@ public class ResultModel : MonoBehaviour
         EventManager.Instance.Raise(new ViewResultEndEvent());
     }
 
+    public void MoreDetailsHasBeenPressed()
+    {
+        PanelWithDetails.SetActive(true);
+    }
+
+    public void LessDetailsHasBeenPressed()
+    {
+        PanelWithDetails.SetActive(false);
+    }
+
     #endregion
 
     #region Tools
@@ -43,7 +59,12 @@ public class ResultModel : MonoBehaviour
     {
         #region Clear
 
-        foreach (Transform Child in ContentNode.transform)
+        foreach (Transform Child in ContentNodeDefault.transform)
+        {
+            Destroy(Child.gameObject);
+        }
+
+        foreach (Transform Child in ContentNodeDetails.transform)
         {
             Destroy(Child.gameObject);
         }
@@ -53,41 +74,94 @@ public class ResultModel : MonoBehaviour
         #region Generate
 
         IReadOnlyDictionary<ulong, Player> players = ServerGameManager.Instance.GetPlayers();
-        List<ServerResultDefaultItem> list = new List<ServerResultDefaultItem>();
-        ServerResultDefaultItem tampon;
+        IReadOnlyList<AI_Player> ais = ServerGameManager.Instance.GetAIList();
+
+        #region Default
+
+
+        List<ServerResultDefaultItem> listDefault = new List<ServerResultDefaultItem>();
+        ServerResultDefaultItem tamponDefault;
 
         foreach (Player p in players.Values)
         {
-            tampon = Instantiate(DefaultItemPrefab, ContentNode.transform);
+            tamponDefault = Instantiate(DefaultItemPrefab, ContentNodeDefault.transform);
 
-            tampon.Pseudo.text = p.Pseudo;
-            tampon.Score.text = p.LastGameScore.ToString();
+            tamponDefault.Pseudo.text = p.Pseudo;
+            tamponDefault.Score.text = p.LastGameScore.ToString();
 
-            list.Add(tampon);
+            listDefault.Add(tamponDefault);
         }
 
-        IReadOnlyList<AI_Player> ais = ServerGameManager.Instance.GetAIList();
         foreach (AI_Player ai in ais)
         {
-            tampon = Instantiate(DefaultItemPrefab, ContentNode.transform);
+            tamponDefault = Instantiate(DefaultItemPrefab, ContentNodeDefault.transform);
 
-            tampon.Pseudo.text = "Chochin " + ai.Name;
-            tampon.Score.text = ai.LastGameScore.ToString();
+            tamponDefault.Pseudo.text = "Chochin " + ai.Name;
+            tamponDefault.Score.text = ai.LastGameScore.ToString();
 
-            list.Add(tampon);
+            listDefault.Add(tamponDefault);
         }
+
+        #endregion
+
+        #region Details
+
+        List<ServerResultDetailsItem> listDetails = new List<ServerResultDetailsItem>();
+        ServerResultDetailsItem tamponDetails;
+
+        foreach (Player p in players.Values)
+        {
+            tamponDetails = Instantiate(DetailsItemPrefab, ContentNodeDetails.transform);
+
+            tamponDetails.Pseudo.text = p.Pseudo.ToString();
+            tamponDetails.Lantern.text = p.LastGameLanternSuccess + "/" + p.LastGameTotalLantern;
+            tamponDetails.Power.text = p.LastGamePowerUse.ToString();
+            tamponDetails.Combo.text = p.LastGameBestCombo.ToString();
+            tamponDetails.Score = p.LastGameScore;
+
+            listDetails.Add(tamponDetails);
+        }
+
+        foreach (AI_Player ai in ais)
+        {
+            tamponDetails = Instantiate(DetailsItemPrefab, ContentNodeDetails.transform);
+
+            tamponDetails.Pseudo.text = "Chochin " + ai.Name;
+            tamponDetails.Lantern.text = ai.LastGameLanternSuccess + "/" + ai.LastGameTotalLantern;
+            tamponDetails.Power.text = ai.LastGamePowerUse.ToString();
+            tamponDetails.Combo.text = ai.LastGameBestCombo.ToString();
+            tamponDetails.Score = ai.LastGameScore;
+
+            listDetails.Add(tamponDetails);
+        }
+
+        #endregion
 
         #endregion
 
         #region Sort
 
-        list.Sort((ServerResultDefaultItem x, ServerResultDefaultItem y) =>
+        #region Default
+
+        listDefault.Sort((ServerResultDefaultItem x, ServerResultDefaultItem y) =>
             Int32.Parse(y.Score.text) - Int32.Parse(x.Score.text)
         );
 
         #endregion
 
+        #region Details
+
+        listDetails.Sort((ServerResultDetailsItem x, ServerResultDetailsItem y) =>
+            y.Score - x.Score
+        );
+
+        #endregion
+
+        #endregion
+
         #region Placement
+
+        #region Default
 
         float areaHeight = DefaultItemPrefab.GetComponent<RectTransform>().rect.height;
         float currentMarginHeight = MARGIN_HEIGHT;
@@ -97,13 +171,13 @@ public class ResultModel : MonoBehaviour
         currentMarginHeight *= ViewPanel.lossyScale.y;
 
         // On estime la hauteur à allouer
-        float height = (list.Count + 1) * currentMarginHeight
-               + list.Count * areaHeight;
+        float height = (listDefault.Count + 1) * currentMarginHeight
+               + listDefault.Count * areaHeight;
 
         height /= ViewPanel.lossyScale.y;
 
         // On redimenssionne le content
-        RectTransform contentRectTransform = ContentNode.GetComponent<RectTransform>();
+        RectTransform contentRectTransform = ContentNodeDefault.GetComponent<RectTransform>();
         contentRectTransform.sizeDelta = new Vector2
             (
             contentRectTransform.rect.width,
@@ -122,7 +196,7 @@ public class ResultModel : MonoBehaviour
 
         // On les affiches
 
-        foreach (ServerResultDefaultItem srdi in list)
+        foreach (ServerResultDefaultItem srdi in listDefault)
         {
             srdi.transform.position = currentPositionButtonSpawn;
             currentPositionButtonSpawn -= new Vector3(0, areaHeight + currentMarginHeight, 0);
@@ -135,6 +209,59 @@ public class ResultModel : MonoBehaviour
             -height / 2 - contentRectTransform.parent.GetComponent<RectTransform>().rect.height,
             contentRectTransform.localPosition.z
             );
+
+        #endregion
+
+        #region Details
+
+        areaHeight = DetailsItemPrefab.GetComponent<RectTransform>().rect.height;
+        currentMarginHeight = MARGIN_HEIGHT;
+
+        // On tient compte du rescale de la vue
+        areaHeight *= ViewPanel.lossyScale.y;
+        currentMarginHeight *= ViewPanel.lossyScale.y;
+
+        // On estime la hauteur à allouer
+        height = (listDetails.Count + 1) * currentMarginHeight
+               + listDetails.Count * areaHeight;
+
+        height /= ViewPanel.lossyScale.y;
+
+        // On redimenssionne le content
+        contentRectTransform = ContentNodeDetails.GetComponent<RectTransform>();
+        contentRectTransform.sizeDelta = new Vector2
+            (
+            contentRectTransform.rect.width,
+            height
+            );
+
+        // Position de départ
+
+        currentPositionButtonSpawn = new Vector3
+            (
+                contentRectTransform.position.x,
+                (contentRectTransform.position.y
+                    + height * ViewPanel.lossyScale.y / 2 - currentMarginHeight - areaHeight / 2),
+                contentRectTransform.position.z
+            );
+
+        // On les affiches
+
+        foreach (ServerResultDetailsItem srdi in listDetails)
+        {
+            srdi.transform.position = currentPositionButtonSpawn;
+            currentPositionButtonSpawn -= new Vector3(0, areaHeight + currentMarginHeight, 0);
+        }
+
+        // On décale le content pour afficher le premier en haut
+        contentRectTransform.localPosition = new Vector3
+            (
+            contentRectTransform.localPosition.x,
+            -height / 2 - contentRectTransform.parent.GetComponent<RectTransform>().rect.height,
+            contentRectTransform.localPosition.z
+            );
+
+        #endregion
 
         #endregion
     }
