@@ -565,15 +565,18 @@
                         aiProfil.LastGameBestCombo = p.GetBestCombo();
                         aiProfil.LastGameLanternSuccess = p.GetTotalSuccess();
                         aiProfil.LastGamePowerUse = p.GetPowerUse();
-                        aiProfil.lastGameTotalLantern = p.GetTotalObstacle();
+                        aiProfil.LastGameTotalLantern = p.GetTotalObstacle();
+                        aiProfil.LastGameScore = CurrentScore;
 
                         if (CurrentScore > bestCurrentScore) // Si le gagnant est battu, on clear
                         {
                             aiWinners.Clear();
+                            playerWinners.Clear();
                             aiWinners.Add(aiProfil); // On ajoute le gagnant
+                            bestCurrentScore = CurrentScore; // On actualise le best score
                         } else if (CurrentScore == bestCurrentScore) // Si égalité
                         {
-                            aiWinners.Add(aiProfil);
+                            aiWinners.Add(aiProfil); // On ajoute le profil
                         }
                     } else
                     {
@@ -588,17 +591,19 @@
                         playerProfil.LastGameBestCombo = p.GetBestCombo();
                         playerProfil.LastGameLanternSuccess = p.GetTotalSuccess();
                         playerProfil.LastGamePowerUse = p.GetPowerUse();
-                        playerProfil.lastGameTotalLantern = p.GetTotalObstacle();
+                        playerProfil.LastGameTotalLantern = p.GetTotalObstacle();
+                        playerProfil.LastGameScore = CurrentScore;
 
                         if (CurrentScore > bestCurrentScore) // Si le gagnant est battu, on clear
                         {
                             aiWinners.Clear();
                             playerWinners.Clear();
                             playerWinners.Add(playerProfil); // On ajoute le gagnant
+                            bestCurrentScore = CurrentScore; // On actualise le bestScore
                         }
                         else if (CurrentScore == bestCurrentScore) // Si égalité
                         {
-                            playerWinners.Add(playerProfil);
+                            playerWinners.Add(playerProfil); // On ajoute le profil
                         }
                     }
                 }

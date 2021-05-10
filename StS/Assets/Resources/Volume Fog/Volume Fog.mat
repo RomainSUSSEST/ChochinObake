@@ -39,4 +39,4 @@ Material:
     m_Colors:
     - Vector2_8617E12A: {r: 2.85, g: 4.95, b: 3.34, a: 0}
     - Vector3_6FFEE9D2: {r: 0, g: 0, b: 0, a: 0}
-    - _FogSpeed: {r: 2, g: 1, b: 14.285714, a: 0}
+    - _FogSpeed: {r: 2, g: 1, b: 16.856756, a: 0}

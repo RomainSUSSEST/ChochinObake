@@ -1,6 +1,5 @@
 ﻿using SDD.Events;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using CommonVisibleManager;
@@ -12,10 +11,15 @@ public class RoomModel : MonoBehaviour
     #region Constants
 
     public static readonly string DEFAULT_NAME = "No Name";
+    private static readonly int PLAYER_MARGIN_HEIGHT = 5; // en px
 
     #endregion
 
     #region Attributs
+
+    [Header("Panel Info")]
+
+    [SerializeField] private RectTransform ViewPanel;
 
     [Header("RoomModel")]
 
@@ -143,7 +147,7 @@ public class RoomModel : MonoBehaviour
         if (Players.Count + AI_Players.Count < ServerNetworkManager.MAX_PLAYER_CONNECTED)
         {
             AI_Player currentAI = new AI_Player();
-            currentAI.Name = "AI." + AI_Players.Count;
+            currentAI.Name = AI_Players.Count.ToString();
 
             currentAI.Difficulty = UnityEngine.Random.Range(AI_Player.MIN_SUCCESS_RATE, AI_Player.MAX_SUCCESS_RATE);
 
@@ -294,14 +298,16 @@ public class RoomModel : MonoBehaviour
 
     private void RefreshListPlayer()
     {
-        // Clear
+        #region clear
 
         foreach (Transform child in ContentNodePlayers.transform)
         {
             Destroy(child.gameObject);
         }
 
-        // Generate
+        #endregion
+
+        #region Generate
         Dictionary<ulong, Player>.ValueCollection value = Players.Values;
 
         List<PlayerListModel> list = new List<PlayerListModel>();
@@ -328,22 +334,72 @@ public class RoomModel : MonoBehaviour
         {
             tampon = Instantiate(PlayerPrefabItems, ContentNodePlayers.transform);
 
-            tampon.m_Pseudo.text = "Chochin " + i;
+            tampon.m_Pseudo.text = "Chochin " + AI_Players[i].Name;
             tampon.m_Score.text = AI_Players[i].Score.ToString();
             tampon.m_Victory.text = AI_Players[i].Victory.ToString();
 
             list.Add(tampon);
         }
+        #endregion
 
-        // Sort
+        #region Sort
 
         list.Sort((PlayerListModel x, PlayerListModel y) =>
-            Int32.Parse(x.m_Score.text) - Int32.Parse(y.m_Score.text)
+            Int32.Parse(y.m_Score.text) - Int32.Parse(x.m_Score.text)
             );
 
-        // Organise
+        #endregion
 
+        #region Placement
 
+        float areaHeight = PlayerPrefabItems.GetComponent<RectTransform>().rect.height;
+        float currentMarginHeight = PLAYER_MARGIN_HEIGHT;
+
+        // On tient compte du rescale de la vue
+        areaHeight *= ViewPanel.lossyScale.y;
+        currentMarginHeight *= ViewPanel.lossyScale.y;
+
+        // On estime la hauteur à allouer
+        float height = (list.Count + 1) * currentMarginHeight
+            + list.Count * areaHeight;
+     
+        height /= ViewPanel.lossyScale.y;
+
+        // On redimenssionne le content
+        RectTransform contentRectTransform = ContentNodePlayers.GetComponent<RectTransform>();
+        contentRectTransform.sizeDelta = new Vector2
+            (
+            contentRectTransform.rect.width,
+            height
+            );
+
+        // Position de départ
+
+        Vector3 currentPositionButtonSpawn = new Vector3
+            (
+                contentRectTransform.position.x,
+                (contentRectTransform.position.y
+                    + height * ViewPanel.lossyScale.y / 2 - currentMarginHeight - areaHeight / 2),
+                contentRectTransform.position.z
+            );
+
+        // On les affiches
+
+        foreach (PlayerListModel plm in list)
+        {
+            plm.transform.position = currentPositionButtonSpawn;
+            currentPositionButtonSpawn -= new Vector3(0, areaHeight + currentMarginHeight, 0);
+        }
+
+        // On décale le content pour afficher le premier en haut
+        contentRectTransform.localPosition = new Vector3
+            (
+            contentRectTransform.localPosition.x,
+            -height / 2 - contentRectTransform.parent.GetComponent<RectTransform>().rect.height,
+            contentRectTransform.localPosition.z
+            );
+
+        #endregion
     }
 
     private void SetAIBodys()

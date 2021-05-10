@@ -15,7 +15,8 @@ public class Player
     public int LastGameLanternSuccess;
     public int LastGamePowerUse;
     public int LastGameBestCombo;
-    public int lastGameTotalLantern;
+    public int LastGameTotalLantern;
+    public int LastGameScore;
     #endregion
 }
 
@@ -42,6 +43,7 @@ public class AI_Player
     public int LastGameLanternSuccess;
     public int LastGamePowerUse;
     public int LastGameBestCombo;
-    public int lastGameTotalLantern;
+    public int LastGameTotalLantern;
+    public int LastGameScore;
     #endregion
 }
