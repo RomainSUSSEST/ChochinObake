@@ -41,6 +41,9 @@ public class Obstacle : MonoBehaviour
     [SerializeField] private Material OutlinerMaterial;
     [SerializeField] private Material UncolorMaterial;
 
+    [Header("Effect")]
+    [SerializeField] private ParticleSystem KanjiDestroyed;
+
     private CharacterServer AssociatedCharacter;
 
     private float PositionStart; // Position du début
@@ -107,6 +110,7 @@ public class Obstacle : MonoBehaviour
         Destroy(Kanji.gameObject);
         StopCoroutine(m_IndicatorManagement);
         LanternRenderer.material = LanternON;
+        KanjiDestroyed.Play();
     }
 
     public void SetKanjiRendererStatus(bool b)

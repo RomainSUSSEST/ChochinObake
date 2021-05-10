@@ -76,7 +76,7 @@
         public static readonly float ALGO_MIN_SENSITIVITY = 0.7f; // en % (gestion de la difficulté) 0 = D / 0.1 = M / 0.2 = F
         public static readonly float ALGO_MAX_SENSITIVITY = 0.225f;
 
-        public static readonly float MAXIMUM_ADVANCE_DISTANCE = 30; // Distance maximal d'avancé des joueurs
+        public static readonly float MAXIMUM_ADVANCE_DISTANCE = 26; // Distance maximal d'avancé des joueurs
 
         public static readonly int MIN_SAFE_PLAYER = 1;
 
