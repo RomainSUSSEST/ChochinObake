@@ -582,7 +582,7 @@ public class World : MonoBehaviour
 
     private void LeaderChange()
     {
-        SfxManager.Instance.PlayDefaultSfx(SfxManager.Instance.LeaderChange);
+        SfxManager.Instance.PlayCharacterSfx(SfxManager.Instance.LeaderChange);
     }
 
     #endregion
