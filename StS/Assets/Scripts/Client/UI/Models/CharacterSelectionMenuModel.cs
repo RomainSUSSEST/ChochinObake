@@ -33,6 +33,7 @@ public class CharacterSelectionMenuModel : MonoBehaviour
     [Header("Button Ready & Vibrator")]
 
     [SerializeField] private Button ButtonReady;
+    [SerializeField] private TextMeshProUGUI ButtonReadyText;
     [SerializeField] private Button Vibrator;
 
     [SerializeField] private Sprite UnOKButtonSprite;
@@ -354,11 +355,13 @@ public class CharacterSelectionMenuModel : MonoBehaviour
     private void SetReadyButtonColor()
     {
         ButtonReady.image.sprite = OKButtonSprite;
+        ButtonReadyText.text = "!";
     }
 
     private void SetUnreadyButtonColor()
     {
         ButtonReady.image.sprite = UnOKButtonSprite;
+        ButtonReadyText.text = "?";
     }
 
     #endregion
