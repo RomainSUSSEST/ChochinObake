@@ -285,6 +285,8 @@ public class World : MonoBehaviour
 
         StartCoroutine("Rythme"); // Génére un son lorsque c'est le moment idéal de passer l'obstacle
 
+        StartCoroutine("UpdateRank"); // Calcul le rang des joueurs en continue
+
         // On synchronise les obstacles avec la musique
         yield return new WaitForSeconds(AheadTimeToSpawn);
 
@@ -336,7 +338,11 @@ public class World : MonoBehaviour
         MusicRoundEnd();
     }
 
-    private IEnumerator Rythme() // TODO ?
+    /// <summary>
+    /// Effectue l'action _Rythme lorsque les joueurs se retrouvent face à un obstacle
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator Rythme()
     {
         int cpt = 0;
         float time = -AheadTimeToSpawn; // Compteur de temps
@@ -355,6 +361,37 @@ public class World : MonoBehaviour
 
             yield return new CoroutineTools.WaitForFrames(1);
             time += Time.deltaTime; // On ajoute le temps passé
+        }
+    }
+
+    private IEnumerator UpdateRank()
+    {
+        float time = 0;
+        float finalTime = ServerMusicManager.Instance.GetTimeLeftRoundMusic();
+
+        List<CharacterServer> list = new List<CharacterServer>(CharacterArray);
+
+        while (time <= finalTime)
+        {
+            // On met à jours les scores
+            list.Sort((CharacterServer c1, CharacterServer c2) =>
+                c2.GetTotalSuccess() - c1.GetTotalSuccess());
+
+            int rank = 0;
+            int previousTotalSuccess = 0;
+            for (int i = 0; i < list.Count; ++i)
+            {
+                if (i > 0 && list[i].GetTotalSuccess() < previousTotalSuccess)
+                {
+                    ++rank;
+                }
+
+                list[i].SetRank(rank);
+                previousTotalSuccess = list[i].GetTotalSuccess();
+            }
+
+            yield return new WaitForSeconds(0.5f);
+            time += 0.5f;
         }
     }
 
