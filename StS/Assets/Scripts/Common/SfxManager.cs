@@ -11,15 +11,9 @@ namespace ServerManager
 	{
         #region Attributes
 
-        [Header("SfxManager")]
-
 		#region AudioClip
 		[Header("InGame")]
 		public AudioClip Balloon;
-		[SerializeField] private AudioClip CharacterHappy;
-		[SerializeField] private AudioClip CharacterHappy2;
-		[SerializeField] private AudioClip CharacterHit;
-		[SerializeField] private AudioClip CharacterHit2;
 
 		[Header("Effects")]
 		public AudioClip GongAppear;
@@ -27,13 +21,17 @@ namespace ServerManager
 
 		public AudioClip FireworksExplosion;
 
+		[Header("Character")]
+		public AudioClip LeaderChange;
+
 		[Header("UI")]
 		[SerializeField] private AudioClip UI_Sound1;
 		[SerializeField] private AudioClip UI_Sound2;
 		[SerializeField] private AudioClip UI_Sound3;
 		#endregion
 
-		[SerializeField] private AudioSource Source;
+		[SerializeField] private AudioSource DefaultSource;
+		[SerializeField] private AudioSource CharacterAudioSource;
 
 		private Dictionary<ulong, AudioSource> AudioSourcesPlayer;
 		private Dictionary<string, AudioSource> AudioSourcesAI;
@@ -44,18 +42,25 @@ namespace ServerManager
 
 		public float GetVolume()
 		{
-			return Source.volume;
+			return DefaultSource.volume;
 		}
 
         #endregion
 
         #region Methods
 
-        public void PlaySfx(AudioClip clip)
+        public void PlayDefaultSfx(AudioClip clip)
 		{
-			Source.Stop();
-			Source.clip = clip;
-			Source.Play();
+			DefaultSource.Stop();
+			DefaultSource.clip = clip;
+			DefaultSource.Play();
+		}
+
+		public void PlayCharacterSfx(AudioClip clip)
+		{
+			CharacterAudioSource.Stop();
+			CharacterAudioSource.clip = clip;
+			CharacterAudioSource.Play();
 		}
 
 		public void PlayerPlaySfx(ulong ID, AudioClip clip)
@@ -76,7 +81,8 @@ namespace ServerManager
 
 		public void SetVolume(float v)
 		{
-			Source.volume = v;
+			DefaultSource.volume = v;
+			CharacterAudioSource.volume = v;
 		}
 
         #endregion
@@ -84,17 +90,17 @@ namespace ServerManager
         #region UI Events
         public void ButtonNextHasBeenClicked()
 		{
-			PlaySfx(UI_Sound1);
+			PlayDefaultSfx(UI_Sound1);
 		}
 
 		public void ButtonPanelHasBeenClicked()
 		{
-			PlaySfx(UI_Sound2);
+			PlayDefaultSfx(UI_Sound2);
 		}
 
 		public void ButtonLeaveHasBeenClicked()
 		{
-			PlaySfx(UI_Sound3);
+			PlayDefaultSfx(UI_Sound3);
 		}
 
         #endregion
@@ -121,7 +127,7 @@ namespace ServerManager
 			foreach (ulong id in ServerGameManager.Instance.GetPlayers().Keys)
 			{
 				tampon = gameObject.AddComponent<AudioSource>();
-				tampon.volume = Source.volume;
+				tampon.volume = DefaultSource.volume;
 				AudioSourcesPlayer.Add(id, tampon);
 			}
 
@@ -130,7 +136,7 @@ namespace ServerManager
 			foreach (AI_Player ai in ServerGameManager.Instance.GetAIList())
 			{
 				tampon = gameObject.AddComponent<AudioSource>();
-				tampon.volume = Source.volume;
+				tampon.volume = DefaultSource.volume;
 				AudioSourcesAI.Add(ai.Name, tampon);
 			}
 		}
@@ -174,7 +180,8 @@ namespace ServerManager
 		{
 			base.GamePause(e);
 
-			Source.Pause();
+			DefaultSource.Pause();
+			CharacterAudioSource.Pause();
 			foreach (AudioSource audio in AudioSourcesPlayer.Values)
 			{
 				audio.Pause();
@@ -189,7 +196,8 @@ namespace ServerManager
 		{
 			base.GameContinue(e);
 
-			Source.UnPause();
+			DefaultSource.UnPause();
+			CharacterAudioSource.UnPause();
 			foreach (AudioSource audio in AudioSourcesPlayer.Values)
 			{
 				audio.UnPause();
