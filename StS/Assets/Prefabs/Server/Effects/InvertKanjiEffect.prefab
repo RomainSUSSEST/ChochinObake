@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626d04a70f361724d91713082b423ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SmokeEffect: {fileID: 5755322423875531699}
+  m_SmokeEffect: {fileID: 7278376815852397223}
   m_Animator: {fileID: 2085099483614320217}
 --- !u!1 &5443013449582636125
 GameObject:
@@ -622,9 +622,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5575652811900838367}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &5755322423875531699 stripped
+--- !u!198 &7278376815852397223 stripped
 ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198072555640263276, guid: 263727c77de3a0b40853f43c0172c025,
+  m_CorrespondingSourceObject: {fileID: 2909694340829004664, guid: 263727c77de3a0b40853f43c0172c025,
     type: 3}
   m_PrefabInstance: {fileID: 5575652811900838367}
   m_PrefabAsset: {fileID: 0}

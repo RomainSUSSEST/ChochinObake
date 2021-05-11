@@ -4,6 +4,7 @@ using ServerManager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterServer : CharacterPlayer
 {
@@ -51,6 +52,11 @@ public class CharacterServer : CharacterPlayer
 
     [SerializeField] private Transform LightProjectilesTarget;
 
+    [Header("Rank Position")]
+
+    [SerializeField] private List<Sprite> AllRankImages;
+    [SerializeField] private Image RankImage;
+
     private Coroutine LastUpdatePositionCoroutine;
 
     #region Malus
@@ -86,6 +92,26 @@ public class CharacterServer : CharacterPlayer
         while (QueueObstacle.Count > 0)
         {
             Destroy(QueueObstacle.Dequeue().gameObject);
+        }
+
+        // On met à jours le player profil
+        if (IsAI)
+        {
+            AI_Player ai = AssociatedAIManager.GetAssociatedProfil();
+
+            ai.LastGameBestCombo = GetBestCombo();
+            ai.LastGameLanternSuccess = GetTotalSuccess();
+            ai.LastGamePowerUse = GetPowerUse();
+            ai.LastGameTotalLantern = GetTotalObstacle();
+
+        } else
+        {
+            Player p = ServerGameManager.Instance.GetPlayers()[AssociedClientID];
+
+            p.LastGameBestCombo = GetBestCombo();
+            p.LastGameLanternSuccess = GetTotalSuccess();
+            p.LastGamePowerUse = GetPowerUse();
+            p.LastGameTotalLantern = GetTotalObstacle();
         }
     }
 
@@ -470,6 +496,19 @@ public class CharacterServer : CharacterPlayer
     private void UseFlashKanjiEffect()
     {
         m_FlashKanji.gameObject.SetActive(true);
+    }
+
+    #endregion
+
+    #region Rank
+
+    /// <summary>
+    /// Commence à 0
+    /// </summary>
+    /// <param name="rank"></param>
+    public void SetRank(int rank)
+    {
+        RankImage.sprite = AllRankImages[rank];
     }
 
     #endregion
