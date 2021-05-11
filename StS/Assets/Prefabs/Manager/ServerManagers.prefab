@@ -262,7 +262,8 @@ MonoBehaviour:
   UI_Sound1: {fileID: 8300000, guid: 569488cb891707641a232e4fe4588cbd, type: 3}
   UI_Sound2: {fileID: 8300000, guid: 7ffe2404f4e9e5e46853fd227a7a35c8, type: 3}
   UI_Sound3: {fileID: 8300000, guid: c85f3e65edb07de4a9f9c659d36e7c52, type: 3}
-  Source: {fileID: 82451109799386276}
+  DefaultSource: {fileID: 82451109799386276}
+  CharacterAudioSource: {fileID: 1125633676616916746}
 --- !u!1 &1680404950657250
 GameObject:
   m_ObjectHideFlags: 0
