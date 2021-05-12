@@ -163,7 +163,7 @@ public class MusicResultModel : MonoBehaviour
 
     private void RefreshTimerUI()
     {
-        Timer.text = Mathf.Ceil(TimerCurrentValue).ToString() + 's';
+        Timer.text = Mathf.Ceil(TimerCurrentValue).ToString() + ' s';
     }
 
     #endregion

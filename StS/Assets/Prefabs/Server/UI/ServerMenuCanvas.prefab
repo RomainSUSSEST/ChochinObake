@@ -233,7 +233,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9147720720277082261
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5183,7 +5183,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -7042,7 +7042,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 00:10s
+  m_text: 00:10 S
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 34c5fd3f20bcf534696030861261edf4, type: 2}
   m_sharedMaterial: {fileID: -5038764836378006247, guid: 34c5fd3f20bcf534696030861261edf4,
@@ -7113,10 +7113,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 3615532327870336148}
-    characterCount: 6
+    characterCount: 7
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 2
+    spaceCount: 1
+    wordCount: 3
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -8302,7 +8302,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &517814542599393109
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9886,7 +9886,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10268,8 +10268,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9926a009284480a41b61894476649d12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PROGRESS_BAR_DEFAULT_COLOR: {r: 1, g: 1, b: 1, a: 1}
-  PROGRESS_BAR_ERROR_COLOR: {r: 1, g: 0, b: 0, a: 1}
+  PROGRESS_BAR_DEFAULT_COLOR: {r: 0.47058827, g: 0.43529415, b: 0.5568628, a: 1}
+  PROGRESS_BAR_ERROR_COLOR: {r: 0.5849056, g: 0, b: 0, a: 1}
   Tips: {fileID: 7684621274781304314}
   AllTips:
   - Reussissez 6 obstacles pour obtenir le pouvoir de l'inversion !
@@ -16789,7 +16789,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6644644860712285861
 RectTransform:
   m_ObjectHideFlags: 0

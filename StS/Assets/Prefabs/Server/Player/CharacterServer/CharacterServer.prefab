@@ -27,7 +27,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2275828882481118302}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0, z: -3.44}
+  m_LocalPosition: {x: 0, y: 0, z: -3.522}
   m_LocalScale: {x: 0.020758549, y: 0.020758549, z: 0.020758549}
   m_Children:
   - {fileID: 7426283116846895889}
@@ -36,8 +36,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1.42, y: 3.77}
-  m_SizeDelta: {x: 50, y: 50}
+  m_AnchoredPosition: {x: 1.42, y: 3.817}
+  m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!223 &8467994202428733374
 Canvas:
@@ -188,12 +188,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
-  m_Maskable: 0
+  m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a76c9d253d34eb645a9433488a0bb4d4, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -296,18 +296,18 @@ MonoBehaviour:
   m_StopInvertInput: {fileID: 2700526134949479545}
   LightProjectilesTarget: {fileID: 1565117915252504817}
   AllRankImages:
-  - {fileID: 21300000, guid: e6008c1ba2f372b4ebfa03bf6054d63c, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 5ada476445c48c34e8058dcc4cc22cb8, type: 3}
+  - {fileID: 21300000, guid: 708d8751d25272e4a926387023147b9f, type: 3}
+  - {fileID: 21300000, guid: 0d34cfc40c32ea34e8af3bd5139172af, type: 3}
+  - {fileID: 21300000, guid: 8267e88a732e9f54796ab6e6049af624, type: 3}
+  - {fileID: 21300000, guid: 3eae3971075d47d4699e826ae80cc967, type: 3}
+  - {fileID: 21300000, guid: 24341db819f2534418b9f949f3398045, type: 3}
+  - {fileID: 21300000, guid: 8c6b6e6d578544b47b53ab382df2f70a, type: 3}
+  - {fileID: 21300000, guid: 6e7a4270722bfcc4cb55c1fa6d728aa0, type: 3}
+  - {fileID: 21300000, guid: f5497d173d13fe241865a93e54ef6b2f, type: 3}
+  - {fileID: 21300000, guid: 4628a077a941fc041971e6667a6d1ca4, type: 3}
+  - {fileID: 21300000, guid: febb37ce5c286e04d9b365191735fd90, type: 3}
+  - {fileID: 21300000, guid: a291d0b8779e747488042e63ac31f2f6, type: 3}
   RankImage: {fileID: 9098116303918098577}
 --- !u!1001 &2035375362200727482
 PrefabInstance:
