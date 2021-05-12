@@ -21,6 +21,12 @@ public class PanelOptionsModel : MonoBehaviour
 	{
 		RegisterPanels();
 	}
+
+	private void OnEnable()
+	{
+		OpenPanel(m_PanelSounds);
+	}
+
 	#endregion
 
 	#region Panel Methods

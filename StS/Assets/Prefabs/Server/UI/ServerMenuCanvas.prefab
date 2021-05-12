@@ -233,7 +233,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &9147720720277082261
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7437,10 +7437,10 @@ RectTransform:
   m_Father: {fileID: 3992713029321520817}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000030517578}
-  m_SizeDelta: {x: -20, y: -14.155369}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -169.20007}
+  m_SizeDelta: {x: 550, y: 588.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5357161413813314783
 CanvasRenderer:
@@ -7469,10 +7469,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Created by : \nMaxime MORAINE\nRomain SUSSEST\n\nMusic Menu :\nVindu -
-    Japanese Spring [Stories From Japan EP] (japanese lo-fi)\n\nFor their participation
-    to the project or to enhance it :\nLucas DERAEDT\nSullyvan MODESTE\nHouman NADJARI\nThomas
-    GAUDY\nArnaud SAUZEDDE\nPascal LUBAN"
+  m_text: "\nCreated by : \r\nMaxime MORAINE\r\nRomain SUSSEST\r\n\r\nMusic Menu
+    :\r\nVindu - Japanese Spring [Stories From Japan EP] (japanese lo-fi)\r\n\r\nAssets
+    package for the background :\r\nhttps://assetstore.unity.com/packages/3d/environments/polygon-samurai-low-poly-3d-art-by-synty-89551\r\n\r\nFont
+    :\r\nLandasans : https://www.dafont.com/landasans.font\r\nArial unicode : https://docs.microsoft.com/en-us/typography/font-list/arial-unicode-ms\r\nJapanese
+    : https://www.dafont.com/japanese-3017.font\r\n\r\nFor their participation to
+    the project or to enhance it :\r\nThomas GAUDY - For his advices and project
+    follow-up throughout the development\r\nArnaud SAUZEDDE - For his tips to improve
+    graphics\r\nHouman NADJARI - For his tips to improve camera\r\nLucas DERAEDT
+    - Project launch companion\r\nSullyvan MODESTE - Project launch companion\r\nElie
+    KARABOGHOSSIAN - Project launch companion\r\nAnd to all who played and cheered
+    us to make this project better\r\n\r\nThank you !"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e156e7e736c9fba4abef7743d8e7ace3, type: 2}
   m_sharedMaterial: {fileID: -4727782685651985158, guid: e156e7e736c9fba4abef7743d8e7ace3,
@@ -7518,7 +7525,7 @@ MonoBehaviour:
   m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 213
+  m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -7542,12 +7549,12 @@ MonoBehaviour:
   m_margin: {x: -0.01385686, y: 1.012669, z: 1.7419977, w: 0.8758881}
   m_textInfo:
     textComponent: {fileID: 5169230329228555322}
-    characterCount: 269
+    characterCount: 931
     spriteCount: 0
-    spaceCount: 45
-    wordCount: 40
+    spaceCount: 120
+    wordCount: 130
     linkCount: 0
-    lineCount: 14
+    lineCount: 26
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -16294,7 +16301,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5539532905431020711
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16312,8 +16319,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1, y: 1.4}
-  m_SizeDelta: {x: 500, y: 250}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 570, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7439329922624347755
 CanvasRenderer:
@@ -18246,6 +18253,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3992713029321520817}
   - component: {fileID: 6010512034199926399}
+  - component: {fileID: 7279526932630765180}
+  - component: {fileID: 6223295118977531761}
+  - component: {fileID: 660522173543659673}
   m_Layer: 5
   m_Name: InternBackground
   m_TagString: Untagged
@@ -18281,6 +18291,78 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9152668553287356419}
   m_CullTransparentMesh: 0
+--- !u!114 &7279526932630765180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9152668553287356419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 8d5aa4a7d4f1d3f4e94bb3c3d38218f4, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6223295118977531761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9152668553287356419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1
+--- !u!114 &660522173543659673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9152668553287356419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Content: {fileID: 6676365893925350641}
+  m_Horizontal: 0
+  m_Vertical: 1
+  m_MovementType: 1
+  m_Elasticity: 0.1
+  m_Inertia: 1
+  m_DecelerationRate: 0.135
+  m_ScrollSensitivity: 6
+  m_Viewport: {fileID: 0}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 0}
+  m_HorizontalScrollbarVisibility: 0
+  m_VerticalScrollbarVisibility: 0
+  m_HorizontalScrollbarSpacing: 0
+  m_VerticalScrollbarSpacing: 0
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1623583611660645856
 PrefabInstance:
   m_ObjectHideFlags: 0
