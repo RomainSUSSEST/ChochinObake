@@ -49,6 +49,8 @@ public class CharacterServer : CharacterPlayer
     [SerializeField] private Effect m_InvertKanji;
     [SerializeField] private Effect m_UncolorKanji;
     [SerializeField] private Effect m_FlashKanji;
+    [SerializeField] private Effect m_InvertInput;
+    [SerializeField] private Effect m_StopInvertInput;
 
     [SerializeField] private Transform LightProjectilesTarget;
 
@@ -58,6 +60,7 @@ public class CharacterServer : CharacterPlayer
     [SerializeField] private Image RankImage;
 
     private Coroutine LastUpdatePositionCoroutine;
+    private Coroutine InvertInputCoroutine;
 
     #region Malus
 
@@ -334,13 +337,39 @@ public class CharacterServer : CharacterPlayer
 
     public void InvertInput(float delai)
     {
+        UseInvertInputEffect();
+
         if (!IsAI)
         {
-            MessagingManager.Instance.RaiseNetworkedEventOnClient(new InvertInputEvent(AssociedClientID, delai));
+            MessagingManager.Instance.RaiseNetworkedEventOnClient(new InvertInputEvent(AssociedClientID));
         } else
         {
-            AssociatedAIManager.InvertInput(delai);
+            AssociatedAIManager.InvertInput();
         }
+
+        if (InvertInputCoroutine != null)
+        {
+            StopCoroutine(InvertInputCoroutine);
+        }
+        InvertInputCoroutine = StartCoroutine(StopInvertInput(delai));
+    }
+
+    private IEnumerator StopInvertInput(float delai)
+    {
+        yield return new WaitForSeconds(delai);
+
+        UseStopInvertInputEffect();
+
+        if (!IsAI)
+        {
+            MessagingManager.Instance.RaiseNetworkedEventOnClient(new StopInvertInputEvent(AssociedClientID));
+        }
+        else
+        {
+            AssociatedAIManager.StopInvertInput();
+        }
+
+        InvertInputCoroutine = null;
     }
 
     public void FlashKanji(float delai, float delaiInterFlash)
@@ -496,6 +525,16 @@ public class CharacterServer : CharacterPlayer
     private void UseFlashKanjiEffect()
     {
         m_FlashKanji.gameObject.SetActive(true);
+    }
+
+    private void UseInvertInputEffect()
+    {
+        m_InvertInput.gameObject.SetActive(true);
+    }
+
+    private void UseStopInvertInputEffect()
+    {
+        m_StopInvertInput.gameObject.SetActive(true);
     }
 
     #endregion

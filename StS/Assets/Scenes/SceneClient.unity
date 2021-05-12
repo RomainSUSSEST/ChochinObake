@@ -814,6 +814,11 @@ PrefabInstance:
       propertyPath: m_PanelMusicResult
       value: 
       objectReference: {fileID: 1263433526}
+    - target: {fileID: 8143138706301954726, guid: 468abcc6260b42b48b519d1f1a02066a,
+        type: 3}
+      propertyPath: m_PanelPostGame
+      value: 
+      objectReference: {fileID: 1381900822}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 468abcc6260b42b48b519d1f1a02066a, type: 3}
 --- !u!1 &1322823447 stripped
@@ -835,3 +840,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_DoNotDestroyGameObjectOnLoad: 0
+--- !u!1 &1381900822 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1540869472692761399, guid: 8b2596f6cfc63a74dbf9b25e98e5d993,
+    type: 3}
+  m_PrefabInstance: {fileID: 1263433518}
+  m_PrefabAsset: {fileID: 0}

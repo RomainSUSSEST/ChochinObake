@@ -25,6 +25,7 @@
         [SerializeField] private GameObject m_PanelMusicSelection;
         [SerializeField] private GameObject m_PanelMusicResult;
         [SerializeField] private GameObject m_PanelInGame;
+        [SerializeField] private GameObject m_PanelPostGame;
 
         private List<GameObject> m_AllPanels;
         #endregion
@@ -58,6 +59,7 @@
             m_AllPanels.Add(m_PanelMusicSelection);
             m_AllPanels.Add(m_PanelMusicResult);
             m_AllPanels.Add(m_PanelInGame);
+            m_AllPanels.Add(m_PanelPostGame);
         }
 
         private void OpenPanel(GameObject panel)
@@ -150,6 +152,13 @@
             base.MobileGamePlay(e);
 
             OpenPanel(m_PanelInGame);
+        }
+
+        protected override void MobilePostGame(MobilePostGameEvent e)
+        {
+            base.MobilePostGame(e);
+
+            OpenPanel(m_PanelPostGame);
         }
 
         #endregion

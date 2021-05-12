@@ -3,6 +3,7 @@ using SDD.Events;
 using System.Collections;
 using UnityEngine;
 using CommonVisibleManager;
+using System.Collections.Generic;
 
 namespace ServerManager
 {
@@ -104,6 +105,22 @@ namespace ServerManager
 
             // On aaverti les téléphones connectés que la partie commence.
             MessagingManager.Instance.RaiseNetworkedEventOnAllClient(new GameStartedEvent());
+        }
+
+        protected override void GameResult(GameResultEvent e)
+        {
+            base.GameResult(e);
+
+            // On averti les téléphones que l'on rentre dans la page Result
+            // On communique pour chaque joueurs, ces résultats
+            IReadOnlyDictionary<ulong, Player> Players = ServerGameManager.Instance.GetPlayers();
+
+            foreach (ulong id in Players.Keys)
+            {
+                MessagingManager.Instance.RaiseNetworkedEventOnClient(new ServerEnterInPostGameEvent(id, Players[id].LastGameScore, Players[id].LastGamePowerUse,
+                    Players[id].LastGameBestCombo, Players[id].LastGameLanternSuccess, Players[id].LastGameTotalLantern));
+            }
+            
         }
 
 

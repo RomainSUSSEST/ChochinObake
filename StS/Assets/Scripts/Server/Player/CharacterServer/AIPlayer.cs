@@ -69,9 +69,14 @@ public class AIPlayer : MonoBehaviour
         CmptCombo = combo;
     }
 
-    public void InvertInput(float delai)
+    public void InvertInput()
     {
-        StartCoroutine(_InvertInput(delai));
+        CurrentSuccessRate -= INVERT_INPUT_MALUS;
+    }
+
+    public void StopInvertInput()
+    {
+        CurrentSuccessRate += INVERT_INPUT_MALUS;
     }
 
     public void FlashKanji(float delai)
@@ -140,15 +145,6 @@ public class AIPlayer : MonoBehaviour
     #region Tools
 
     #region Coroutine
-
-    private IEnumerator _InvertInput(float delai)
-    {
-        CurrentSuccessRate -= INVERT_INPUT_MALUS;
-
-        yield return new WaitForSeconds(delai);
-
-        CurrentSuccessRate += INVERT_INPUT_MALUS;
-    }
 
     private IEnumerator _FlashKanji(float delai)
     {

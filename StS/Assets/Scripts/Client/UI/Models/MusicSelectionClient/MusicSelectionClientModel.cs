@@ -120,6 +120,14 @@ public class MusicSelectionClientModel : MonoBehaviour
             // On ajoute le son à la liste.
             SongList.Add(currentSong);
         }
+
+        // On décale le content pour afficher le premier en haut
+        contentRectTransform.localPosition = new Vector3
+            (
+                contentRectTransform.localPosition.x,
+                -height / 2 - contentRectTransform.parent.GetComponent<RectTransform>().rect.height,
+                contentRectTransform.localPosition.z
+            );
     }
 
     /// <summary>

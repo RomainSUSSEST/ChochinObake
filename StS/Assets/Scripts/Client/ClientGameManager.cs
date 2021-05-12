@@ -10,6 +10,11 @@
     {
         #region Attributs
         private CharacterBody currentBody;
+        private int LastScore;
+        private int LastPowerUse;
+        private int LastBestCombo;
+        private int LastLanternSuccess;
+        private int LastTotalLantern;
         #endregion
         
         #region Game State
@@ -30,6 +35,31 @@
         public CharacterBody GetCurrentBody()
         {
             return currentBody;
+        }
+
+        public int GetLastScore()
+        {
+            return LastScore;
+        }
+
+        public int GetLastBestCombo()
+        {
+            return LastBestCombo;
+        }
+
+        public int GetLastPowerUse()
+        {
+            return LastPowerUse;
+        }
+
+        public int GetLastLanternSuccess()
+        {
+            return LastLanternSuccess;
+        }
+
+        public int GetLastTotalLantern()
+        {
+            return LastTotalLantern;
         }
 
         #endregion
@@ -57,6 +87,7 @@
             EventManager.Instance.AddListener<ServerEnterInGameMusicResultEvent>(ServerEnterInGameMusicResult);
             EventManager.Instance.AddListener<GameStartedEvent>(GameStarted);
             EventManager.Instance.AddListener<ServerEnterInLobbyEvent>(ServerEnterInLobby);
+            EventManager.Instance.AddListener<ServerEnterInPostGameEvent>(ServerEnterInPostGame);
         }
 
         public override void UnsubscribeEvents()
@@ -80,6 +111,7 @@
             EventManager.Instance.RemoveListener<ServerEnterInGameMusicResultEvent>(ServerEnterInGameMusicResult);
             EventManager.Instance.RemoveListener<GameStartedEvent>(GameStarted);
             EventManager.Instance.RemoveListener<ServerEnterInLobbyEvent>(ServerEnterInLobby);
+            EventManager.Instance.RemoveListener<ServerEnterInPostGameEvent>(ServerEnterInPostGame);
         }
         #endregion
 
@@ -176,6 +208,13 @@
             EventManager.Instance.Raise(new MobileCharacterSelectionEvent());
         }
 
+        private void PostGameMenu()
+        {
+            SetTimeScale(1);
+            m_GameState = GameState.gameMenu;
+            EventManager.Instance.Raise(new MobilePostGameEvent());
+        }
+
         #endregion
 
         #region Callbacks to Event issued by NetworksManager
@@ -209,6 +248,17 @@
         private void ServerEnterInLobby(ServerEnterInLobbyEvent e)
         {
             CharacterSelection();
+        }
+
+        private void ServerEnterInPostGame(ServerEnterInPostGameEvent e)
+        {
+            LastBestCombo = e.MaxCombo;
+            LastLanternSuccess = e.TotalSuccess;
+            LastPowerUse = e.PowerUse;
+            LastScore = e.Score;
+            LastTotalLantern = e.TotalLantern;
+
+            PostGameMenu();
         }
 
         #endregion

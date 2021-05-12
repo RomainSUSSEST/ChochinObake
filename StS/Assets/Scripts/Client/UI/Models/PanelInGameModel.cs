@@ -30,8 +30,6 @@ public class PanelInGameModel : MonoBehaviour
     [SerializeField] private GameObject DefaultPanel;
     [SerializeField] private GameObject InvertPanel;
 
-    private Coroutine InvertInput_Coroutine;
-
     #endregion
 
 
@@ -88,6 +86,7 @@ public class PanelInGameModel : MonoBehaviour
 
         // Malus
         EventManager.Instance.AddListener<InvertInputEvent>(InvertInput);
+        EventManager.Instance.AddListener<StopInvertInputEvent>(StopInvertInput);
     }
 
     private void UnsubscribeEvents()
@@ -97,6 +96,7 @@ public class PanelInGameModel : MonoBehaviour
 
         // Malus
         EventManager.Instance.RemoveListener<InvertInputEvent>(InvertInput);
+        EventManager.Instance.RemoveListener<StopInvertInputEvent>(StopInvertInput);
     }
 
     #endregion
@@ -162,27 +162,12 @@ public class PanelInGameModel : MonoBehaviour
 
     private void InvertInput(InvertInputEvent e)
     {
-        // Si une coroutine fait déjà cet effet, on la supprime
-        if (InvertInput_Coroutine != null)
-        {
-            StopCoroutine(InvertInput_Coroutine);
-        }
-
         DefaultPanel.SetActive(false);
         InvertPanel.SetActive(true);
-        InvertInput_Coroutine = StartCoroutine("_InvertKanji", e.Delai);
     }
 
-    /// <summary>
-    /// Replace la configuration par défaut après un certain délai
-    /// concernant les inputs.
-    /// </summary>
-    /// <param name="delai"></param>
-    /// <returns></returns>
-    private IEnumerator _InvertKanji(float delai)
+    private void StopInvertInput(StopInvertInputEvent e)
     {
-        yield return new WaitForSeconds(delai);
-
         DefaultPanel.SetActive(true);
         InvertPanel.SetActive(false);
     }

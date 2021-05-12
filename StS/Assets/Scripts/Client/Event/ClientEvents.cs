@@ -30,6 +30,10 @@ public class MobileMusicResultEvent : Event
 public class MobileGamePlayEvent : Event
 {
 }
+
+public class MobilePostGameEvent : Event
+{
+}
 #endregion
 
 #region UI

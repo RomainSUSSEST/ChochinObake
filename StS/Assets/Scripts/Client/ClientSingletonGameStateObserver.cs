@@ -12,6 +12,7 @@ public abstract class ClientSingletonGameStateObserver<T> : Singleton<T>, IEvent
         EventManager.Instance.AddListener<MobileMusicSelectionEvent>(MobileMusicSelection);
         EventManager.Instance.AddListener<MobileMusicResultEvent>(MobileMusicResult);
         EventManager.Instance.AddListener<MobileGamePlayEvent>(MobileGamePlay);
+        EventManager.Instance.AddListener<MobilePostGameEvent>(MobilePostGame);
     }
 
     public virtual void UnsubscribeEvents()
@@ -22,6 +23,7 @@ public abstract class ClientSingletonGameStateObserver<T> : Singleton<T>, IEvent
         EventManager.Instance.RemoveListener<MobileMusicSelectionEvent>(MobileMusicSelection);
         EventManager.Instance.RemoveListener<MobileMusicResultEvent>(MobileMusicResult);
         EventManager.Instance.RemoveListener<MobileGamePlayEvent>(MobileGamePlay);
+        EventManager.Instance.RemoveListener<MobilePostGameEvent>(MobilePostGame);
     }
 
 
@@ -63,6 +65,10 @@ public abstract class ClientSingletonGameStateObserver<T> : Singleton<T>, IEvent
     }
 
     protected virtual void MobileGamePlay(MobileGamePlayEvent e)
+    {
+    }
+
+    protected virtual void MobilePostGame(MobilePostGameEvent e)
     {
     }
 }

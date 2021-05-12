@@ -110,6 +110,13 @@
             OpenCamera(m_MainCamera);
         }
 
+        protected override void MobilePostGame(MobilePostGameEvent e)
+        {
+            base.MobilePostGame(e);
+
+            OpenCamera(m_MainCamera);
+        }
+
         #endregion
     }
 

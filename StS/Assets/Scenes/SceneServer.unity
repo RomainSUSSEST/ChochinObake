@@ -469,6 +469,11 @@ PrefabInstance:
       propertyPath: UI_BambooUnhit2
       value: 
       objectReference: {fileID: 8300000, guid: ef61eb916616b5e498a15cff55732702, type: 3}
+    - target: {fileID: 114331011742233390, guid: 68480a01e4a00ab45b3d746ae2fc86ee,
+        type: 3}
+      propertyPath: LeaderChange
+      value: 
+      objectReference: {fileID: 8300000, guid: d9142f714d3583a4297cce31afa25d41, type: 3}
     - target: {fileID: 440146086460121455, guid: 68480a01e4a00ab45b3d746ae2fc86ee,
         type: 3}
       propertyPath: m_Cameras.Array.size

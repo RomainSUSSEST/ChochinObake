@@ -229,6 +229,32 @@ public class ServerEnterInLobbyEvent : NetworkedEvent
 {
 }
 
+public class ServerEnterInPostGameEvent : NetworkedEvent
+{
+	public int Score;
+	public int PowerUse;
+	public int MaxCombo;
+	public int TotalSuccess;
+	public int TotalLantern;
+
+	public ServerEnterInPostGameEvent(ulong PlayerID, int score, int powerUse, int maxCombo, int totalSuccess, int totalLantern)
+		: base(PlayerID, new Argument[]
+			{
+				new Argument { Arg = score, Type = typeof(int) },
+				new Argument { Arg = powerUse, Type = typeof(int) },
+				new Argument { Arg = maxCombo, Type = typeof(int) },
+				new Argument { Arg = totalSuccess, Type = typeof(int) },
+				new Argument { Arg = totalLantern, Type = typeof(int) }
+			})
+	{
+		Score = score;
+		PowerUse = powerUse;
+		MaxCombo = maxCombo;
+		TotalSuccess = totalSuccess;
+		TotalLantern = totalLantern;
+	}
+}
+
 #endregion
 
 #region InRound
@@ -268,10 +294,15 @@ public class VibrateEvent : NetworkedEvent
 
 public class InvertInputEvent : NetworkedEvent
 {
-	public float Delai;
-	public InvertInputEvent(ulong PlayerID, float delai) : base (PlayerID, new Argument { Arg = delai, Type = typeof(float) })
+	public InvertInputEvent(ulong PlayerID) : base (PlayerID)
 	{
-		Delai = delai;
+	}
+}
+
+public class StopInvertInputEvent : NetworkedEvent
+{
+	public StopInvertInputEvent(ulong PlayerID) : base(PlayerID)
+	{
 	}
 }
 
