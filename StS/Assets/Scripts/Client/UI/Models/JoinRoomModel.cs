@@ -17,7 +17,6 @@ public class JoinRoomModel : MonoBehaviour
 
     private void OnEnable()
     {
-        ip_Address.text = "";
         errorMessage.text = "";
     }
 
@@ -27,10 +26,12 @@ public class JoinRoomModel : MonoBehaviour
 
     public void EnterIPButtonHasBeenClicked()
     {
-        if (ip_Address.text == "" && !IPManager.ValidateIPv4(ip_Address.text))
+        if (ip_Address.text == "")
         {
-            errorMessage.text = "Invalid IP : " + ip_Address.text;
-            ip_Address.text = "";
+            errorMessage.text = "Please enter IP address";
+        } else if (!IPManager.ValidateIPv4(ip_Address.text))
+        {
+            errorMessage.text = "Please enter valid IP address";
         } else
         {
             EventManager.Instance.Raise(new ServerConnectionEvent()

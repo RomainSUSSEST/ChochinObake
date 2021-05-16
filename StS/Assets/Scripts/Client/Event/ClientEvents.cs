@@ -5,6 +5,7 @@
 
 public class MobileMainMenuEvent : Event
 {
+	public string Message;
 }
 
 public class MobileJoinRoomEvent : Event

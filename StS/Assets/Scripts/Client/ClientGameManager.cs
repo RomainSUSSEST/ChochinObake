@@ -8,6 +8,12 @@
 
     public class ClientGameManager : ClientManager<ClientGameManager>
     {
+        #region Constant
+
+        private readonly string ERROR_SERVER_MESSAGE = "Connection lost, verify that both wifi client and server are the same";
+
+        #endregion
+
         #region Attributs
         private CharacterBody currentBody;
         private int LastScore;
@@ -126,7 +132,7 @@
                 yield return new CoroutineTools.WaitForFrames(1);
 
             // On lance le menu
-            MainMenu();
+            MainMenu("");
         }
 
         protected override IEnumerator InitCoroutine()
@@ -150,7 +156,7 @@
 
         private void LeaveButtonClicked(LeaveButtonClickedEvent e)
         {
-            MainMenu();
+            MainMenu("");
         }
 
         private void PreviousCharacterSelectionButtonClicked(PreviousCharacterSelectionButtonClickedEvent e)
@@ -166,11 +172,14 @@
 
         #region GameState Methods
 
-        private void MainMenu()
+        private void MainMenu(string message)
         {
             SetTimeScale(1);
             m_GameState = GameState.gameMenu;
-            EventManager.Instance.Raise(new MobileMainMenuEvent());
+            EventManager.Instance.Raise(new MobileMainMenuEvent()
+            {
+                Message = message
+            });
         }
 
         private void JoinMenu()
@@ -227,7 +236,7 @@
         #region Call back to Networked Event
         private void ServerClosed(ServerClosedEvent e)
         {
-            MainMenu();
+            MainMenu(ERROR_SERVER_MESSAGE);
         }
 
         private void ServerEnterInGameMusicSelection(ServerEnterInGameMusicSelectionEvent e)

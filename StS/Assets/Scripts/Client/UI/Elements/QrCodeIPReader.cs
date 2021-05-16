@@ -7,7 +7,9 @@ using UnityEngine.Android;
 
 public class QrCodeIPReader : MonoBehaviour
 {
-    // Attributs
+    // Attributes
+
+    [SerializeField] private Text errorMessage;
 
     private RawImage display;
     private WebCamTexture camTexture;
@@ -98,8 +100,12 @@ public class QrCodeIPReader : MonoBehaviour
                 result = barcodeReader.Decode(camTexture.GetPixels32(),
                 camTexture.width, camTexture.height); // On décode l'image
 
-                if (result == null || !IPManager.ValidateIPv4(result.Text))
+                if (result == null)
                 {
+                    yield return new WaitForSeconds(0.5f);
+                } else if (!IPManager.ValidateIPv4(result.Text))
+                {
+                    errorMessage.text = "Please enter valid IP address";
                     result = null;
                     yield return new WaitForSeconds(0.5f);
                 }

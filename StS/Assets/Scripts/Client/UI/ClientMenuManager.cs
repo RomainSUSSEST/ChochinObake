@@ -28,6 +28,16 @@
         [SerializeField] private GameObject m_PanelPostGame;
 
         private List<GameObject> m_AllPanels;
+        private string ErrorMessage;
+        #endregion
+
+        #region Request
+
+        public string GetErrorMessage()
+        {
+            return ErrorMessage;
+        }
+
         #endregion
 
         #region Manager Implementation
@@ -116,6 +126,7 @@
         {
             base.MobileMainMenu(e);
 
+            ErrorMessage = e.Message;
             OpenPanel(m_PanelMainMenu);
         }
 
@@ -162,28 +173,6 @@
         }
 
         #endregion
-
-
-        // Outils
-
-        public class WaitForFrames : CustomYieldInstruction
-        {
-            private int _targetFrameCount;
-
-            public WaitForFrames(int numberOfFrames)
-            {
-                _targetFrameCount = Time.frameCount + numberOfFrames;
-            }
-
-            public override bool keepWaiting
-            {
-                get
-                {
-                    return Time.frameCount < _targetFrameCount;
-                }
-            }
-        }
     }
-
 }
 
