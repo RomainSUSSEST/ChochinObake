@@ -427,7 +427,7 @@ public class World : MonoBehaviour
                 {
                     ++rank;
                 }
-                Debug.Log(rank + " " + list[i].GetTotalSuccess());
+
                 list[i].SetRank(rank);
                 previousTotalSuccess = list[i].GetTotalSuccess();
             }
