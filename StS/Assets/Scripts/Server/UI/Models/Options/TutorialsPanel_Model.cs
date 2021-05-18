@@ -42,18 +42,32 @@ public class TutorialsPanel_Model : MonoBehaviour
         LoadInGamePanel();
     }
 
-    public void LobbyTutoNextButtonHasBeenClicked()
+    public void LobbyTutoIncrementButtonHasBeenClicked()
     {
         currentIndex = (currentIndex + 1) % m_InLobbyTutorials.Count;
 
         m_InLobbyTutoImage.sprite = m_InLobbyTutorials[currentIndex];
     }
 
-    public void InGameTutoNextButtonHasBeenClicked()
+    public void LobbyTutoDecrementButtonHasBeenClicked()
+    {
+        currentIndex = (currentIndex - 1) % m_InLobbyTutorials.Count;
+
+        m_InLobbyTutoImage.sprite = m_InLobbyTutorials[currentIndex];
+    }
+
+    public void InGameTutoIncrementButtonHasBeenClicked()
     {
         currentIndex = (currentIndex + 1) % m_InGameTutorials.Count;
 
         m_InGameTutoImage.sprite = m_InGameTutorials[currentIndex];
+    }
+
+    public void InGameTutoDecrementButtonHasBeenClicked()
+    {
+        currentIndex = (currentIndex - 1) % m_InLobbyTutorials.Count;
+
+        m_InLobbyTutoImage.sprite = m_InLobbyTutorials[currentIndex];
     }
 
     #endregion
