@@ -1234,9 +1234,13 @@ MonoBehaviour:
   m_ContentInGame: {fileID: 1550576486291986074}
   m_ContentLobby: {fileID: 5044991451049044684}
   m_InGameTutorials:
-  - {fileID: 21300000, guid: 546626c2d91da2c4b86dca339c62ecf0, type: 3}
-  - {fileID: 21300000, guid: 572afbed88d59a145af2519b208270ea, type: 3}
-  - {fileID: 21300000, guid: 888049047552eb1438bc8f65d7ef2812, type: 3}
+  - {fileID: 21300000, guid: f193c0bf88f752a4c9be867dd4c68c31, type: 3}
+  - {fileID: 21300000, guid: 2ebf983ca2cf4e8439e5d8cf0bd4e59c, type: 3}
+  - {fileID: 21300000, guid: 9b57ad21dc1267c46b0ed2651b4dbf96, type: 3}
+  - {fileID: 21300000, guid: 891b4b64c2f627f4f9268b4a97964121, type: 3}
+  - {fileID: 21300000, guid: b8a920522a79f214b8b651d331c5c43f, type: 3}
+  - {fileID: 21300000, guid: 903c813e1afc3b04b8541c4556fdd7d2, type: 3}
+  - {fileID: 21300000, guid: 32363b714bcde394ab7848e7342b350a, type: 3}
   m_InLobbyTutorials:
   - {fileID: 21300000, guid: 1d09c454c57681846a8c1c2100823665, type: 3}
   - {fileID: 21300000, guid: 9ff637ba38e451147a70c52d325fa552, type: 3}
@@ -16073,10 +16077,10 @@ RectTransform:
   m_Father: {fileID: 7862141527717897913}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 960, y: 540}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6897730745374531788
 CanvasRenderer:
