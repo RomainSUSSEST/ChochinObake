@@ -116,7 +116,7 @@
         private GameObject CurrentWorld;
         private GameObject CurrentMenuBackground;
 
-        private bool GenerateInGameEvents;
+        //private bool GenerateInGameEvents;
 
         private IReadOnlyCollection<CharacterServer> RoundPlayers; // Contient le charactere à la wave i ou null (si deconnexion par exemple)
         private int SafePlayerCount;
@@ -527,15 +527,15 @@
 
         private void RoundStart(RoundStartEvent e)
         {
-            GenerateInGameEvents = true;
+            //GenerateInGameEvents = true;
             RoundPlayers = e.RoundPlayers;
 
-            StartCoroutine("InGameEventsManager");
+            //StartCoroutine("InGameEventsManager");
         }
 
         private void MusicRoundEnd(MusicRoundEndEvent e)
         {
-            GenerateInGameEvents = false;
+            //GenerateInGameEvents = false;
         }
 
         private void RoundEnd(RoundEndEvent e)
@@ -630,27 +630,27 @@
 
         #region Coroutines
 
-        private IEnumerator InGameEventsManager()
-        {
-            //while (GenerateInGameEvents)
-            //{
-            //    yield return new WaitForSeconds(TIME_BETWEEN_IN_GAME_EVENTS);
+        //private IEnumerator InGameEventsManager()
+        //{
+        //    //while (GenerateInGameEvents)
+        //    //{
+        //    //    yield return new WaitForSeconds(TIME_BETWEEN_IN_GAME_EVENTS);
 
-            //    // On choisi un event
-            //    int index = Random.Range(0, AllInGameEventsList.Count);
+        //    //    // On choisi un event
+        //    //    int index = Random.Range(0, AllInGameEventsList.Count);
 
-            //    foreach (CharacterServer c in RoundPlayers)
-            //    {
-            //        if (c != null)
-            //        {
-            //            InGameEvents e = Instantiate(AllInGameEventsList[index], c.transform);
-            //            e.SetAssociatedCharacter(c);
-            //        }
-            //    }
+        //    //    foreach (CharacterServer c in RoundPlayers)
+        //    //    {
+        //    //        if (c != null)
+        //    //        {
+        //    //            InGameEvents e = Instantiate(AllInGameEventsList[index], c.transform);
+        //    //            e.SetAssociatedCharacter(c);
+        //    //        }
+        //    //    }
 
-                yield return new WaitForSeconds(InGameEvents.EVENT_TIME);
-            //}
-        }
+        //        yield return new WaitForSeconds(InGameEvents.EVENT_TIME);
+        //    //}
+        //}
 
         #endregion
 

@@ -33,7 +33,7 @@ public class QrCodeIPReader : MonoBehaviour
         {
             Permission.RequestUserPermission(Permission.Camera); // On les demande
 
-            if (Screen.orientation == ScreenOrientation.LandscapeLeft)
+            if (Screen.orientation == ScreenOrientation.LandscapeRight || Screen.orientation == ScreenOrientation.LandscapeLeft)
             {
                 display.transform.localScale = new Vector3(-1, -1, 1);
             }

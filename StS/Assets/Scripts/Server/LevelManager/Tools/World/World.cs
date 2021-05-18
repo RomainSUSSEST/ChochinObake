@@ -85,6 +85,12 @@ public class World : MonoBehaviour
 
     #endregion
 
+    #region Rank
+
+    private bool CalculateRank;
+
+    #endregion
+
     #endregion
 
     #region Life Cycle
@@ -280,8 +286,7 @@ public class World : MonoBehaviour
 
         #endregion
 
-        // On lance l'algo procédural des obstacles & gestionnaire de la manche
-        StartCoroutine("RoundManager");
+        StartCoroutine("RoundManager"); // On lance l'algo procédural des obstacles & gestionnaire de la manche
 
         StartCoroutine("Rythme"); // Génére un son lorsque c'est le moment idéal de passer l'obstacle
 
@@ -351,7 +356,7 @@ public class World : MonoBehaviour
             while (cpt < CurrentMap.Count &&
                 CurrentMap[cpt].time <= time)
             {
-                if (CurrentMap[cpt].prunedSpectralFlux > CurrentThresholdSensitivity)
+                if (CurrentMap[cpt].prunedSpectralFlux > CurrentThresholdSensitivity) // Si le beats n'est pas ignoré
                 {
                     SfxManager.Instance.PlayDefaultSfx(SfxManager.Instance.Balloon);
                 }
@@ -366,46 +371,51 @@ public class World : MonoBehaviour
 
     private IEnumerator UpdateRank()
     {
-        float time = 0;
-        float finalTime = ServerMusicManager.Instance.GetTimeLeftRoundMusic();
+        CalculateRank = true; // On active le calcul de rang
 
-        List<CharacterServer> list = new List<CharacterServer>(CharacterArray);
+        List<CharacterServer> list = new List<CharacterServer>();
+        CharacterServer lastLeader = null;
 
-        if (list.Count == 0)
+        // On recherche un premier leader
+        foreach (CharacterServer c in CharacterArray)
+        {
+            if (c != null)
+            {
+                lastLeader = c;
+                break;
+            }
+        }
+
+        // Si il n'y a aucune leader on arrete
+        if (lastLeader == null)
         {
             yield break;
         }
 
-        CharacterServer currentLeader = list[0];
-        bool IsNewLeader = false;
-
-        while (time <= finalTime)
+        while (CalculateRank)
         {
+            list.Clear();
+
+            // On met à jour la liste pour s'adapter au déconnexion.
+            foreach (CharacterServer c in CharacterArray)
+            {
+                if (c != null)
+                {
+                    list.Add(c);
+                }
+            }
+
+            // On vérifie qu'il reste des joueurs
+            if (list.Count == 0)
+                yield break;
+
             // On met à jours les scores
             list.Sort((CharacterServer c1, CharacterServer c2) =>
                 c2.GetTotalSuccess() - c1.GetTotalSuccess());
 
-            if (currentLeader.IsAI && list[0].IsAI) // Si ceux sont des IAs
+            if (lastLeader != list[0])
             {
-                if (currentLeader.AssociatedAIManager.GetAssociatedProfil().Name != list[0].AssociatedAIManager.GetAssociatedProfil().Name) // Si elles n'ont pas le meme noms
-                {
-                    IsNewLeader = true;
-                }
-            } else if (!currentLeader.IsAI && !list[0].IsAI) // Si se sont des joueurs
-            {
-                if (currentLeader.AssociedClientID != list[0].AssociedClientID) // Si ils n'ont pas le meme ID
-                {
-                    IsNewLeader = true;
-                }
-            } else // Si elles sont différentes
-            {
-                IsNewLeader = true;
-            }
-
-            if (IsNewLeader)
-            {
-                IsNewLeader = false;
-                currentLeader = list[0];
+                lastLeader = list[0];
                 LeaderChange();
             }
 
@@ -417,13 +427,12 @@ public class World : MonoBehaviour
                 {
                     ++rank;
                 }
-
+                Debug.Log(rank + " " + list[i].GetTotalSuccess());
                 list[i].SetRank(rank);
                 previousTotalSuccess = list[i].GetTotalSuccess();
             }
 
             yield return new WaitForSeconds(0.5f);
-            time += 0.5f;
         }
     }
 
@@ -435,12 +444,16 @@ public class World : MonoBehaviour
     {
         EventManager.Instance.AddListener<GroundEndMapEvent>(GroundEndMap);
         EventManager.Instance.AddListener<BackgroundEndMapEvent>(BackgroundEndMap);
+
+        EventManager.Instance.AddListener<RoundEndEvent>(RoundEnd);
     }
 
     private void UnsubscribeEvents()
     {
         EventManager.Instance.RemoveListener<GroundEndMapEvent>(GroundEndMap);
         EventManager.Instance.RemoveListener<BackgroundEndMapEvent>(BackgroundEndMap);
+
+        EventManager.Instance.RemoveListener<RoundEndEvent>(RoundEnd);
     }
 
     #endregion
@@ -466,6 +479,11 @@ public class World : MonoBehaviour
             StartBackgroundSpawnPosition_X,
             DistanceToBackgroundY,
             LastBackground.transform.position.z + BackgroundSize.z));
+    }
+
+    private void RoundEnd(RoundEndEvent e)
+    {
+        CalculateRank = false;
     }
 
     #endregion

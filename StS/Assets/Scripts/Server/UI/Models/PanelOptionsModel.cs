@@ -4,31 +4,19 @@ using UnityEngine.UI;
 
 public class PanelOptionsModel : MonoBehaviour
 {
-	#region Panels
+	#region Attributes
 	[Header("Panels")]
 	[SerializeField] private GameObject m_PanelSounds;
 	[SerializeField] private GameObject m_PanelCredits;
 	[SerializeField] private GameObject m_PanelTutorials;
 
-	[Header("SubPanels")]
-	[SerializeField] private GameObject m_PanelInGame;
-	[SerializeField] private GameObject m_PanelLobby;
-
-	[Header("Tutorials")]
-	[SerializeField] private Image m_TutorialImageInGame;
-	[SerializeField] private List<Sprite> m_TutorialsInGame;
-	[SerializeField] private Image m_TutorialImageLobby;
-	[SerializeField] private List<Sprite> m_TutorialsLobby;
-
 	private List<GameObject> m_AllPanels;
-	private int m_Index;
 	#endregion
 
 	#region Monobehaviour lifecycle
 	private void Awake()
 	{
 		RegisterPanels();
-		m_Index = 0;
 	}
 
 	private void OnEnable()
@@ -38,7 +26,7 @@ public class PanelOptionsModel : MonoBehaviour
 
 	#endregion
 
-	#region Panel Methods
+	#region Panel Tools
 	private void RegisterPanels()
 	{
 		m_AllPanels = new List<GameObject>();
@@ -74,36 +62,6 @@ public class PanelOptionsModel : MonoBehaviour
 	public void OnClickTutorialButton()
 	{
 		OpenPanel(m_PanelTutorials);
-	}
-
-	public void OnClickToggleSubPanelLobbyButton()
-	{
-		m_PanelLobby.SetActive(false);
-		m_PanelInGame.SetActive(true);
-		m_Index = 0;
-	}
-
-	public void OnClickToggleSubPanelInGameButton()
-	{
-		m_PanelInGame.SetActive(false);
-		m_PanelLobby.SetActive(true);
-		m_Index = 0;
-	}
-
-	public void OnClickImageChangeIndexInGame()
-	{
-		ChangeImageIndex(m_TutorialsInGame, m_TutorialImageInGame);
-	}
-
-	public void OnClickImageChangeIndexLobby()
-	{
-		ChangeImageIndex(m_TutorialsLobby, m_TutorialImageLobby);
-	}
-
-	public void ChangeImageIndex(List<Sprite> listImages, Image imageComponent)
-    {
-		m_Index = (m_Index + 1) % listImages.Count;
-		imageComponent.sprite = listImages[m_Index];
 	}
 
 	#endregion
