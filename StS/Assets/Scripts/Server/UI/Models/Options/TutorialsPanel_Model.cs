@@ -51,7 +51,9 @@ public class TutorialsPanel_Model : MonoBehaviour
 
     public void LobbyTutoDecrementButtonHasBeenClicked()
     {
-        currentIndex = (currentIndex - 1) % m_InLobbyTutorials.Count;
+        --currentIndex;
+        if (currentIndex < 0)
+            currentIndex = m_InLobbyTutorials.Count - 1;
 
         m_InLobbyTutoImage.sprite = m_InLobbyTutorials[currentIndex];
     }
@@ -65,9 +67,11 @@ public class TutorialsPanel_Model : MonoBehaviour
 
     public void InGameTutoDecrementButtonHasBeenClicked()
     {
-        currentIndex = (currentIndex - 1) % m_InLobbyTutorials.Count;
+        --currentIndex;
+        if (currentIndex < 0)
+            currentIndex = m_InGameTutorials.Count - 1;
 
-        m_InLobbyTutoImage.sprite = m_InLobbyTutorials[currentIndex];
+        m_InGameTutoImage.sprite = m_InGameTutorials[currentIndex];
     }
 
     #endregion
