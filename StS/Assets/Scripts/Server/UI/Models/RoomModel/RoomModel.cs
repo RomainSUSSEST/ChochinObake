@@ -10,7 +10,7 @@ public class RoomModel : MonoBehaviour
 {
     #region Constants
 
-    public static readonly string DEFAULT_NAME = "No Name";
+    public static readonly string DEFAULT_NAME = "UNREADY";
     private static readonly int PLAYER_MARGIN_HEIGHT = 5; // en px
 
     #endregion
