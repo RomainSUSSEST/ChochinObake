@@ -17,6 +17,7 @@ public class Player
     public int LastGameBestCombo;
     public int LastGameTotalLantern;
     public int LastGameScore;
+    public int LastGameRank;
     #endregion
 }
 

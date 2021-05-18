@@ -118,7 +118,7 @@ namespace ServerManager
             foreach (ulong id in Players.Keys)
             {
                 MessagingManager.Instance.RaiseNetworkedEventOnClient(new ServerEnterInPostGameEvent(id, Players[id].LastGameScore, Players[id].LastGamePowerUse,
-                    Players[id].LastGameBestCombo, Players[id].LastGameLanternSuccess, Players[id].LastGameTotalLantern));
+                    Players[id].LastGameBestCombo, Players[id].LastGameLanternSuccess, Players[id].LastGameTotalLantern, Players[id].LastGameRank));
             }
             
         }

@@ -317,19 +317,6 @@
             }
         }
 
-        /// <summary>
-        /// Essai de mettre un shield sur le joueur appelant
-        /// </summary>
-        /// <param name="target"></param>
-        /// <returns></returns>
-        //private void Shield(List<CharacterServer> targets)
-        //{
-        //    foreach (CharacterServer c in targets)
-        //    {
-        //        AddSafePlayer(c);
-        //    }
-        //}
-
         #endregion
 
         #region Malus

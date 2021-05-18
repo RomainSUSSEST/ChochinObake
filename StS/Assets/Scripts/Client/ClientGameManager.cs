@@ -21,6 +21,7 @@
         private int LastBestCombo;
         private int LastLanternSuccess;
         private int LastTotalLantern;
+        private int LastRank;
         #endregion
         
         #region Game State
@@ -66,6 +67,11 @@
         public int GetLastTotalLantern()
         {
             return LastTotalLantern;
+        }
+
+        public int GetLastRank()
+        {
+            return LastRank;
         }
 
         #endregion
@@ -266,6 +272,7 @@
             LastPowerUse = e.PowerUse;
             LastScore = e.Score;
             LastTotalLantern = e.TotalLantern;
+            LastRank = e.LastRank;
 
             PostGameMenu();
         }

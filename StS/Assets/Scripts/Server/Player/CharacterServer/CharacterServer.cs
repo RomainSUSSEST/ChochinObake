@@ -60,6 +60,8 @@ public class CharacterServer : CharacterPlayer
     [SerializeField] private List<Sprite> AllRankImages;
     [SerializeField] private Image RankImage;
 
+    private int currentRank;
+
     private Coroutine LastUpdatePositionCoroutine;
     private Coroutine InvertInputCoroutine;
 
@@ -153,6 +155,11 @@ public class CharacterServer : CharacterPlayer
     public int GetPowerUse()
     {
         return PowerUse;
+    }
+
+    public int GetCurrentRank()
+    {
+        return currentRank;
     }
 
     #endregion
@@ -532,6 +539,7 @@ public class CharacterServer : CharacterPlayer
     public void SetRank(int rank)
     {
         RankImage.sprite = AllRankImages[rank];
+        currentRank = rank;
     }
 
     #endregion

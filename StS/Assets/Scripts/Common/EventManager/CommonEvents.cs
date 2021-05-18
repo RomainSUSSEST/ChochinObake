@@ -236,15 +236,17 @@ public class ServerEnterInPostGameEvent : NetworkedEvent
 	public int MaxCombo;
 	public int TotalSuccess;
 	public int TotalLantern;
+	public int LastRank;
 
-	public ServerEnterInPostGameEvent(ulong PlayerID, int score, int powerUse, int maxCombo, int totalSuccess, int totalLantern)
+	public ServerEnterInPostGameEvent(ulong PlayerID, int score, int powerUse, int maxCombo, int totalSuccess, int totalLantern, int lastRank)
 		: base(PlayerID, new Argument[]
 			{
 				new Argument { Arg = score, Type = typeof(int) },
 				new Argument { Arg = powerUse, Type = typeof(int) },
 				new Argument { Arg = maxCombo, Type = typeof(int) },
 				new Argument { Arg = totalSuccess, Type = typeof(int) },
-				new Argument { Arg = totalLantern, Type = typeof(int) }
+				new Argument { Arg = totalLantern, Type = typeof(int) },
+				new Argument { Arg = lastRank, Type = typeof(int) }
 			})
 	{
 		Score = score;
@@ -252,6 +254,7 @@ public class ServerEnterInPostGameEvent : NetworkedEvent
 		MaxCombo = maxCombo;
 		TotalSuccess = totalSuccess;
 		TotalLantern = totalLantern;
+		LastRank = lastRank;
 	}
 }
 
