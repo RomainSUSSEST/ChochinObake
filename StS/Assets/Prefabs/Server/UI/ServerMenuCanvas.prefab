@@ -465,9 +465,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Timer: {fileID: 6869591858714684231}
   PlayerList: {fileID: 4523157996557177001}
+  ViewPanel: {fileID: 6515220545298702481}
   SongPrefab: {fileID: 8214926304204735798, guid: f904085e23ce89146b2eff2e60f9bed4,
     type: 3}
-  SongSpawnTransform: {fileID: 7630768514315060990}
   SongContentNode: {fileID: 3420550258225208013}
   TimerStartValue: 30
 --- !u!1 &462455386935181078
@@ -615,15 +615,14 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 7630768514315060990}
+  m_Children: []
   m_Father: {fileID: 6118601337136664472}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 330}
+  m_SizeDelta: {x: 324, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9075770107905658038
 CanvasRenderer:
@@ -3926,41 +3925,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!1 &2129387834547347898
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7630768514315060990}
-  m_Layer: 5
-  m_Name: SpawnerTransform
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &7630768514315060990
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2129387834547347898}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 3420550258225208013}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 70}
-  m_SizeDelta: {x: 50, y: 50}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2159976755479920751
 GameObject:
   m_ObjectHideFlags: 0

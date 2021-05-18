@@ -8,6 +8,10 @@ using System.IO;
 
 public class MusicSelectionServerModel : MonoBehaviour
 {
+    // Constantes
+
+    private readonly int MARGIN_HEIGHT = 5; // en px
+
     // Attributs
 
     [Header("UI Elements")]
@@ -16,8 +20,9 @@ public class MusicSelectionServerModel : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI PlayerList;
 
+    [SerializeField] private RectTransform ViewPanel;
+
     [SerializeField] private MusicSelectionServer_Song SongPrefab;
-    [SerializeField] private Transform SongSpawnTransform;
     [SerializeField] private Transform SongContentNode;
 
     [Header("Panel Config")]
@@ -34,7 +39,6 @@ public class MusicSelectionServerModel : MonoBehaviour
 
     // Panel music
     private List<MusicSelectionServer_Song> SongListGameObject; // Liste des chansons affiché en UI
-    private Vector3 CurrentSongSpawnerPosition;
 
 
     // Life cycle
@@ -216,29 +220,89 @@ public class MusicSelectionServerModel : MonoBehaviour
 
         // On initialise la liste des sons
         SongListGameObject = new List<MusicSelectionServer_Song>();
-
-        // On reset l'emplacement du spawner
-        CurrentSongSpawnerPosition = SongSpawnTransform.position;
     }
 
     private void IncreaseVoteOnSong(string title)
     {
+        bool instantiate = true;
+
         // On regarde si le son n'a pas déjà été voté
         foreach (MusicSelectionServer_Song song in SongListGameObject)
         {
             if (song.GetTitle().Equals(title))
             {
                 song.IncreaseNumberVote();
-                return;
+                instantiate = false;
             }
         }
 
-        // Sinon on ajoute le nouveau son
-        MusicSelectionServer_Song tampon = Instantiate(SongPrefab, CurrentSongSpawnerPosition, Quaternion.identity, SongContentNode);
-        tampon.SetTitle(title); // On set son titre
-        tampon.IncreaseNumberVote(); // on set son nombre de vote
+        if (instantiate)
+        {
+            // Sinon on ajoute le nouveau son
+            MusicSelectionServer_Song tampon = Instantiate(SongPrefab, SongContentNode);
+            tampon.SetTitle(title); // On set son titre
+            tampon.IncreaseNumberVote(); // on set son nombre de vote
 
-        SongListGameObject.Add(tampon); // On l'ajoute à la liste
+            SongListGameObject.Add(tampon); // On l'ajoute à la liste
+        }
+
+        #region Sort
+
+        SongListGameObject.Sort((MusicSelectionServer_Song x, MusicSelectionServer_Song y) =>
+            y.getNbrVote() - x.getNbrVote());
+
+        #endregion
+
+        #region Placement
+
+        float areaHeight = SongPrefab.GetComponent<RectTransform>().rect.height;
+        float currentMarginHeight = MARGIN_HEIGHT;
+
+        // On tiens compte du rescale de la vue
+        areaHeight *= ViewPanel.lossyScale.y;
+        currentMarginHeight *= ViewPanel.lossyScale.y;
+
+        // On estime la hauteur à allouer
+        float height = (SongListGameObject.Count + 1) * currentMarginHeight
+            + SongListGameObject.Count * areaHeight;
+
+        height /= ViewPanel.lossyScale.y;
+
+        // On redimenssionne le content
+        RectTransform contentRectTransform = SongContentNode.GetComponent<RectTransform>();
+        contentRectTransform.sizeDelta = new Vector2
+            (
+               contentRectTransform.rect.width,
+               height
+            );
+
+        // Position de départ
+
+        Vector3 currentPositionSong = new Vector3
+            (
+                contentRectTransform.position.x,
+                (contentRectTransform.position.y
+                    + height * ViewPanel.lossyScale.y / 2 - currentMarginHeight - areaHeight / 2),
+                contentRectTransform.position.z
+            );
+
+        // On les affiches
+
+        foreach (MusicSelectionServer_Song msss in SongListGameObject)
+        {
+            msss.transform.position = currentPositionSong;
+            currentPositionSong -= new Vector3(0, areaHeight + currentMarginHeight, 0);
+        }
+
+        // On affiche le premier en haut
+        contentRectTransform.localPosition = new Vector3
+            (
+                contentRectTransform.localPosition.x,
+                -height / 2 - contentRectTransform.parent.GetComponent<RectTransform>().rect.height,
+                contentRectTransform.localPosition.z
+            );
+
+        #endregion
     }
 
     #endregion
