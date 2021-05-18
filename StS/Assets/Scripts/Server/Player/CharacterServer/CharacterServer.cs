@@ -51,6 +51,7 @@ public class CharacterServer : CharacterPlayer
     [SerializeField] private Effect m_FlashKanji;
     [SerializeField] private Effect m_InvertInput;
     [SerializeField] private Effect m_StopInvertInput;
+    [SerializeField] private Effect m_ResetCombo;
 
     [SerializeField] private Transform LightProjectilesTarget;
 
@@ -63,9 +64,6 @@ public class CharacterServer : CharacterPlayer
     private Coroutine InvertInputCoroutine;
 
     #region Malus
-
-    private bool IsSleeping;
-    private Coroutine Sleeping_Couroutine;
 
     private Coroutine FlashKanji_Coroutine;
 
@@ -316,25 +314,6 @@ public class CharacterServer : CharacterPlayer
 
     #region Malus
 
-    public void Sleep(float delai)
-    {
-        if (Sleeping_Couroutine != null)
-        {
-            StopCoroutine(Sleeping_Couroutine);
-        }
-
-        Sleeping_Couroutine = StartCoroutine("Sleeping", delai);
-    }
-
-    private IEnumerator Sleeping(float delai)
-    {
-        IsSleeping = true;
-
-        yield return new WaitForSeconds(delai);
-
-        IsSleeping = false;
-    }
-
     public void InvertInput(float delai)
     {
         UseInvertInputEffect();
@@ -537,6 +516,11 @@ public class CharacterServer : CharacterPlayer
         m_StopInvertInput.gameObject.SetActive(true);
     }
 
+    public void UseResetComboEffect()
+    {
+        m_ResetCombo.gameObject.SetActive(true);
+    }
+
     #endregion
 
     #region Rank
@@ -650,7 +634,7 @@ public class CharacterServer : CharacterPlayer
 
     private void Fire(FireEvent e)
     {
-        if (e.DoesThisConcernMe(AssociedClientID) && !IsSleeping)
+        if (e.DoesThisConcernMe(AssociedClientID))
         {
             GetCharacterBody().StartAttackFire();
         }
@@ -658,7 +642,7 @@ public class CharacterServer : CharacterPlayer
 
     private void Earth(EarthEvent e)
     {
-        if (e.DoesThisConcernMe(AssociedClientID) && !IsSleeping)
+        if (e.DoesThisConcernMe(AssociedClientID))
         {
             GetCharacterBody().StartAttackEarth();
         }
@@ -666,7 +650,7 @@ public class CharacterServer : CharacterPlayer
 
     private void Water(WaterEvent e)
     {
-        if (e.DoesThisConcernMe(AssociedClientID) && !IsSleeping)
+        if (e.DoesThisConcernMe(AssociedClientID))
         {
             GetCharacterBody().StartAttackWater();
         }
@@ -674,7 +658,7 @@ public class CharacterServer : CharacterPlayer
 
     private void Power(PowerEvent e)
     {
-        if (e.DoesThisConcernMe(AssociedClientID) && !IsSleeping)
+        if (e.DoesThisConcernMe(AssociedClientID))
         {
             GetCharacterBody().StartAttackPower();
         }

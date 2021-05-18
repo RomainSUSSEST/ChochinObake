@@ -312,6 +312,7 @@
                 if (c != null)
                 {
                     c.ResetCombo();
+                    c.UseResetComboEffect();
                 }
             }
         }
