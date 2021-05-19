@@ -581,6 +581,7 @@
                         playerProfil.LastGamePowerUse = p.GetPowerUse();
                         playerProfil.LastGameTotalLantern = p.GetTotalObstacle();
                         playerProfil.LastGameScore = CurrentScore;
+                        playerProfil.LastGameRank = p.GetCurrentRank();
 
                         if (CurrentScore > bestCurrentScore) // Si le gagnant est battu, on clear
                         {
