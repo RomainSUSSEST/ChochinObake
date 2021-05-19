@@ -48,8 +48,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BodyType: 0
-  m_BodyStory: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tristique
-    rhoncus ipsum.
+  m_BodyStory: "Ban come with a catch: if a new request is not made as soon as a
+    wish is granted, Ban will demand, \u201CWhat is next?\u201D As soon as that request
+    is fulfilled, Ban demands another, and another, and another. This pattern never
+    ends. Because their creation comes out of human greed and desire, Ban cling to
+    their creators obsessively and never leave their sides."
   ValidArea: {fileID: 8502893056666793916}
   m_AttackSuccess: {fileID: 2114959106717496422}
   m_AttackFailure: {fileID: 3090110099826901049}

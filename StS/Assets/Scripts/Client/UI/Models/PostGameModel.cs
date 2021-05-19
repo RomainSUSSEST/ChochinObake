@@ -1,6 +1,8 @@
 ﻿using ClientManager;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PostGameModel : MonoBehaviour
 {
@@ -10,7 +12,8 @@ public class PostGameModel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI LastBestCombo;
     [SerializeField] private TextMeshProUGUI LastPowerUse;
     [SerializeField] private TextMeshProUGUI LastLanternSuccessPerTotal;
-    [SerializeField] private TextMeshProUGUI LastRank;
+    [SerializeField] private Image LastRank;
+    [SerializeField] private List<Sprite> AllRanksSprite;
 
     #endregion
 
@@ -22,7 +25,7 @@ public class PostGameModel : MonoBehaviour
         LastBestCombo.text = ClientGameManager.Instance.GetLastBestCombo().ToString();
         LastPowerUse.text = ClientGameManager.Instance.GetLastPowerUse().ToString();
         LastLanternSuccessPerTotal.text = ClientGameManager.Instance.GetLastLanternSuccess() + "/" + ClientGameManager.Instance.GetLastTotalLantern();
-        LastRank.text = ClientGameManager.Instance.GetLastRank().ToString();
+        LastRank.sprite = AllRanksSprite[ClientGameManager.Instance.GetLastRank()];
     }
 
     #endregion

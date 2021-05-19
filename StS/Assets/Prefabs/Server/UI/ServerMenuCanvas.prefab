@@ -19286,12 +19286,12 @@ PrefabInstance:
     - target: {fileID: 4282384856792956493, guid: c15c3ee98bb66e14687ae07033813e5e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 436.2
+      value: 370
       objectReference: {fileID: 0}
     - target: {fileID: 4282384856792956493, guid: c15c3ee98bb66e14687ae07033813e5e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -121
+      value: -127
       objectReference: {fileID: 0}
     - target: {fileID: 4282384856792956493, guid: c15c3ee98bb66e14687ae07033813e5e,
         type: 3}
@@ -19336,22 +19336,27 @@ PrefabInstance:
     - target: {fileID: 4282384856792956493, guid: c15c3ee98bb66e14687ae07033813e5e,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.44771
+      value: 0.40818617
       objectReference: {fileID: 0}
     - target: {fileID: 4282384856792956493, guid: c15c3ee98bb66e14687ae07033813e5e,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.44771
+      value: 0.40818617
       objectReference: {fileID: 0}
     - target: {fileID: 4282384856792956493, guid: c15c3ee98bb66e14687ae07033813e5e,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.44771
+      value: 0.40818617
       objectReference: {fileID: 0}
     - target: {fileID: 5500518287479774776, guid: c15c3ee98bb66e14687ae07033813e5e,
         type: 3}
       propertyPath: m_Name
       value: ChochinTips
+      objectReference: {fileID: 0}
+    - target: {fileID: 5500518287479774776, guid: c15c3ee98bb66e14687ae07033813e5e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c15c3ee98bb66e14687ae07033813e5e, type: 3}
