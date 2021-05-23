@@ -282,7 +282,7 @@ namespace ServerManager
             StreamManifest streamManifest = await youtube.Videos.Streams.GetManifestAsync(Url);
 
             // On sélectionne la plus haute qualité audio
-            IStreamInfo streamInfo = streamManifest.GetAudioOnly().WithHighestBitrate();
+            IStreamInfo streamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
 
             // On crée le répertoire stockant les données
 
